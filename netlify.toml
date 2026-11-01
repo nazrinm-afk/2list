@@ -1,0 +1,4 @@
+# Zero-overhead build configuration for Netlify
+[build]
+  publish = "."
+  command = ""
