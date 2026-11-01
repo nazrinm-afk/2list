@@ -714,18 +714,18 @@ dialog#slot-warning-dialog[open] {
 .script-back-link-btn:hover{background:#2e2e38!important;border-color:var(--green,#f4cc57)!important;color:#fff!important}
 @media all and (display-mode: standalone), (display-mode: fullscreen){
  @media(max-width:760px){
-  .sidebar{padding-top:max(env(safe-area-inset-top,0px),50px)!important;min-height:calc(56px + max(env(safe-area-inset-top,0px),50px))!important}
+  .sidebar{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 12px)!important;min-height:calc(56px + max(env(safe-area-inset-top,0px),52px) + 12px)!important}
   .sidebar nav{bottom:0!important;position:fixed!important;padding-bottom:calc(max(env(safe-area-inset-bottom,0px),16px) + 6px)!important;-webkit-transform:translate3d(0,0,0)!important;transform:translate3d(0,0,0)!important}
   dialog{margin-top:max(env(safe-area-inset-top,0px),52px)!important;max-height:calc(var(--visual-height,100dvh) - max(env(safe-area-inset-top,0px),52px) - 30px)!important}
-  .welcome-signout-btn{top:calc(max(env(safe-area-inset-top,0px),52px) + 10px)!important;right:18px!important}
-  .welcome{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 20px)!important}
+  .welcome-signout-btn{top:calc(max(env(safe-area-inset-top,0px),52px) + 16px)!important;right:18px!important}
+  .welcome{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 30px)!important}
  }
 }
-html.is-standalone-pwa .sidebar{padding-top:max(env(safe-area-inset-top,0px),50px)!important;min-height:calc(56px + max(env(safe-area-inset-top,0px),50px))!important}
+html.is-standalone-pwa .sidebar{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 12px)!important;min-height:calc(56px + max(env(safe-area-inset-top,0px),52px) + 12px)!important}
 html.is-standalone-pwa .sidebar nav{bottom:0!important;position:fixed!important;padding-bottom:calc(max(env(safe-area-inset-bottom,0px),16px) + 6px)!important;-webkit-transform:translate3d(0,0,0)!important;transform:translate3d(0,0,0)!important}
 html.is-standalone-pwa dialog{margin-top:max(env(safe-area-inset-top,0px),52px)!important;max-height:calc(var(--visual-height,100dvh) - max(env(safe-area-inset-top,0px),52px) - 30px)!important}
-html.is-standalone-pwa .welcome-signout-btn{top:calc(max(env(safe-area-inset-top,0px),52px) + 10px)!important;right:18px!important}
-html.is-standalone-pwa .welcome{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 20px)!important}
+html.is-standalone-pwa .welcome-signout-btn{top:calc(max(env(safe-area-inset-top,0px),52px) + 16px)!important;right:18px!important}
+html.is-standalone-pwa .welcome{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 30px)!important}
 </style></head><body><div id="app"><p class="loading">Opening your writing workspace…</p></div><div id="toast" role="status" aria-live="polite"></div><dialog id="dialog"></dialog><dialog id="slot-warning-dialog" class="slot-warning-dialog"></dialog><script type="module">
 if(window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches){document.documentElement.classList.add('is-standalone-pwa');}
 const statuses = ['PREPRO','FILMED','EDITED','TX','CANCELLED','POST'];
