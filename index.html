@@ -444,13 +444,20 @@ body[data-project-type="conti"] .sidebar nav{display:none!important}
 .conti-pending-shot-deck{display:flex;flex-direction:column;gap:8px;width:100%}
 .conti-back-shot-btn{min-height:46px;padding:10px 20px;border-radius:10px;font-weight:700;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--paper);border:1px solid var(--line);color:var(--ink);width:100%;cursor:pointer}
 .conti-back-shot-btn:hover{background:#2a2a30;color:var(--paper)}
-.home-episodes-wrap{margin-top:6px}
-.home-episodes-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;padding:0 2px}
-.home-episodes-header .eyebrow{font-size:10px;letter-spacing:1.5px;color:var(--muted);font-weight:700}
-.home-episodes-swipe-hint{font-size:11px;color:var(--muted);font-weight:500}
-.home-episodes-slider{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:10px;scrollbar-width:none}
-.home-episodes-slider::-webkit-scrollbar{display:none}
-.home-ep-box{flex:0 0 100%;min-width:100%;max-width:100%;scroll-snap-align:start;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-sizing:border-box;user-select:none;cursor:default}
+.home-slider-viewport{display:flex;width:100%;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.home-slider-viewport::-webkit-scrollbar{display:none}
+.home-slide{flex:0 0 100%;min-width:100%;max-width:100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;box-sizing:border-box}
+.home-slide-main{padding-bottom:14px}
+.home-slide-episodes{padding-bottom:30px}
+.home-swipe-prompt{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--paper);border:1px solid var(--line);border-radius:12px;margin-top:6px;font-size:13px;font-weight:600;color:var(--muted);width:100%;cursor:pointer;text-align:left}
+.home-swipe-prompt:hover{border-color:var(--green);color:var(--ink)}
+.home-swipe-arrow{color:var(--green);font-weight:700}
+.home-episodes-stack-view{display:flex;flex-direction:column;gap:14px}
+.home-episodes-stack-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 2px}
+.home-swipe-back-btn{min-height:34px!important;padding:6px 14px!important;font-size:12px!important;font-weight:700!important;border-radius:8px!important;background:var(--paper)!important;border:1px solid var(--line)!important;color:var(--ink)!important;cursor:pointer}
+.home-swipe-back-btn:hover{background:var(--bg)!important;border-color:var(--green)!important}
+.home-episodes-vertical-stack{display:flex;flex-direction:column;gap:14px}
+.home-ep-box{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-sizing:border-box;user-select:none;cursor:default}
 .home-ep-box-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--line)}
 .home-ep-box-head strong{font-size:15px;font-weight:750;letter-spacing:0.5px;color:var(--ink)}
 .home-ep-box-head small{font-size:11px;color:var(--muted);font-weight:600}
@@ -463,6 +470,14 @@ body[data-project-type="conti"] .sidebar nav{display:none!important}
 .home-ep-cap-num{font-size:11px;font-weight:700;color:var(--muted);min-width:76px}
 .home-ep-cap-topic{font-size:13px;font-weight:550;color:var(--ink);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .home-ep-cap-topic.is-na{color:var(--muted);font-weight:400}
+.conti-rem-prompt-grid{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.conti-rem-prompt-btn{width:100%;min-height:50px;font-size:15px;font-weight:750;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.conti-rem-prompt-btn.is-gt{background:#24392e;color:#b3ddbe;border:1.5px solid #346147}
+.conti-rem-prompt-btn.is-gt:hover{background:#2e4d3c;color:#fff}
+.conti-rem-prompt-btn.is-kiv{background:#3a3219;color:#ffda69;border:1.5px solid #6b5622}
+.conti-rem-prompt-btn.is-kiv:hover{background:#4d401e;color:#fff}
+.conti-rem-prompt-btn.is-ng{background:#422323;color:#ffabab;border:1.5px solid #6e3333}
+.conti-rem-prompt-btn.is-ng:hover{background:#542929;color:#fff}
 .page-heading p.conti-heading-date{display:block!important;font-size:12px;color:var(--muted);margin:4px 0 0;font-weight:500}
 .conti-top-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
 .conti-top-actions button{margin:0!important;width:100%!important;height:44px!important;min-height:44px!important;padding:0 12px!important;font-size:13px!important;font-weight:700!important;border-radius:10px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;box-sizing:border-box!important}
@@ -1028,6 +1043,26 @@ function options(values,selected){return values.map(v=>`<option value="${esc(v)}
 function stat(n,label,sub=''){return `<div class="stat"><strong>${n}</strong><span>${label}</span><small>${sub}</small></div>`;}
 function header(){const activeTab=view==='preview'?'script':view==='conti-record'?'conti':view;const isContiOnly=p?.settings?.projectType==='conti';return `<aside class="sidebar"><a class="brand" href="#" data-action="all-projects"><span class="brand-mark" aria-label="2list">${brandEmblemSvg}</span><span>2list<small>WRITING STUDIO</small></span></a><div class="project-picker"><label>ACTIVE PROJECT</label><div class="project-picker-row"><details class="project-menu"><summary aria-label="Active project"><span>${esc(p?.name||'Select project')}</span><span aria-hidden="true">▾</span></summary><div class="project-menu-list">${projects.map(x=>`<button type="button" class="project-menu-item ${x.id===p?.id?'active':''}" data-action="open-project" data-id="${esc(x.id)}"><span>${esc(x.name)}</span>${x.id===p?.id?'<span>✓</span>':''}</button>`).join('')}<div class="project-menu-divider"></div><button type="button" class="project-menu-item" data-action="new-project"><span>＋ Create new project</span></button><button type="button" class="project-menu-item" data-action="all-projects"><span>← All projects</span></button></div></details><details class="dots-menu ${view==='settings'||view==='account'?'active':''}"><summary aria-label="Menu" title="Menu">⋮</summary><div class="dots-menu-list"><button type="button" class="project-menu-item ${view==='account'?'active':''}" data-action="nav" data-view="account"><span>Account</span></button><button type="button" class="project-menu-item ${view==='settings'?'active':''}" data-action="nav" data-view="settings"><span>Settings</span></button></div></details></div></div>${isContiOnly?'':`<nav aria-label="Main navigation">${navs.map(([v,l])=>`<button data-action="nav" data-view="${v}" class="nav-link ${activeTab===v?'active':''}" aria-label="${l}" ${activeTab===v?'aria-current="page"':''}><span class="nav-icon" aria-hidden="true">${icons[v]}</span><span class="nav-label desktop-label">${l}</span><span class="nav-label mobile-label" aria-hidden="true">${tabLabels[v]}</span>${v==='log'?`<b>${(p?.records?.length||0)+((p?.throws||[]).length||0)}</b>`:''}</button>`).join('')}</nav>`}<div class="sidebar-note"><span class="dot"></span> ${esc(userEmail||(adapter.mode==='local'?'Local preview':'Google Sheets'))}<p>${adapter.mode==='local'?'Connected to Google Sheets (R&D preview).':'Synced to your Google Sheets.'}</p><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="text-button" data-action="help">Quick guide ↗</button><button class="text-button" data-action="sign-out">Sign out</button></div>${adapter.mode==='local'?'<a class="phone-preview-link" href="/?phone-preview=1" target="_blank" rel="noopener">Phone preview ↗</a>':''}</div></aside>`;}
 function googleIcon(){return `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09C3.26 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.98-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>`;}
+function promptContiSceneSwitchRemark(lastRow, targetScene){
+ const sc=lastRow.scene||'1';
+ const sh=lastRow.shot||'1';
+ const tk=lastRow.take||'1';
+ dialog(`<div>
+  <div class="dialog-heading">
+    <div>
+      <p class="eyebrow">UNRECORDED REMARKS</p>
+      <h2>Scene ${esc(sc)}, Shot ${esc(sh)}, Take ${esc(tk)} has not been recorded.</h2>
+    </div>
+    <button type="button" data-action="close" aria-label="Close">✕</button>
+  </div>
+  <p style="font-size:14px;margin-bottom:18px;color:var(--muted)">How was it?</p>
+  <div class="conti-rem-prompt-grid">
+    <button type="button" class="conti-rem-prompt-btn is-gt" data-action="confirm-scene-switch-rem" data-id="${esc(lastRow.id)}" data-rem="GT" data-target-scene="${esc(targetScene)}">GT (Good Take)</button>
+    <button type="button" class="conti-rem-prompt-btn is-kiv" data-action="confirm-scene-switch-rem" data-id="${esc(lastRow.id)}" data-rem="KIV" data-target-scene="${esc(targetScene)}">KIV</button>
+    <button type="button" class="conti-rem-prompt-btn is-ng" data-action="confirm-scene-switch-rem" data-id="${esc(lastRow.id)}" data-rem="NG" data-target-scene="${esc(targetScene)}">NG (No Good)</button>
+  </div>
+ </div>`);
+}
 function contiHeadingTitle(){
  return view==='conti'?'Conti Sheets':'Conti Sheet';
 }
@@ -1124,8 +1159,36 @@ function home(){
   }).join('');
   return `<div class="home-ep-box" aria-label="Episode ${n} Overview"><div class="home-ep-box-head"><strong>EPISODE ${String(n).padStart(2,'0')}</strong><small>${n} of ${totalEps}</small></div><div class="home-ep-throw-row"><span class="home-ep-throw-badge">THROW</span><span class="home-ep-throw-topic ${throwTopic==='N/A'?'is-na':''}">${esc(throwTopic)}</span></div><ul class="home-ep-caps-list">${capRows}</ul></div>`;
  }).join('');
- const episodeSliderHtml=`<section class="home-episodes-wrap"><div class="home-episodes-header"><span class="eyebrow">SERIES EPISODES OVERVIEW</span><small class="home-episodes-swipe-hint">Swipe left ➔</small></div><div class="home-episodes-slider" role="region" aria-label="Episodes capsule list">${episodeBoxes}</div></section>`;
- return `<div class="home-stack"><section class="hero home-hero"><div class="home-identity">${p.settings.station?`<div class="home-station-badge">${esc(p.settings.station)}</div>`:''}${formatProgramTitle(p.name)}<p>${esc(p.settings.description||'No program tagline added yet. Click the gear icon to add your tagline and host details.')}</p><div class="home-people-row"><div class="host-badge"><span class="host-avatar">${esc(hostInitial)}</span><span>HOST · <b>${esc(p.settings.host||'HOST')}</b></span></div></div></div><div class="home-hero-footer"><span class="pill home-identity-pill">TV MAGAZINE · ${p.settings.slot} MINUTES · ${p.settings.episodes} EPISODES</span><button type="button" class="hero-gear-btn" data-action="nav" data-view="settings" aria-label="Edit project" title="Edit project"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div></section><details class="tx-card"><summary><span class="eyebrow">NEXT TX DATE</span><strong id="next-tx-display">${esc(nextTxDisplay())}</strong><small>Upcoming broadcast schedule · click to view all episodes ▾</small></summary><div class="tx-schedule-wrap"><table class="tx-table" aria-label="Broadcast schedule by episode"><tbody>${txRows}</tbody></table></div></details>${episodeSliderHtml}</div>`;
+
+ return `<div class="home-slider-viewport" aria-label="Home and Episodes Views">
+  <div class="home-slide home-slide-main">
+    <div class="home-stack">
+      <section class="hero home-hero">
+        <div class="home-identity">${p.settings.station?`<div class="home-station-badge">${esc(p.settings.station)}</div>`:''}${formatProgramTitle(p.name)}<p>${esc(p.settings.description||'No program tagline added yet. Click the gear icon to add your tagline and host details.')}</p><div class="home-people-row"><div class="host-badge"><span class="host-avatar">${esc(hostInitial)}</span><span>HOST · <b>${esc(p.settings.host||'HOST')}</b></span></div></div></div>
+        <div class="home-hero-footer"><span class="pill home-identity-pill">TV MAGAZINE · ${p.settings.slot} MINUTES · ${p.settings.episodes} EPISODES</span><button type="button" class="hero-gear-btn" data-action="nav" data-view="settings" aria-label="Edit project" title="Edit project"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+      </section>
+      <details class="tx-card">
+        <summary><span class="eyebrow">NEXT TX DATE</span><strong id="next-tx-display">${esc(nextTxDisplay())}</strong><small>Upcoming broadcast schedule · click to view all episodes ▾</small></summary>
+        <div class="tx-schedule-wrap"><table class="tx-table" aria-label="Broadcast schedule by episode"><tbody>${txRows}</tbody></table></div>
+      </details>
+      <button type="button" class="home-swipe-prompt" data-action="home-scroll-slide" data-slide="1">
+        <span>Series Episodes Overview</span>
+        <span class="home-swipe-arrow">Swipe left ➔</span>
+      </button>
+    </div>
+  </div>
+  <div class="home-slide home-slide-episodes">
+    <div class="home-episodes-stack-view">
+      <div class="home-episodes-stack-header">
+        <button type="button" class="home-swipe-back-btn" data-action="home-scroll-slide" data-slide="0">← Main Home</button>
+        <span class="eyebrow">SERIES EPISODES OVERVIEW (${totalEps})</span>
+      </div>
+      <div class="home-episodes-vertical-stack">
+        ${episodeBoxes}
+      </div>
+    </div>
+  </div>
+ </div>`;
 }
 function overview(){const rs=p.records.filter(r=>r.episode===ep&&/^\d+$/.test(r.capsule)&&r.status!=='CANCELLED');const s=p.scripts[ep];const total=s?s.sections.reduce((a,x)=>a+x.seconds,0):0;const epThrows=(p.throws||[]).filter(t=>Number(t.episode)===Number(ep));const isSponsored=epThrows.some(t=>Boolean(t.sponsored));return `<section class="hero"><div><div class="hero-badge-wrap"><span class="pill">EPISODE ${String(ep).padStart(2,'0')}</span>${isSponsored?'<span class="pill is-sponsored">★ SPONSORED</span>':''}</div><h2>Arrange the stories.<br>Give every voice room.</h2><p>${rs.length} of ${p.settings.capsules} capsules recorded for this episode.</p><button class="light" data-action="open-script-episode" data-ep="${ep}">${s?'Continue writing':'Open script editor'} <span>↗</span></button></div><div class="hero-art" aria-hidden="true"><div class="paper"><small>EP ${String(ep).padStart(2,'0')} / SCRIPT</small><div>VIDEO <span>AUDIO</span></div><i></i><i></i><i></i><i></i><b>STORIES, IN THE MAKING.</b></div><span class="orbit">✳</span></div></section><section class="stats">${stat(String(rs.length).padStart(2,'0'),'Capsules this episode',`${rs.filter(r=>['EDITED','TX'].includes(r.status)).length} edited`)}${stat(s?tc(total):'—','Content duration',`Target ${p.settings.target} min · slot ${p.settings.slot} min`)}${stat(String(Object.keys(p.scripts).length).padStart(2,'0'),'Saved scripts','In this project')}${stat(breaksForSlot(p.settings.slot),'Commercial breaks','Excludes advertising time')}</section><div class="section-title"><h2>Capsules in episode ${ep}</h2><button class="text-button" data-action="nav" data-view="log">View production log →</button></div><div class="capsule-grid">${rs.length?rs.sort((a,b)=>+a.capsule-+b.capsule).map(r=>`<button class="capsule-card" data-action="edit-record" data-id="${r.id}"><div><span class="capsule-number">${String(r.capsule).padStart(2,'0')}</span><span class="status ${r.status.toLowerCase()}">${r.status}</span></div><h3>${esc(r.topic||'Topic not entered')}</h3><p>${esc(r.description||'Add a description of this story.')}</p><small>${esc(r.location||'Location not entered')} <span>${esc(r.duration||'--:--')} ↗</span></small></button>`).join(''):'<div class="empty">No capsules yet. Start with your first story.</div>'}<button class="add-card" data-action="add-record"><span>＋</span>Add Capsule</button></div><div class="note"><b>Your workspace, on phone and desktop.</b><p>${adapter.mode==='local'?'This preview saves data in this browser. Use JSON backups to move between devices; Sheets sync needs a one-time setup.':'Project data is read from Sheets. Click Reload after editing the spreadsheet manually.'}</p></div>`;}
 function log(){
@@ -1947,6 +2010,56 @@ async function doAction(a,b){
  if(a==='conti-setup-next')showContiSetupStep(2);
  if(a==='conti-setup-back')showContiSetupStep(1);
  if(a==='open-conti-sheet'){syncActiveContiSheet();const s=(p?.settings?.contiSheets||[]).find(x=>x.id===b.dataset.id);if(s){contiUndoStack=[];p.settings.activeContiSheetId=s.id;p.settings.contiShootDate=s.date||todayShootDate();if(s.contiType)p.settings.contiType=s.contiType;p.settings.contiSceneMode=s.sceneMode||'default';p.settings.contiCameras=s.cameras||2;p.settings.contiAudio=s.audio||'separate';p.settings.contiEnded=Boolean(s.ended);ep=Number(s.episode||1);p.settings.contiRows=[...(p.settings.contiRows||[]).filter(r=>Number(r.episode||1)!==ep),...clone(s.rows||[]).map(r=>({...r,episode:ep}))];activeContiScene=String(s.rows?.at(-1)?.scene||s.rows?.[0]?.scene||'1');view='conti-record';render();window.scrollTo(0,0);}}
+ if(a==='home-scroll-slide'){
+  const idx=Number(b.dataset.slide||0);
+  const viewport=document.querySelector('.home-slider-viewport');
+  if(viewport){viewport.scrollTo({left:idx*viewport.clientWidth,behavior:'smooth'});}
+  return;
+ }
+ if(a==='confirm-scene-switch-rem'){
+  const rowId=b.dataset.id;
+  const rem=b.dataset.rem;
+  const targetScene=b.dataset.targetScene;
+  const row=p?.settings?.contiRows?.find(r=>r.id===rowId);
+  if(row){
+   row.remarks=rem;
+   syncActiveContiSheet();
+   draft();
+  }
+  closeDialog();
+  if(targetScene==='__new_scene__'){
+   if(isHostThrowConti()){
+    const idx=hostThrowScenesList().indexOf(String(activeContiScene));
+    const nextScene=hostThrowScenesList()[(idx+1)%hostThrowScenesList().length];
+    activeContiScene=nextScene;
+    render();
+    window.scrollTo(0,0);
+    notify(`Moved to ${nextScene}.`);
+    return;
+   }
+   if(p?.settings?.contiSceneMode==='custom'){contiNewSceneDialog();return;}
+   pushContiUndo();
+   const rows=getEpisodeContiRows();
+   const maxScene=rows.length?Math.max(0,...rows.map(r=>Number(r.scene)||0)):0;
+   const nextScene=String(maxScene+1);
+   activeContiScene=nextScene;
+   const added=newContiRow(nextScene,'1','1',null);
+   added.draft=true;added.cam1='';added.cam2='';added.cam3='';added.audio='';added.remarks='';
+   p.settings.contiRows.push(added);
+   syncActiveContiSheet();
+   draft();
+   render();
+   window.scrollTo(0,0);
+   notify(`Moved to Scene ${nextScene}.`);
+   return;
+  }
+  if(targetScene){
+   activeContiScene=targetScene;
+   render();
+   window.scrollTo(0,0);
+  }
+  return;
+ }
  if(a==='select-conti-scene'){
   const targetScene=String(b.dataset.scene||'1');
   if(targetScene!==String(activeContiScene)){
@@ -1954,9 +2067,8 @@ async function doAction(a,b){
    const prevSceneRows=rows.filter(r=>String(r.scene||'1')===String(activeContiScene)&&!r.draft&&String(r.description||'').trim());
    const lastRow=prevSceneRows.at(-1);
    if(lastRow&&!String(lastRow.remarks||'').trim()){
-    lastRow.remarks='GT';
-    syncActiveContiSheet();
-    draft();
+    promptContiSceneSwitchRemark(lastRow, targetScene);
+    return;
    }
    activeContiScene=targetScene;
    render();
@@ -1985,7 +2097,16 @@ async function doAction(a,b){
  if(a==='conti-undo'){if(contiUndoStack.length){const prev=contiUndoStack.pop();p.settings.contiRows=prev.rows;activeContiScene=prev.activeScene;recalculateContiFileNumbers(getEpisodeContiRows());syncActiveContiSheet();draft();render();return;}const rows=getEpisodeContiRows();if(rows.length>1){const last=rows.at(-1);p.settings.contiRows=p.settings.contiRows.filter(r=>r.id!==last.id);const rem=getEpisodeContiRows();activeContiScene=String(rem.at(-1)?.scene||'1');recalculateContiFileNumbers(rem);syncActiveContiSheet();draft();render();}}
  if(a==='add-conti-take'){const rows=getEpisodeContiRows();const sceneRows=rows.filter(r=>String(r.scene||'1')===String(activeContiScene));const lastSceneRow=sceneRows.at(-1);if(!lastSceneRow||!String(lastSceneRow.description||'').trim())return;pushContiUndo();if(lastSceneRow&&!String(lastSceneRow.remarks||'').trim())lastSceneRow.remarks='NG';const nextTake=String((Number(lastSceneRow?.take)||0)+1);const added=newContiRow(activeContiScene,lastSceneRow?.shot||'1',nextTake,null);added.description=lastSceneRow?.description||'';added.remarks='';added.draft=false;p.settings.contiRows.push(added);recalculateContiFileNumbers(getEpisodeContiRows());syncActiveContiSheet();draft();render();}
  if(a==='conti-new-shot'){const rows=getEpisodeContiRows();const sceneRows=rows.filter(r=>String(r.scene||'1')===String(activeContiScene));const lastSceneRow=sceneRows.at(-1);if(!lastSceneRow||!String(lastSceneRow.description||'').trim())return;pushContiUndo();if(lastSceneRow&&!String(lastSceneRow.remarks||'').trim())lastSceneRow.remarks='GT';const maxShot=sceneRows.length?Math.max(1,...sceneRows.map(r=>Number(r.shot)||1)):1;const nextShot=String(maxShot+1);const shotRow=newContiRow(activeContiScene,nextShot,'1',null);shotRow.draft=true;shotRow.cam1='';shotRow.cam2='';shotRow.cam3='';shotRow.audio='';shotRow.remarks='';p.settings.contiRows.push(shotRow);syncActiveContiSheet();draft();render();const el=document.querySelector(`[data-conti-shot-desc="${esc(activeContiScene)}:${nextShot}"]`);el?.focus();}
- if(a==='conti-new-scene'){if(isHostThrowConti()){const idx=hostThrowScenesList().indexOf(String(activeContiScene));const nextScene=hostThrowScenesList()[(idx+1)%hostThrowScenesList().length];activeContiScene=nextScene;render();window.scrollTo(0,0);notify(`Moved to ${nextScene}.`);return;}const rows=getEpisodeContiRows();const sceneRows=rows.filter(r=>String(r.scene||'1')===String(activeContiScene));const lastSceneRow=sceneRows.at(-1);if(lastSceneRow&&!String(lastSceneRow.remarks||'').trim())lastSceneRow.remarks='GT';if(p?.settings?.contiSceneMode==='custom'){contiNewSceneDialog();return;}pushContiUndo();const maxScene=rows.length?Math.max(0,...rows.map(r=>Number(r.scene)||0)):0;const nextScene=String(maxScene+1);activeContiScene=nextScene;const added=newContiRow(nextScene,'1','1',null);added.draft=true;added.cam1='';added.cam2='';added.cam3='';added.audio='';added.remarks='';p.settings.contiRows.push(added);syncActiveContiSheet();draft();render();window.scrollTo(0,0);notify(`Moved to Scene ${nextScene}.`);}
+ if(a==='conti-new-scene'){
+  const curRows=getEpisodeContiRows();
+  const curSceneRows=curRows.filter(r=>String(r.scene||'1')===String(activeContiScene));
+  const curLastRow=curSceneRows.at(-1);
+  if(!curLastRow||!String(curLastRow.description||'').trim())return;
+  if(curLastRow&&!String(curLastRow.remarks||'').trim()){
+   promptContiSceneSwitchRemark(curLastRow, '__new_scene__');
+   return;
+  }
+  if(isHostThrowConti()){const idx=hostThrowScenesList().indexOf(String(activeContiScene));const nextScene=hostThrowScenesList()[(idx+1)%hostThrowScenesList().length];activeContiScene=nextScene;render();window.scrollTo(0,0);notify(`Moved to ${nextScene}.`);return;}const rows=getEpisodeContiRows();const sceneRows=rows.filter(r=>String(r.scene||'1')===String(activeContiScene));const lastSceneRow=sceneRows.at(-1);if(lastSceneRow&&!String(lastSceneRow.remarks||'').trim())lastSceneRow.remarks='GT';if(p?.settings?.contiSceneMode==='custom'){contiNewSceneDialog();return;}pushContiUndo();const maxScene=rows.length?Math.max(0,...rows.map(r=>Number(r.scene)||0)):0;const nextScene=String(maxScene+1);activeContiScene=nextScene;const added=newContiRow(nextScene,'1','1',null);added.draft=true;added.cam1='';added.cam2='';added.cam3='';added.audio='';added.remarks='';p.settings.contiRows.push(added);syncActiveContiSheet();draft();render();window.scrollTo(0,0);notify(`Moved to Scene ${nextScene}.`);}
  if(a==='conti-end-record'){const rows=getEpisodeContiRows();const latestOverall=rows.at(-1);if(latestOverall&&!String(latestOverall.remarks||'').trim())latestOverall.remarks='GT';p.settings.contiEnded=true;syncActiveContiSheet();draft();await save();notify('Recording session ended and saved to Conti Sheets.');}
  if(a==='conti-continue-record'){p.settings.contiEnded=false;syncActiveContiSheet();draft();await save();notify('Conti Sheet resumed. You can continue recording.');}
  if(a==='remove-conti-row'){if(Array.isArray(p?.settings?.contiRows)){p.settings.contiRows=p.settings.contiRows.filter(r=>r.id!==b.dataset.id);recalculateContiFileNumbers(getEpisodeContiRows());syncActiveContiSheet();draft();render();}}
