@@ -171,8 +171,12 @@ html:has(dialog[open]){overflow:hidden}
 .welcome-heading{font-size:38px!important;line-height:1.15!important;font-weight:800!important;color:var(--ink)!important;margin:0 0 40px!important;letter-spacing:-0.5px!important}
 @media(max-width:760px){.welcome-heading{font-size:27px!important;line-height:1.2!important;margin:0 0 28px!important}}
 
-.welcome-signout-btn{position:fixed;top:20px;right:24px;z-index:100;border:0!important;background:transparent!important;padding:6px 10px!important;font-size:12px!important;font-weight:550!important;color:var(--muted)!important;cursor:pointer!important;border-radius:6px;transition:color .15s,background .15s}
-.welcome-signout-btn:hover{color:var(--ink)!important;background:rgba(255,255,255,0.06)!important}
+.welcome-signout-btn{position:fixed;top:calc(max(env(safe-area-inset-top,0px),20px) + 6px);right:20px;z-index:100;border:1px solid var(--line)!important;background:#26262b!important;padding:7px 14px!important;font-size:12px!important;font-weight:600!important;color:var(--ink)!important;cursor:pointer!important;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,0.4);transition:color .15s,background .15s,transform .12s}
+.welcome-signout-btn:hover{color:#ffabab!important;background:#362828!important;border-color:#5a3333!important;transform:translateY(-1px)}
+@media(max-width:760px){
+ .welcome-signout-btn{top:calc(max(env(safe-area-inset-top,0px),52px) + 10px)!important;right:16px!important}
+ .welcome{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 20px)!important}
+}
 .welcome .actions{max-width:560px;margin:0 0 24px}
 .welcome-projects{margin:0 0 28px;display:flex;flex-direction:column;gap:10px;max-width:560px}
 .welcome-project-row{display:flex;align-items:center;gap:12px;width:100%}
@@ -713,11 +717,15 @@ dialog#slot-warning-dialog[open] {
   .sidebar{padding-top:max(env(safe-area-inset-top,0px),50px)!important;min-height:calc(56px + max(env(safe-area-inset-top,0px),50px))!important}
   .sidebar nav{bottom:0!important;position:fixed!important;padding-bottom:calc(max(env(safe-area-inset-bottom,0px),16px) + 6px)!important;-webkit-transform:translate3d(0,0,0)!important;transform:translate3d(0,0,0)!important}
   dialog{margin-top:max(env(safe-area-inset-top,0px),52px)!important;max-height:calc(var(--visual-height,100dvh) - max(env(safe-area-inset-top,0px),52px) - 30px)!important}
+  .welcome-signout-btn{top:calc(max(env(safe-area-inset-top,0px),52px) + 10px)!important;right:18px!important}
+  .welcome{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 20px)!important}
  }
 }
 html.is-standalone-pwa .sidebar{padding-top:max(env(safe-area-inset-top,0px),50px)!important;min-height:calc(56px + max(env(safe-area-inset-top,0px),50px))!important}
 html.is-standalone-pwa .sidebar nav{bottom:0!important;position:fixed!important;padding-bottom:calc(max(env(safe-area-inset-bottom,0px),16px) + 6px)!important;-webkit-transform:translate3d(0,0,0)!important;transform:translate3d(0,0,0)!important}
 html.is-standalone-pwa dialog{margin-top:max(env(safe-area-inset-top,0px),52px)!important;max-height:calc(var(--visual-height,100dvh) - max(env(safe-area-inset-top,0px),52px) - 30px)!important}
+html.is-standalone-pwa .welcome-signout-btn{top:calc(max(env(safe-area-inset-top,0px),52px) + 10px)!important;right:18px!important}
+html.is-standalone-pwa .welcome{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 20px)!important}
 </style></head><body><div id="app"><p class="loading">Opening your writing workspace…</p></div><div id="toast" role="status" aria-live="polite"></div><dialog id="dialog"></dialog><dialog id="slot-warning-dialog" class="slot-warning-dialog"></dialog><script type="module">
 if(window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches){document.documentElement.classList.add('is-standalone-pwa');}
 const statuses = ['PREPRO','FILMED','EDITED','TX','CANCELLED','POST'];
