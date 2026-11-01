@@ -415,8 +415,15 @@ body[data-project-type="conti"] .sidebar nav{display:none!important}
 .conti-table input:focus,.conti-table select:focus{background:var(--bg);border-color:var(--line);outline:none}
 .conti-num{width:54px;text-align:center}
 .conti-num input{font-weight:700}
-.conti-cam{min-width:74px}
-.conti-audio{min-width:78px}
+.conti-cam{min-width:88px}
+.conti-audio{min-width:88px}
+.conti-file-field{display:flex;align-items:center;position:relative;width:100%;min-width:0}
+.conti-file-field input{width:100%!important;padding:6px 22px 6px 4px!important;text-align:center!important}
+.conti-file-field.is-cancelled input{color:var(--muted)!important;text-decoration:line-through!important;opacity:0.55!important;cursor:not-allowed!important}
+.conti-file-cancel-btn{position:absolute;right:3px;top:50%;transform:translateY(-50%);width:18px;height:18px;min-width:18px;min-height:18px;padding:0!important;margin:0!important;border:1px solid rgba(255,255,255,0.15)!important;border-radius:50%!important;background:rgba(255,255,255,0.06)!important;color:var(--muted)!important;font-size:10px!important;font-weight:700!important;line-height:1!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;cursor:pointer!important;transition:all .15s ease!important;user-select:none!important;-webkit-tap-highlight-color:transparent!important}
+.conti-file-cancel-btn::after{content:'';position:absolute;inset:-6px}
+.conti-file-cancel-btn:hover{background:rgba(255,90,90,0.25)!important;color:#ffabab!important;border-color:rgba(255,90,90,0.4)!important}
+.conti-file-cancel-btn.is-active{background:#5a2222!important;color:#ff9494!important;border-color:#823333!important;box-shadow:0 0 0 1px #ff949433!important}
 .conti-rem-cell{width:92px}
 .conti-rem-select{font-weight:700;text-align:center;text-align-last:center;border-radius:999px!important;padding:5px 8px!important;font-size:11px!important;cursor:pointer;-webkit-appearance:none;appearance:none}
 .conti-rem-select.is-empty{background:transparent;color:var(--muted);border:1px dashed var(--line)!important}
@@ -1132,14 +1139,47 @@ function nextFileNumber(prev,fallback='001'){
  const nextNum=String(Number(m[2])+1).padStart(m[2].length,'0');
  return `${m[1]}${nextNum}${m[3]}`;
 }
+function recalculateContiFileNumbers(rows){
+ if(!Array.isArray(rows))return;
+ const s=p?.settings||{};
+ const cols=['cam1','cam2','cam3','audio'];
+ const sorted=sortContiRows(rows.filter(r=>!r.draft));
+
+ for(const col of cols){
+  const startSetting = col==='cam1'?s.contiStartCam1:col==='cam2'?s.contiStartCam2:col==='cam3'?s.contiStartCam3:s.contiStartAudio;
+  const fallback = String(startSetting||'001').trim()||'001';
+  let lastVal = null;
+
+  for(const r of sorted){
+   const isOff = Boolean(r[`${col}_off`]);
+   if(isOff){
+    r[col] = '';
+    continue;
+   }
+   if(r[`${col}_manual`]){
+    const manualVal = String(r[col]||'').trim();
+    if(manualVal){
+     lastVal = manualVal;
+    }
+   }else{
+    if(lastVal === null){
+     const cur = String(r[col]||'').trim();
+     r[col] = cur || fallback;
+    }else{
+     r[col] = nextFileNumber(lastVal, fallback);
+    }
+    lastVal = r[col];
+   }
+  }
+ }
+}
 function newContiRow(scene='1',shot='1',take='1',prevRow=null){
  const s=p?.settings||{};
  return {
   id:uid(),episode:ep,scene:String(scene),shot:String(shot),take:String(take),
-  cam1:prevRow?nextFileNumber(prevRow.cam1,s.contiStartCam1||'001'):String(s.contiStartCam1||'001'),
-  cam2:prevRow?nextFileNumber(prevRow.cam2,s.contiStartCam2||'001'):String(s.contiStartCam2||'001'),
-  cam3:prevRow?nextFileNumber(prevRow.cam3,s.contiStartCam3||'001'):String(s.contiStartCam3||'001'),
-  audio:prevRow?nextFileNumber(prevRow.audio,s.contiStartAudio||'001'):String(s.contiStartAudio||'001'),
+  cam1:'',cam2:'',cam3:'',audio:'',
+  cam1_off:false,cam2_off:false,cam3_off:false,audio_off:false,
+  cam1_manual:false,cam2_manual:false,cam3_manual:false,audio_manual:false,
   description:prevRow&&String(prevRow.scene)===String(scene)&&String(prevRow.shot)===String(shot)?(prevRow.description||''):'',
   remarks:''
  };
@@ -1263,9 +1303,9 @@ function buildContiPdfBlob(programName,sheet){
    text('F2',10,colX[1]+16,y+7,String(r.shot||'1'));
    text('F1',10,colX[2]+16,y+7,String(r.take||'1'));
    text('F1',9,colX[3]+8,y+7,String(r.description||'').slice(0,52));
-   for(let c=0;c<cams;c++)text('F1',9,colX[4+c]+14,y+7,String(r[`cam${c+1}`]||''));
+   for(let c=0;c<cams;c++)text('F1',9,colX[4+c]+14,y+7,r[`cam${c+1}_off`]?'—':String(r[`cam${c+1}`]||'—'));
    let ci=4+cams;
-   if(showAudio){text('F1',9,colX[ci]+14,y+7,String(r.audio||''));ci++;}
+   if(showAudio){text('F1',9,colX[ci]+14,y+7,r.audio_off?'—':String(r.audio||'—'));ci++;}
    text('F2',9,colX[ci]+20,y+7,String(r.remarks||'—'));
   }
   return ops.join('\n');
@@ -1313,7 +1353,7 @@ function renderTraditionalContiTable(sheet){
  const hasSub=cams>1;
  const rowSpan=hasSub?' rowspan="2"':'';
  const rows=sortContiRows((sheet?.rows||[]).filter(r=>!r.draft&&String(r.description||'').trim()));
- return `<div class="conti-wrap"><table class="conti-table conti-full-table" aria-label="Full Continuity Sheet"><thead><tr><th${rowSpan}>SCENE</th><th${rowSpan}>SHOT</th><th${rowSpan}>TAKE</th><th${rowSpan}>DESCRIPTION</th><th${hasSub?` colspan="${cams}"`:''}>VIDEO</th>${showAudio?`<th${rowSpan}>AUDIO</th>`:''}<th${rowSpan}>REMARKS</th></tr>${hasSub?`<tr class="conti-subhead">${Array.from({length:cams},(_,i)=>`<th>CAM ${i+1}</th>`).join('')}</tr>`:''}</thead><tbody>${rows.map(r=>`<tr><td><b>${esc(r.scene||'1')}</b></td><td><b>${esc(r.shot||'1')}</b></td><td>${esc(r.take||'1')}</td><td class="conti-desc-cell">${esc(r.description||'—')}</td>${Array.from({length:cams},(_,i)=>`<td>${esc(r[`cam${i+1}`]||'')}</td>`).join('')}${showAudio?`<td>${esc(r.audio||'')}</td>`:''}<td><span class="tx-remark ${r.remarks==='NG'?'is-not-ready':r.remarks==='KIV'?'is-script':r.remarks==='GT'?'is-aired':''}">${esc(r.remarks||'—')}</span></td></tr>`).join('')}</tbody></table></div>`;
+ return `<div class="conti-wrap"><table class="conti-table conti-full-table" aria-label="Full Continuity Sheet"><thead><tr><th${rowSpan}>SCENE</th><th${rowSpan}>SHOT</th><th${rowSpan}>TAKE</th><th${rowSpan}>DESCRIPTION</th><th${hasSub?` colspan="${cams}"`:''}>VIDEO</th>${showAudio?`<th${rowSpan}>AUDIO</th>`:''}<th${rowSpan}>REMARKS</th></tr>${hasSub?`<tr class="conti-subhead">${Array.from({length:cams},(_,i)=>`<th>CAM ${i+1}</th>`).join('')}</tr>`:''}</thead><tbody>${rows.map(r=>`<tr><td><b>${esc(r.scene||'1')}</b></td><td><b>${esc(r.shot||'1')}</b></td><td>${esc(r.take||'1')}</td><td class="conti-desc-cell">${esc(r.description||'—')}</td>${Array.from({length:cams},(_,i)=>`<td>${r[`cam${i+1}_off`]?'—':esc(r[`cam${i+1}`]||'')}</td>`).join('')}${showAudio?`<td>${r.audio_off?'—':esc(r.audio||'')}</td>`:''}<td><span class="tx-remark ${r.remarks==='NG'?'is-not-ready':r.remarks==='KIV'?'is-script':r.remarks==='GT'?'is-aired':''}">${esc(r.remarks||'—')}</span></td></tr>`).join('')}</tbody></table></div>`;
 }
 function conti(){
  syncActiveContiSheet();
@@ -1355,7 +1395,7 @@ function contiRecordPage(){
   const shotDesc=takes[0]?.description||'';
   const hasDesc=Boolean(String(shotDesc||'').trim());
   const sceneBadge=hostThrow?`${String(activeContiScene).toUpperCase()} · SHOT ${shotNo}`:`SCENE ${activeContiScene} · SHOT ${shotNo}`;
-  const tableHtml=hasDesc?`<div class="conti-wrap"><table class="conti-table" aria-label="Scene ${esc(activeContiScene)} Shot ${esc(shotNo)}"><thead><tr><th${rowSpan}>TAKE</th><th${hasSub?` colspan="${cams}"`:''}>VIDEO</th>${showAudio?`<th${rowSpan}>AUDIO</th>`:''}<th${rowSpan}>REMARKS</th></tr>${hasSub?`<tr class="conti-subhead">${Array.from({length:cams},(_,i)=>`<th>CAM ${i+1}</th>`).join('')}</tr>`:''}</thead><tbody>${takes.map(r=>`<tr data-conti-id="${esc(r.id)}"><td class="conti-num"><input type="text" data-conti-field="take" value="${esc(r.take)}" placeholder="1"></td>${Array.from({length:cams},(_,i)=>{const f=`cam${i+1}`;return `<td class="conti-cam"><input type="text" data-conti-field="${f}" value="${esc(r[f]||'')}" placeholder="001"></td>`;}).join('')}${showAudio?`<td class="conti-audio"><input type="text" data-conti-field="audio" value="${esc(r.audio||'')}" placeholder="001"></td>`:''}<td class="conti-rem-cell"><select data-conti-field="remarks" class="conti-rem-select is-${(r.remarks||'empty').toLowerCase()}">${remOpts(r.remarks||'')}</select></td></tr>`).join('')}</tbody></table></div>`:'';
+  const tableHtml=hasDesc?`<div class="conti-wrap"><table class="conti-table" aria-label="Scene ${esc(activeContiScene)} Shot ${esc(shotNo)}"><thead><tr><th${rowSpan}>TAKE</th><th${hasSub?` colspan="${cams}"`:''}>VIDEO</th>${showAudio?`<th${rowSpan}>AUDIO</th>`:''}<th${rowSpan}>REMARKS</th></tr>${hasSub?`<tr class="conti-subhead">${Array.from({length:cams},(_,i)=>`<th>CAM ${i+1}</th>`).join('')}</tr>`:''}</thead><tbody>${takes.map(r=>`<tr data-conti-id="${esc(r.id)}"><td class="conti-num"><input type="text" data-conti-field="take" value="${esc(r.take)}" placeholder="1"></td>${Array.from({length:cams},(_,i)=>{const f=`cam${i+1}`;const isOff=Boolean(r[`${f}_off`]);return `<td class="conti-cam"><div class="conti-file-field ${isOff?'is-cancelled':''}"><input type="text" data-conti-field="${f}" value="${isOff?'—':esc(r[f]||'')}" placeholder="001" ${isOff?'readonly':''}><button type="button" class="conti-file-cancel-btn ${isOff?'is-active':''}" data-action="toggle-conti-file" data-id="${esc(r.id)}" data-field="${f}" title="${isOff?'Restore file number':'Cancel (not rolling)'}" aria-label="Cancel ${f}">✕</button></div></td>`;}).join('')}${showAudio?(()=>{const isOff=Boolean(r.audio_off);return `<td class="conti-audio"><div class="conti-file-field ${isOff?'is-cancelled':''}"><input type="text" data-conti-field="audio" value="${isOff?'—':esc(r.audio||'')}" placeholder="001" ${isOff?'readonly':''}><button type="button" class="conti-file-cancel-btn ${isOff?'is-active':''}" data-action="toggle-conti-file" data-id="${esc(r.id)}" data-field="audio" title="${isOff?'Restore file number':'Cancel (not rolling)'}" aria-label="Cancel audio">✕</button></div></td>`;})():''}<td class="conti-rem-cell"><select data-conti-field="remarks" class="conti-rem-select is-${(r.remarks||'empty').toLowerCase()}">${remOpts(r.remarks||'')}</select></td></tr>`).join('')}</tbody></table></div>`:'';
   return `<section class="conti-shot-card ${hasDesc?'has-desc':'is-waiting-desc'}"><div class="conti-shot-head"><div class="conti-shot-title-row"><span class="conti-shot-badge">${esc(sceneBadge)}</span><small>${hasDesc?`${takes.length} take${takes.length>1?'s':''}`:'Enter description to start'}</small></div><input type="text" class="conti-shot-desc" data-conti-shot-desc="${esc(activeContiScene)}:${esc(shotNo)}" value="${esc(shotDesc)}" placeholder="Shot description (e.g. Wide angle establish)…"><p class="conti-shot-desc-hint">Take table &amp; continuous file numbers appear once shot description is entered.</p></div>${tableHtml}</section>`;
  }).join('');
  const ended=Boolean(p.settings.contiEnded);
@@ -1857,14 +1897,32 @@ async function doAction(a,b){
  if(a==='open-conti-sheet'){syncActiveContiSheet();const s=(p?.settings?.contiSheets||[]).find(x=>x.id===b.dataset.id);if(s){contiUndoStack=[];p.settings.activeContiSheetId=s.id;p.settings.contiShootDate=s.date||todayShootDate();if(s.contiType)p.settings.contiType=s.contiType;p.settings.contiSceneMode=s.sceneMode||'default';p.settings.contiCameras=s.cameras||2;p.settings.contiAudio=s.audio||'separate';p.settings.contiEnded=Boolean(s.ended);ep=Number(s.episode||1);p.settings.contiRows=[...(p.settings.contiRows||[]).filter(r=>Number(r.episode||1)!==ep),...clone(s.rows||[]).map(r=>({...r,episode:ep}))];activeContiScene=String(s.rows?.at(-1)?.scene||s.rows?.[0]?.scene||'1');view='conti-record';render();window.scrollTo(0,0);}}
  if(a==='select-conti-scene'){const targetScene=String(b.dataset.scene||'1');activeContiScene=targetScene;render();}
  if(a==='select-archive-sheet'){selectedArchiveSheetId=String(b.dataset.id||'');render();}
+ if(a==='toggle-conti-file'){
+  pushContiUndo();
+  const rowId=b.dataset.id;
+  const field=b.dataset.field;
+  const rows=getEpisodeContiRows();
+  const row=rows.find(r=>r.id===rowId);
+  if(row&&field){
+   row[`${field}_off`]=!row[`${field}_off`];
+   if(row[`${field}_off`]){
+    row[`${field}_manual`]=false;
+   }
+   recalculateContiFileNumbers(rows);
+   syncActiveContiSheet();
+   draft();
+   render();
+  }
+  return;
+ }
  if(a==='share-conti-pdf')await shareContiPdf(b.dataset.id||'');
- if(a==='conti-undo'){if(contiUndoStack.length){const prev=contiUndoStack.pop();p.settings.contiRows=prev.rows;activeContiScene=prev.activeScene;syncActiveContiSheet();draft();render();return;}const rows=getEpisodeContiRows();if(rows.length>1){const last=rows.at(-1);p.settings.contiRows=p.settings.contiRows.filter(r=>r.id!==last.id);const rem=getEpisodeContiRows();activeContiScene=String(rem.at(-1)?.scene||'1');syncActiveContiSheet();draft();render();}}
- if(a==='add-conti-take'){pushContiUndo();const rows=getEpisodeContiRows();const sceneRows=rows.filter(r=>String(r.scene||'1')===String(activeContiScene));const lastSceneRow=sceneRows.at(-1);const latestOverall=latestRecordedTakeRow(rows);if(lastSceneRow&&!String(lastSceneRow.remarks||'').trim())lastSceneRow.remarks='NG';const nextTake=String((Number(lastSceneRow?.take)||0)+1);const added=newContiRow(activeContiScene,lastSceneRow?.shot||'1',nextTake,latestOverall);added.description=lastSceneRow?.description||'';added.remarks='';p.settings.contiRows.push(added);syncActiveContiSheet();draft();render();}
+ if(a==='conti-undo'){if(contiUndoStack.length){const prev=contiUndoStack.pop();p.settings.contiRows=prev.rows;activeContiScene=prev.activeScene;recalculateContiFileNumbers(getEpisodeContiRows());syncActiveContiSheet();draft();render();return;}const rows=getEpisodeContiRows();if(rows.length>1){const last=rows.at(-1);p.settings.contiRows=p.settings.contiRows.filter(r=>r.id!==last.id);const rem=getEpisodeContiRows();activeContiScene=String(rem.at(-1)?.scene||'1');recalculateContiFileNumbers(rem);syncActiveContiSheet();draft();render();}}
+ if(a==='add-conti-take'){pushContiUndo();const rows=getEpisodeContiRows();const sceneRows=rows.filter(r=>String(r.scene||'1')===String(activeContiScene));const lastSceneRow=sceneRows.at(-1);if(lastSceneRow&&!String(lastSceneRow.remarks||'').trim())lastSceneRow.remarks='NG';const nextTake=String((Number(lastSceneRow?.take)||0)+1);const added=newContiRow(activeContiScene,lastSceneRow?.shot||'1',nextTake,null);added.description=lastSceneRow?.description||'';added.remarks='';added.draft=false;p.settings.contiRows.push(added);recalculateContiFileNumbers(getEpisodeContiRows());syncActiveContiSheet();draft();render();}
  if(a==='conti-new-shot'){pushContiUndo();const rows=getEpisodeContiRows();const sceneRows=rows.filter(r=>String(r.scene||'1')===String(activeContiScene));const lastSceneRow=sceneRows.at(-1);if(lastSceneRow&&!String(lastSceneRow.remarks||'').trim())lastSceneRow.remarks='GT';const maxShot=sceneRows.length?Math.max(1,...sceneRows.map(r=>Number(r.shot)||1)):1;const nextShot=String(maxShot+1);const shotRow=newContiRow(activeContiScene,nextShot,'1',null);shotRow.draft=true;shotRow.cam1='';shotRow.cam2='';shotRow.cam3='';shotRow.audio='';shotRow.remarks='';p.settings.contiRows.push(shotRow);syncActiveContiSheet();draft();render();const el=document.querySelector(`[data-conti-shot-desc="${esc(activeContiScene)}:${nextShot}"]`);el?.focus();}
  if(a==='conti-new-scene'){if(isHostThrowConti()){const idx=hostThrowScenesList().indexOf(String(activeContiScene));const nextScene=hostThrowScenesList()[(idx+1)%hostThrowScenesList().length];activeContiScene=nextScene;render();window.scrollTo(0,0);notify(`Moved to ${nextScene}.`);return;}const rows=getEpisodeContiRows();const sceneRows=rows.filter(r=>String(r.scene||'1')===String(activeContiScene));const lastSceneRow=sceneRows.at(-1);if(lastSceneRow&&!String(lastSceneRow.remarks||'').trim())lastSceneRow.remarks='GT';if(p?.settings?.contiSceneMode==='custom'){contiNewSceneDialog();return;}pushContiUndo();const maxScene=rows.length?Math.max(0,...rows.map(r=>Number(r.scene)||0)):0;const nextScene=String(maxScene+1);activeContiScene=nextScene;const added=newContiRow(nextScene,'1','1',null);added.draft=true;added.cam1='';added.cam2='';added.cam3='';added.audio='';added.remarks='';p.settings.contiRows.push(added);syncActiveContiSheet();draft();render();window.scrollTo(0,0);notify(`Moved to Scene ${nextScene}.`);}
  if(a==='conti-end-record'){const rows=getEpisodeContiRows();const latestOverall=rows.at(-1);if(latestOverall&&!String(latestOverall.remarks||'').trim())latestOverall.remarks='GT';p.settings.contiEnded=true;syncActiveContiSheet();draft();await save();notify('Recording session ended and saved to Conti Sheets.');}
  if(a==='conti-continue-record'){p.settings.contiEnded=false;syncActiveContiSheet();draft();await save();notify('Conti Sheet resumed. You can continue recording.');}
- if(a==='remove-conti-row'){if(Array.isArray(p?.settings?.contiRows)){p.settings.contiRows=p.settings.contiRows.filter(r=>r.id!==b.dataset.id);syncActiveContiSheet();draft();render();}}
+ if(a==='remove-conti-row'){if(Array.isArray(p?.settings?.contiRows)){p.settings.contiRows=p.settings.contiRows.filter(r=>r.id!==b.dataset.id);recalculateContiFileNumbers(getEpisodeContiRows());syncActiveContiSheet();draft();render();}}
  if(a==='open-project')await openProject(b.dataset.id);
  if(a==='delete-project'){dialog(`<h2>Delete "${esc(b.dataset.name)}"?</h2><p>This removes the project from your project list. Download a JSON backup first if you want to keep a copy for your archive.</p><div class="actions"><button data-action="close">Cancel</button><button class="primary" data-action="delete-project-confirm" data-id="${esc(b.dataset.id)}" data-name="${esc(b.dataset.name)}">Delete now</button></div>`);}
  if(a==='delete-project-confirm'){await adapter.delete(b.dataset.id);projects=await adapter.list();if(p?.id===b.dataset.id){p=null;token=null;}closeDialog();render();notify(`Deleted "${b.dataset.name}".`);}
@@ -2096,7 +2154,7 @@ document.addEventListener('change',async e=>{try{if(busy){render();return;}if(e.
 if(e.target.id==='throw-filter'){throwFilter=e.target.value;render();}
 if(e.target.id==='throw-episode-select'){ep=+e.target.value;render();}if(e.target.id==='conti-month-filter'){contiMonthFilter=e.target.value;render();}if(e.target.id==='conti-sort'){contiSort=e.target.value;render();}if(e.target.dataset.contiField==='remarks'){const rowId=e.target.closest('[data-conti-id]')?.dataset.contiId;const row=p?.settings?.contiRows?.find(r=>r.id===rowId);if(row){row.remarks=e.target.value;e.target.className=`conti-rem-select is-${(e.target.value||'empty').toLowerCase()}`;syncActiveContiSheet();draft();}}if(e.target.id==='script-style-upload'&&e.target.files?.length){const names=[...(p.settings.styleFiles||[])];const texts=[p.settings.styleReference||''];for(const file of e.target.files){const t=await extractScriptText(file);names.push(file.name);if(t)texts.push(`[${file.name}]\n${t.slice(0,3000)}`);}p.settings.styleFiles=names.slice(-5);p.settings.styleReference=texts.filter(Boolean).join('\n\n').slice(-8000);draft();render();notify('Past script reference added for AI style.');}if(e.target.closest('#record-form')&&(e.target.name==='capsule'||e.target.name==='episode')){const rf=e.target.closest('#record-form');checkCapsuleSlotConflict(rf,e.target);}if(e.target.matches('#record-form [name="capsule"]')){const f=$('#record-form [name="duration"]');if(f){f.readOnly=e.target.value==='Pr';if(f.readOnly)f.value=p.settings.promo;}}if(e.target.dataset.sectionField==='seconds'){const s=p.scripts[ep].sections.find(x=>x.id===e.target.closest('[data-section]').dataset.section);const n=duration(e.target.value);if(!s.edited)s.generated=clone(s);s.edited=true;s.seconds=n;draft();render();}}catch(err){e.target.setCustomValidity?.(err.message);e.target.reportValidity?.();notify(err.message);}});
 document.addEventListener('input',e=>{e.target.setCustomValidity?.('');if(e.target.name==='contiStartScene'){const r=e.target.closest('.conti-option-row')?.querySelector('[name="contiSceneMode"]');if(r)r.checked=false;e.target.classList.add('is-active');}if(e.target.name==='type'&&e.target.closest('#record-form')){const qBox=$('#capsule-questions-box');if(qBox)qBox.hidden=(e.target.value==='Other');}if(e.target.id==='search'){search=e.target.value;const pos=e.target.selectionStart;render();$('#search').focus();$('#search').setSelectionRange(pos,pos);}
-if(e.target.id==='throw-search'){throwSearch=e.target.value;const pos=e.target.selectionStart;render();$('#throw-search')?.focus();$('#throw-search')?.setSelectionRange(pos,pos);}if(e.target.id==='conti-search'){contiSearch=e.target.value;const pos=e.target.selectionStart;render();$('#conti-search').focus();$('#conti-search').setSelectionRange(pos,pos);}const sd=e.target.dataset.contiShotDesc;if(sd){const [sc,sh]=sd.split(':');const val=e.target.value;const epRows=getEpisodeContiRows();const matching=epRows.filter(r=>String(r.scene||'1')===sc&&String(r.shot||'1')===sh);const wasEmpty=!matching.some(r=>!r.draft&&String(r.description||'').trim());const nowFilled=Boolean(val.trim());for(const r of matching){r.description=val;if(nowFilled&&r.draft){const prevReal=latestRecordedTakeRow(epRows.filter(x=>x.id!==r.id));const s=p?.settings||{};r.draft=false;r.cam1=prevReal?nextFileNumber(prevReal.cam1,s.contiStartCam1||'001'):String(s.contiStartCam1||'001');r.cam2=prevReal?nextFileNumber(prevReal.cam2,s.contiStartCam2||'001'):String(s.contiStartCam2||'001');r.cam3=prevReal?nextFileNumber(prevReal.cam3,s.contiStartCam3||'001'):String(s.contiStartCam3||'001');r.audio=prevReal?nextFileNumber(prevReal.audio,s.contiStartAudio||'001'):String(s.contiStartAudio||'001');}}syncActiveContiSheet();draft();if(wasEmpty&&nowFilled){const pos=e.target.selectionStart;render();const el=document.querySelector(`[data-conti-shot-desc="${esc(sc)}:${esc(sh)}"]`);if(el){el.focus();el.setSelectionRange(pos,pos);}}}const cf=e.target.dataset.contiField;if(cf&&cf!=='remarks'){const rowId=e.target.closest('[data-conti-id]')?.dataset.contiId;const row=p?.settings?.contiRows?.find(r=>r.id===rowId);if(row){row[cf]=e.target.value;syncActiveContiSheet();draft();}}const f=e.target.dataset.sectionField;if(f&&f!=='seconds'){const s=p.scripts[ep].sections.find(x=>x.id===e.target.closest('[data-section]').dataset.section);if(!s.edited)s.generated=clone(s);s.edited=true;s[f]=e.target.value;draft();}});
+if(e.target.id==='throw-search'){throwSearch=e.target.value;const pos=e.target.selectionStart;render();$('#throw-search')?.focus();$('#throw-search')?.setSelectionRange(pos,pos);}if(e.target.id==='conti-search'){contiSearch=e.target.value;const pos=e.target.selectionStart;render();$('#conti-search').focus();$('#conti-search').setSelectionRange(pos,pos);}const sd=e.target.dataset.contiShotDesc;if(sd){const [sc,sh]=sd.split(':');const val=e.target.value;const epRows=getEpisodeContiRows();const matching=epRows.filter(r=>String(r.scene||'1')===sc&&String(r.shot||'1')===sh);const wasEmpty=!matching.some(r=>!r.draft&&String(r.description||'').trim());const nowFilled=Boolean(val.trim());for(const r of matching){r.description=val;if(nowFilled&&r.draft){r.draft=false;}}if(nowFilled){recalculateContiFileNumbers(epRows);}syncActiveContiSheet();draft();if(wasEmpty&&nowFilled){const pos=e.target.selectionStart;render();const el=document.querySelector(`[data-conti-shot-desc="${esc(sc)}:${esc(sh)}"]`);if(el){el.focus();el.setSelectionRange(pos,pos);}}}const cf=e.target.dataset.contiField;if(cf&&cf!=='remarks'){const rowId=e.target.closest('[data-conti-id]')?.dataset.contiId;const row=p?.settings?.contiRows?.find(r=>r.id===rowId);if(row){row[cf]=e.target.value;if(['cam1','cam2','cam3','audio'].includes(cf)){row[`${cf}_manual`]=true;row[`${cf}_off`]=false;recalculateContiFileNumbers(getEpisodeContiRows());}syncActiveContiSheet();draft();}}const f=e.target.dataset.sectionField;if(f&&f!=='seconds'){const s=p.scripts[ep].sections.find(x=>x.id===e.target.closest('[data-section]').dataset.section);if(!s.edited)s.generated=clone(s);s.edited=true;s[f]=e.target.value;draft();}});
 document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target;if(f.dataset.submitting==='true')return;f.dataset.submitting='true';const data=Object.fromEntries(new FormData(f));try{
  if(f.id==='auth-form'){userEmail=data.email.trim();safeStorage.setItem('rs:user_email',userEmail);projects=await adapter.list();render();notify(`Signed in as ${userEmail}`);return;}
  if(f.id==='project-form'){pendingProjectName=data.name.trim();projectTypeDialog(pendingProjectName);return;}if(f.id==='account-form'){writerName=String(data.writerName||'').trim();safeStorage.setItem('rs:writer_name',writerName);notify('Account saved. Writer name applies to all projects.');view=p?.settings?.projectType==='conti'?'conti':'home';render();window.scrollTo(0,0);return;}
