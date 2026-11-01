@@ -1,4 +1,4 @@
-// Force cache invalidation & clean state - v20261101-2332
+// Force cache invalidation & clean state - v20261101-2344
 self.addEventListener('install', event => {
   self.skipWaiting();
 });
