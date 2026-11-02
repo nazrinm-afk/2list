@@ -459,11 +459,17 @@ body[data-project-type="conti"] .sidebar nav{display:none!important}
 .conti-back-shot-btn{min-height:46px;padding:10px 20px;border-radius:10px;font-weight:700;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--paper);border:1px solid var(--line);color:var(--ink);width:100%;cursor:pointer}
 .conti-back-shot-btn:hover{background:#2a2a30;color:var(--paper)}
 body[data-view="home"] #main{overflow-x:hidden!important;max-width:1390px;width:100%;box-sizing:border-box}
-.home-slider-viewport{display:flex;width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:0!important;margin:0!important;padding:0!important;box-sizing:border-box}
-.home-slider-viewport::-webkit-scrollbar{display:none}
-.home-slide{flex:0 0 100%!important;min-width:100%!important;max-width:100%!important;width:100%!important;scroll-snap-align:start;scroll-snap-stop:always;box-sizing:border-box;overflow-x:hidden}
-.home-slide-main{padding:0 2px 24px}
-.home-slide-episodes{padding:0 2px 36px}
+.home-view-wrapper{width:100%;max-width:1390px;margin:0 auto;box-sizing:border-box;position:relative}
+.home-page{width:100%;box-sizing:border-box}
+.home-page-identity{padding:0 2px 24px}
+.home-page-episodes{padding:0 2px 36px}
+.home-view-wrapper.page-identity .home-page-identity{display:block;animation:homePageFadeIn .22s cubic-bezier(0.2,1,0.3,1)}
+.home-view-wrapper.page-identity .home-page-episodes{display:none!important}
+.home-view-wrapper.page-episodes .home-page-episodes{display:block;animation:homePageFadeIn .22s cubic-bezier(0.2,1,0.3,1)}
+.home-view-wrapper.page-episodes .home-page-identity{display:none!important}
+@keyframes homePageFadeIn{0%{opacity:0;transform:translateY(6px)}100%{opacity:1;transform:translateY(0)}}
+.home-episodes-footer{display:flex;justify-content:center;margin-top:24px;padding-top:16px;border-top:1px dashed var(--line)}
+.home-episodes-footer .footer-back-btn{width:100%;max-width:320px;min-height:42px;display:flex;align-items:center;justify-content:center;gap:8px}
 .home-swipe-prompt{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--paper);border:1px solid var(--line);border-radius:12px;margin-top:6px;font-size:13px;font-weight:600;color:var(--muted);width:100%;cursor:pointer;text-align:left}
 .home-swipe-prompt:hover{border-color:var(--green);color:var(--ink)}
 .home-swipe-arrow{color:var(--green);font-weight:700}
@@ -1107,7 +1113,7 @@ const $=s=>document.querySelector(s), esc=v=>String(v??'').replace(/[&<>"']/g,c=
 const adapter=globalThis.google?.script?.run?new SheetsAdapter():new LocalAdapter();
 let recordAI=null,pendingRecordSave=null;
 let userEmail=safeStorage.getItem('rs:user_email')||'',pendingProjectName='';
-let projects=[],p=null,token=null,view='home',ep=1,filter='all',search='',dirty=false,busy=false,activity='Saving…',conflict=null,itemActiveTab='split',throwSearch='',throwFilter='all';
+let projects=[],p=null,token=null,view='home',ep=1,filter='all',search='',dirty=false,busy=false,activity='Saving…',conflict=null,homeSubPage='identity',itemActiveTab='split',throwSearch='',throwFilter='all';
 const BRAND_LOGO_URI="data:image/png;base64,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";
 const brandEmblemSvg=`<svg class="brand-emblem-svg" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true"><path d="M 76 12 L 20 88 L 66 88 A 12 12 0 0 1 76 76 L 76 12 Z"/></svg>`;
 const tabLabels={conti:'Conti',script:'Script',home:'Home',log:'Item',overview:'Episode'};
@@ -1262,8 +1268,8 @@ function home(){
   return `<div class="home-ep-box" aria-label="Episode ${n} Overview"><div class="home-ep-box-head"><div style="display:flex;flex-direction:column;gap:5px;width:100%"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><strong>EPISODE ${String(n).padStart(2,'0')}</strong>${isEpSpons?'<span class="pill is-sponsored" style="font-size:8px!important;padding:2px 7px!important;margin:0!important">★ SPONSORED</span>':''}${epTheme?`<span class="pill" style="font-size:8px!important;padding:2px 7px!important;margin:0!important;background:#ffffff15;border-color:var(--lime);color:var(--lime)">${esc(epTheme)}</span>`:''}</div>${epLoc?`<div class="home-ep-box-loc" style="font-size:11px;font-weight:600;color:var(--muted);display:inline-flex;align-items:center;gap:4px"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#f4cc57" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>${esc(epLoc)}</span></div>`:''}</div></div><ul class="home-ep-caps-list">${capRows}</ul></div>`;
  }).join('');
 
- return `<div class="home-slider-viewport" aria-label="Home and Episodes Views">
-  <div class="home-slide home-slide-main">
+ return `<div class="home-view-wrapper page-${homeSubPage}" id="home-view-wrapper" data-page="${homeSubPage}" aria-label="Home and Episodes Views">
+  <div class="home-page home-page-identity" id="home-page-identity">
     <div class="home-stack">
       <section class="hero home-hero">
         <div class="home-identity">${p.settings.station?`<div class="home-station-badge">${esc(p.settings.station)}</div>`:''}${formatProgramTitle(p.name)}<p>${esc(p.settings.description||'No program tagline added yet. Click the gear icon to add your tagline and host details.')}</p><div class="home-people-row"><div class="host-badge"><span class="host-avatar">${esc(hostInitial)}</span><span>HOST · <b>${esc(p.settings.host||'HOST')}</b></span></div></div></div>
@@ -1273,20 +1279,23 @@ function home(){
         <summary><span class="eyebrow">NEXT TX DATE</span><strong id="next-tx-display">${esc(nextTxDisplay())}</strong><small>Upcoming broadcast schedule · click to view all episodes ▾</small></summary>
         <div class="tx-schedule-wrap"><table class="tx-table" aria-label="Broadcast schedule by episode"><tbody>${txRows}</tbody></table></div>
       </details>
-      <button type="button" class="home-swipe-prompt" data-action="home-scroll-slide" data-slide="1">
+      <button type="button" class="home-swipe-prompt" data-action="switch-home-page" data-page="episodes">
         <span>Series Episodes Overview</span>
         <span class="home-swipe-arrow">Swipe left ➔</span>
       </button>
     </div>
   </div>
-  <div class="home-slide home-slide-episodes">
+  <div class="home-page home-page-episodes" id="home-page-episodes">
     <div class="home-episodes-stack-view">
       <div class="home-episodes-stack-header">
-        <button type="button" class="home-swipe-back-btn" data-action="home-scroll-slide" data-slide="0">← Main Home</button>
+        <button type="button" class="home-swipe-back-btn" data-action="switch-home-page" data-page="identity">← Main Home</button>
         <span class="eyebrow">SERIES EPISODES OVERVIEW (${totalEps})</span>
       </div>
       <div class="home-episodes-vertical-stack">
         ${episodeBoxes}
+      </div>
+      <div class="home-episodes-footer">
+        <button type="button" class="home-swipe-back-btn footer-back-btn" data-action="switch-home-page" data-page="identity">← Back to Program Identity</button>
       </div>
     </div>
   </div>
@@ -2126,7 +2135,7 @@ async function extractScriptText(file){
 }
 async function doAction(a,b){
  if(busy&&a!=='backup'&&a!=='close')return;
- if(a==='nav'){if(b.dataset.view==='script')scriptActiveEp=null;if(b.dataset.view==='log')itemActiveTab='split';overviewEpPickerOpen=false;view=b.dataset.view;render();window.scrollTo(0,0);}
+ if(a==='nav'){if(b.dataset.view==='script')scriptActiveEp=null;if(b.dataset.view==='log')itemActiveTab='split';if(b.dataset.view==='home')homeSubPage='identity';overviewEpPickerOpen=false;view=b.dataset.view;render();window.scrollTo(0,0);}
  if(a==='toggle-overview-ep-picker'){overviewEpPickerOpen=!overviewEpPickerOpen;render();return;}
  if(a==='select-overview-ep'){ep=Number(b.dataset.ep)||1;overviewEpPickerOpen=false;render();return;}
  if(a==='edit-episode-overview'){episodeOverviewDialog(b.dataset.ep||ep);return;}
@@ -2165,10 +2174,17 @@ async function doAction(a,b){
  if(a==='conti-setup-next')showContiSetupStep(2);
  if(a==='conti-setup-back')showContiSetupStep(1);
  if(a==='open-conti-sheet'){syncActiveContiSheet();const s=(p?.settings?.contiSheets||[]).find(x=>x.id===b.dataset.id);if(s){contiUndoStack=[];p.settings.activeContiSheetId=s.id;p.settings.contiShootDate=s.date||todayShootDate();if(s.contiType)p.settings.contiType=s.contiType;p.settings.contiSceneMode=s.sceneMode||'default';p.settings.contiCameras=s.cameras||2;p.settings.contiAudio=s.audio||'separate';p.settings.contiEnded=Boolean(s.ended);ep=Number(s.episode||1);p.settings.contiRows=[...(p.settings.contiRows||[]).filter(r=>Number(r.episode||1)!==ep),...clone(s.rows||[]).map(r=>({...r,episode:ep}))];activeContiScene=String(s.rows?.at(-1)?.scene||s.rows?.[0]?.scene||'1');view='conti-record';render();window.scrollTo(0,0);}}
- if(a==='home-scroll-slide'){
-  const idx=Number(b.dataset.slide||0);
-  const viewport=document.querySelector('.home-slider-viewport');
-  if(viewport){viewport.scrollTo({left:idx*viewport.clientWidth,behavior:'smooth'});}
+ if(a==='switch-home-page'||a==='home-scroll-slide'){
+  const target=b.dataset.page||(b.dataset.slide==='1'?'episodes':'identity');
+  homeSubPage=target;
+  window.scrollTo(0,0);
+  const wrap=document.getElementById('home-view-wrapper');
+  if(wrap){
+   wrap.className=`home-view-wrapper page-${target}`;
+   wrap.dataset.page=target;
+  }else{
+   render();
+  }
   return;
  }
  if(a==='confirm-scene-switch-rem'){
@@ -2720,8 +2736,8 @@ window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.return
 let touchStartX=0,touchStartY=0;
 let homeTouchStartX=0,homeTouchStartY=0;
 document.addEventListener('touchstart',e=>{
- const hvp=e.target.closest('.home-slider-viewport');
- if(hvp){
+ const hwrap=e.target.closest('#home-view-wrapper');
+ if(hwrap&&e.changedTouches&&e.changedTouches[0]){
   homeTouchStartX=e.changedTouches[0].screenX;
   homeTouchStartY=e.changedTouches[0].screenY;
  }
@@ -2731,16 +2747,21 @@ document.addEventListener('touchstart',e=>{
  touchStartY=e.changedTouches[0].screenY;
 },{passive:true});
 document.addEventListener('touchend',e=>{
- const hvp=e.target.closest('.home-slider-viewport');
- if(hvp){
+ const hwrap=e.target.closest('#home-view-wrapper');
+ if(hwrap&&e.changedTouches&&e.changedTouches[0]){
   const diffX=e.changedTouches[0].screenX-homeTouchStartX;
   const diffY=e.changedTouches[0].screenY-homeTouchStartY;
   if(Math.abs(diffX)>45&&Math.abs(diffX)>Math.abs(diffY)*1.1){
-   const currentIdx=Math.round(hvp.scrollLeft/Math.max(1,hvp.clientWidth));
-   if(diffX<-45&&currentIdx===0){
-    hvp.scrollTo({left:hvp.clientWidth,behavior:'smooth'});
-   }else if(diffX>45&&currentIdx===1){
-    hvp.scrollTo({left:0,behavior:'smooth'});
+   if(diffX<-45&&homeSubPage==='identity'){
+    homeSubPage='episodes';
+    window.scrollTo(0,0);
+    hwrap.className='home-view-wrapper page-episodes';
+    hwrap.dataset.page='episodes';
+   }else if(diffX>45&&homeSubPage==='episodes'){
+    homeSubPage='identity';
+    window.scrollTo(0,0);
+    hwrap.className='home-view-wrapper page-identity';
+    hwrap.dataset.page='identity';
    }
   }
  }
