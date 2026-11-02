@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2list App Architecture & Visual Itemization Deck</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --bg-dark: #0f0f12;
+      --card-dark: #18181c;
+      --panel-dark: #222227;
+      --accent-yellow: #f4cc57;
+      --accent-yellow-light: #ffd966;
+      --accent-green: #204d43;
+      --accent-lime: #d9e9b2;
+      --border-line: #2e2e36;
+      --text-muted: #8e8e99;
+      --text-ink: #f4f4f7;
+    }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Google Sans", sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      user-select: none;
+    }
+    .slide-container {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    .slide-container.active {
+      display: flex;
+      opacity: 1;
+    }
+    .app-phone-mockup {
+      width: 320px;
+      min-width: 320px;
+      height: 640px;
+      background: #151518;
+      border: 3px solid #2e2e36;
+      border-radius: 36px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 30px rgba(244,204,87,0.08);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .badge-code {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+    .code-hero { background: rgba(244,204,87,0.18); color: #f4cc57; border: 1px solid rgba(244,204,87,0.4); }
+    .code-item { background: rgba(156,200,234,0.18); color: #9cc8ea; border: 1px solid rgba(156,200,234,0.4); }
+    .code-modal { background: rgba(240,185,186,0.18); color: #f0b9ba; border: 1px solid rgba(240,185,186,0.4); }
+    .code-conti { background: rgba(180,230,160,0.18); color: #b4e6a0; border: 1px solid rgba(180,230,160,0.4); }
+    .peeking-v-label {
+      writing-mode: vertical-rl;
+      transform: rotate(0deg);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .peeking-v-left {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #33333d; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #4a4a58; }
+  </style>
+</head>
+<body class="bg-[#0f0f12] text-[#f4f4f7] min-h-screen flex flex-col justify-between">
+
+  <!-- TOP DECK HEADER -->
+  <header class="border-b border-[#24242c] bg-[#141418] px-6 py-3 flex items-center justify-between sticky top-0 z-50 shadow-md">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-[#f4cc57] flex items-center justify-center font-bold text-black text-base shadow-sm">
+        2L
+      </div>
+      <div>
+        <h1 class="text-sm font-bold tracking-tight text-white flex items-center gap-2">
+          2list Application Visual Itemization Deck
+          <span class="text-xs font-normal px-2 py-0.5 rounded bg-[#25252e] text-[#f4cc57] border border-[#f4cc5733]">
+            Vocabulary & Component Guide
+          </span>
+        </h1>
+        <p class="text-xs text-[#8e8e99] m-0">Reference catalog to pinpoint exact screens, cards, modals, and elements.</p>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="flex items-center gap-2">
+      <button id="tocBtn" class="px-3 py-1.5 rounded-lg border border-[#2e2e38] bg-[#1c1c22] text-xs font-semibold hover:border-[#f4cc57] hover:text-[#f4cc57] transition flex items-center gap-1.5 cursor-pointer">
+        <span>☰ Slides Menu</span>
+      </button>
+
+      <div class="h-5 w-px bg-[#2e2e38] mx-1"></div>
+
+      <button id="prevBtn" class="px-3 py-1.5 rounded-lg border border-[#2e2e38] bg-[#1c1c22] text-xs font-bold hover:bg-[#252530] text-white disabled:opacity-30 disabled:cursor-not-allowed transition flex items-center gap-1 cursor-pointer">
+        ‹ Prev
+      </button>
+
+      <div class="text-xs font-mono font-bold text-[#f4cc57] px-2">
+        <span id="currentSlideNum">1</span> / <span id="totalSlidesNum">10</span>
+      </div>
+
+      <button id="nextBtn" class="px-3 py-1.5 rounded-lg border border-[#2e2e38] bg-[#1c1c22] text-xs font-bold hover:bg-[#252530] text-white disabled:opacity-30 disabled:cursor-not-allowed transition flex items-center gap-1 cursor-pointer">
+        Next ›
+      </button>
+    </div>
+  </header>
+
+  <!-- TABLE OF CONTENTS DRAWER (MODAL) -->
+  <div id="tocModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#18181f] border border-[#2e2e38] rounded-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="p-4 border-b border-[#2e2e38] flex items-center justify-between bg-[#1f1f28]">
+        <h2 class="text-sm font-bold text-white flex items-center gap-2">
+          <span>Jump to Screen / Component Slide</span>
+        </h2>
+        <button id="closeTocBtn" class="text-gray-400 hover:text-white text-lg font-bold p-1 cursor-pointer">&times;</button>
+      </div>
+      <div class="p-4 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-2 text-xs" id="tocGrid">
+        <!-- populated via js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN SLIDES STAGE -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 flex flex-col justify-center">
+
+    <!-- ==========================================
+         SLIDE 1: SYSTEM OVERVIEW & ARCHITECTURE
+         ========================================== -->
+    <section class="slide-container active flex-col gap-6" data-slide="1" data-title="System Overview & Architecture">
+      <div class="bg-[#18181f] border border-[#2e2e38] rounded-2xl p-6 shadow-xl">
+        <div class="flex items-center justify-between border-b border-[#2e2e38] pb-4 mb-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-[#f4cc57]">SLIDE 1 OF 10 · MASTER INDEX</span>
+            <h2 class="text-2xl font-bold text-white mt-1">2list TV Magazine System Architecture</h2>
+            <p class="text-sm text-[#8e8e99] mt-0.5">Use this deck as our shared vocabulary. Every visual element has a distinct code (e.g. <span class="badge-code code-item">IT-Q2</span>) so we never confuse different boxes or cards.</p>
+          </div>
+          <div class="text-right">
+            <span class="text-xs px-2.5 py-1 rounded bg-[#204d43] text-[#d9e9b2] font-semibold border border-[#d9e9b233]">PWA Standalone & Web</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Column 1: The 5 Primary Views -->
+          <div class="bg-[#121215] border border-[#272730] rounded-xl p-4">
+            <div class="flex items-center gap-2 text-[#f4cc57] font-bold text-sm mb-3">
+              <span>⊞</span> 1. The 5 Navigation Tabs
+            </div>
+            <ul class="space-y-2 text-xs text-gray-300">
+              <li class="flex items-start gap-2 bg-[#1b1b22] p-2 rounded-lg border border-[#2a2a35]">
+                <span class="badge-code code-hero shrink-0">TAB-1</span>
+                <div>
+                  <strong class="text-white block">Home (Overview)</strong>
+                  <span class="text-gray-400">Series progress, stats, and vertical episode stack.</span>
+                </div>
+              </li>
+              <li class="flex items-start gap-2 bg-[#1b1b22] p-2 rounded-lg border border-[#2a2a35]">
+                <span class="badge-code code-hero shrink-0">TAB-2</span>
+                <div>
+                  <strong class="text-white block">Episode (Lineup)</strong>
+                  <span class="text-gray-400">Hero card, location, special theme, gear edit, capsules.</span>
+                </div>
+              </li>
+              <li class="flex items-start gap-2 bg-[#1b1b22] p-2 rounded-lg border border-[#2a2a35]">
+                <span class="badge-code code-item shrink-0">TAB-3</span>
+                <div>
+                  <strong class="text-[#f4cc57] block">Item (Slider / Split)</strong>
+                  <span class="text-gray-400">Questions card vs Capsule card, and peeking tabs.</span>
+                </div>
+              </li>
+              <li class="flex items-start gap-2 bg-[#1b1b22] p-2 rounded-lg border border-[#2a2a35]">
+                <span class="badge-code code-conti shrink-0">TAB-4</span>
+                <div>
+                  <strong class="text-white block">Continuity (Conti Sheet)</strong>
+                  <span class="text-gray-400">Camera / audio takes, good take (GT), host throws.</span>
+                </div>
+              </li>
+              <li class="flex items-start gap-2 bg-[#1b1b22] p-2 rounded-lg border border-[#2a2a35]">
+                <span class="badge-code code-hero shrink-0">TAB-5</span>
+                <div>
+                  <strong class="text-white block">Script (Editor & Rundown)</strong>
+                  <span class="text-gray-400">Video / Audio split columns and rundown timing.</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Column 2: The Two Key Item Tab Boxes -->
+          <div class="bg-[#121215] border border-[#272730] rounded-xl p-4">
+            <div class="flex items-center gap-2 text-[#9cc8ea] font-bold text-sm mb-3">
+              <span>☰</span> 2. The Item Tab Dual System
+            </div>
+            <div class="space-y-2.5 text-xs">
+              <div class="p-3 rounded-lg bg-[#181d22] border border-[#293642]">
+                <div class="flex items-center justify-between mb-1">
+                  <strong class="text-[#9cc8ea] flex items-center gap-1.5">
+                    <span class="badge-code code-item">BOX-Q</span>
+                    Questions Box
+                  </strong>
+                  <span class="text-[10px] bg-[#9cc8ea22] text-[#9cc8ea] px-1.5 py-0.5 rounded">Interview Stack</span>
+                </div>
+                <p class="text-gray-300 text-[11.5px] leading-relaxed m-0">
+                  Holds clickable cards for interview capsules. Contains:
+                  <br>• Active upcoming questions (sorted by date)
+                  <br>• Filmed questions section at bottom
+                  <br>• Opens full-screen On-Set Interview sheet modal
+                </p>
+              </div>
+
+              <div class="p-3 rounded-lg bg-[#201d14] border border-[#3d3620]">
+                <div class="flex items-center justify-between mb-1">
+                  <strong class="text-[#f4cc57] flex items-center gap-1.5">
+                    <span class="badge-code code-hero">BOX-C</span>
+                    Capsule Box
+                  </strong>
+                  <span class="text-[10px] bg-[#f4cc5722] text-[#f4cc57] px-1.5 py-0.5 rounded">Production Log</span>
+                </div>
+                <p class="text-gray-300 text-[11.5px] leading-relaxed m-0">
+                  Holds all registered stories in the project. Contains:
+                  <br>• "＋ Add Capsule" button & search toolbar
+                  <br>• Active capsule rows (IV/OT badges, keys, topics)
+                  <br>• Cancelled section (stripped from episode/capsule)
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 3: The Dialogs & Modals -->
+          <div class="bg-[#121215] border border-[#272730] rounded-xl p-4">
+            <div class="flex items-center gap-2 text-[#f0b9ba] font-bold text-sm mb-3">
+              <span>❐</span> 3. Popups & Dialogs
+            </div>
+            <ul class="space-y-2 text-xs text-gray-300">
+              <li class="bg-[#1f1618] p-2.5 rounded-lg border border-[#3b2427]">
+                <span class="badge-code code-modal mr-1">DLG-1</span>
+                <strong class="text-white">Episode Settings Dialog</strong>
+                <p class="text-[11px] text-gray-400 m-0 mt-0.5">Triggered by gear icon on Episode Hero. Edits Location, Special Theme, and Sponsored checkbox.</p>
+              </li>
+              <li class="bg-[#1f1618] p-2.5 rounded-lg border border-[#3b2427]">
+                <span class="badge-code code-modal mr-1">DLG-2</span>
+                <strong class="text-white">Capsule Record Dialog</strong>
+                <p class="text-[11px] text-gray-400 m-0 mt-0.5">Full capsule editor: Topic, Type (IV/OT), Guest, Location, Date, Status, Assignment, and Questions.</p>
+              </li>
+              <li class="bg-[#1f1618] p-2.5 rounded-lg border border-[#3b2427]">
+                <span class="badge-code code-modal mr-1">DLG-3</span>
+                <strong class="text-white">Interview Questions Sheet Modal</strong>
+                <p class="text-[11px] text-gray-400 m-0 mt-0.5">Spacious on-set sheet displaying numbered questions for shooting interviews.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 2: GLOBAL FRAME & BOTTOM NAVIGATION
+         ========================================== -->
+    <section class="slide-container flex-col gap-6" data-slide="2" data-title="Global Frame & Bottom Navigation Bar">
+      <div class="bg-[#18181f] border border-[#2e2e38] rounded-2xl p-6 shadow-xl">
+        <div class="border-b border-[#2e2e38] pb-3 mb-4">
+          <span class="text-xs font-extrabold uppercase tracking-widest text-[#f4cc57]">SLIDE 2 OF 10 · GLOBAL FRAMEWORK</span>
+          <h2 class="text-xl font-bold text-white mt-1">App Header, Navigation Bar & Status Bar</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+          <!-- Visual Diagram -->
+          <div class="bg-[#121215] border border-[#272730] rounded-xl p-5 flex flex-col gap-5">
+            <!-- Simulated Top Bar -->
+            <div>
+              <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5">Top Bar / Header Anatomy</span>
+              <div class="bg-[#18181a] border border-[#2e2e36] rounded-xl p-3 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-8 h-8 rounded-lg bg-[#204d43] border border-[#d9e9b244] flex items-center justify-center font-bold text-white text-xs">
+                    2L
+                  </div>
+                  <div>
+                    <span class="text-[10px] text-gray-400 font-mono block">PROJECT SWITCHER</span>
+                    <span class="text-sm font-bold text-white">ANGGUN S4 ▼</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#f4cc57] animate-pulse"></span>
+                  <span class="text-xs font-bold text-gray-300">Saved</span>
+                  <button class="px-2 py-1 rounded bg-[#272730] text-gray-300 text-xs">⋯</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Simulated Bottom Tab Bar -->
+            <div>
+              <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5">Phone Bottom Tab Bar Anatomy</span>
+              <div class="bg-[#18181a] border border-[#2e2e36] rounded-2xl p-2 grid grid-cols-5 gap-1 text-center shadow-lg">
+                <div class="py-1.5 rounded-xl bg-[#25252e] text-[#f4cc57] flex flex-col items-center">
+                  <span class="text-lg leading-tight">⌂</span>
+                  <span class="text-[10px] font-bold">Home</span>
+                </div>
+                <div class="py-1.5 rounded-xl text-gray-400 flex flex-col items-center hover:text-white">
+                  <span class="text-lg leading-tight">⊞</span>
+                  <span class="text-[10px] font-bold">Episode</span>
+                </div>
+                <div class="py-1.5 rounded-xl text-gray-400 flex flex-col items-center hover:text-white">
+                  <span class="text-lg leading-tight">☰</span>
+                  <span class="text-[10px] font-bold">Item</span>
+                </div>
+                <div class="py-1.5 rounded-xl text-gray-400 flex flex-col items-center hover:text-white">
+                  <span class="text-lg leading-tight">◫</span>
+                  <span class="text-[10px] font-bold">Conti</span>
+                </div>
+                <div class="py-1.5 rounded-xl text-gray-400 flex flex-col items-center hover:text-white">
+                  <span class="text-lg leading-tight">✍</span>
+                  <span class="text-[10px] font-bold">Script</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Component Reference Table -->
+          <div class="space-y-3 text-xs">
+            <div class="p-3 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">GF-1</span>
+              <strong class="text-white block text-sm">Brand Emblem & Project Picker</strong>
+              <p class="text-gray-400 mt-1">
+                Displays the 2list logo mark and current project dropdown (e.g. ANGGUN S4). Lets you switch between projects or create new ones.
+              </p>
+            </div>
+            <div class="p-3 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">GF-2</span>
+              <strong class="text-white block text-sm">Save Indicator & Cloud Sync Status</strong>
+              <p class="text-gray-400 mt-1">
+                Reflects whether changes are stored locally on your device or synchronized to Google Sheets. Shows green/yellow pulse dot.
+              </p>
+            </div>
+            <div class="p-3 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">GF-3</span>
+              <strong class="text-white block text-sm">Bottom Tab Navigation (Fixed PWA Bar)</strong>
+              <p class="text-gray-400 mt-1">
+                Fixed navigation bar with iOS safe-area inset protection. Switches seamlessly between Home, Episode, Item, Conti, and Script.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 3: HOME TAB (EPISODES OVERVIEW)
+         ========================================== -->
+    <section class="slide-container flex-col gap-6" data-slide="3" data-title="Home Tab: Series Progress & Episode Stack">
+      <div class="bg-[#18181f] border border-[#2e2e38] rounded-2xl p-6 shadow-xl">
+        <div class="border-b border-[#2e2e38] pb-3 mb-4 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-[#f4cc57]">SLIDE 3 OF 10 · HOME TAB</span>
+            <h2 class="text-xl font-bold text-white mt-1">Home Tab (Series Episodes Overview)</h2>
+          </div>
+          <span class="badge-code code-hero">VIEW: home</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <!-- Mockup Left -->
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="app-phone-mockup p-3">
+              <!-- Mini Home Screen View -->
+              <div class="text-[10px] font-bold text-gray-400 mb-1">SERIES OVERVIEW</div>
+              <div class="bg-[#1b1b22] border border-[#2e2e36] rounded-xl p-3 mb-3">
+                <span class="text-[9px] font-bold text-[#f4cc57] uppercase tracking-wider block">TV MAGAZINE PROGRESS</span>
+                <div class="text-sm font-bold text-white mt-0.5">ANGGUN S4</div>
+                <div class="text-[10px] text-gray-400 mt-1">13 Episodes · Target 25 min</div>
+              </div>
+
+              <div class="text-[10px] font-bold text-[#f4cc57] uppercase tracking-wider mb-2 flex items-center justify-between">
+                <span>SERIES EPISODES (13)</span>
+                <span class="text-[9px] text-gray-400">Vertical Stack</span>
+              </div>
+
+              <!-- Episode Box Mockup -->
+              <div class="space-y-2 overflow-hidden">
+                <!-- Episode 1 Box -->
+                <div class="p-3 rounded-xl bg-[#202026] border-2 border-[#f4cc57] relative">
+                  <div class="flex items-center gap-1.5 mb-1.5 flex-wrap">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#f4cc5722] text-[#f4cc57] border border-[#f4cc5744]">
+                      EPISODE 01
+                    </span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#f4cc57] text-[#18181b]">
+                      ★ SPONSORED
+                    </span>
+                  </div>
+                  <!-- Location on next line -->
+                  <div class="flex items-center gap-1.5 text-xs font-bold text-white mt-1">
+                    <svg class="w-3.5 h-3.5 text-[#f4cc57] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    <span>Langkawi & Normah</span>
+                  </div>
+                  <!-- Special Theme -->
+                  <div class="text-[10px] text-[#f4cc57] font-semibold mt-0.5">
+                    Empowering Women & Wellness
+                  </div>
+                  <div class="text-[9px] text-gray-400 mt-1">
+                    6 of 6 capsules recorded
+                  </div>
+                </div>
+
+                <!-- Episode 2 Box -->
+                <div class="p-3 rounded-xl bg-[#1b1b20] border border-[#2a2a33] opacity-80">
+                  <div class="flex items-center gap-1.5 mb-1">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#2a2a35] text-gray-300">
+                      EPISODE 02
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-1.5 text-xs font-bold text-white mt-1">
+                    <svg class="w-3.5 h-3.5 text-[#f4cc57] shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    <span>Penang Heritage</span>
+                  </div>
+                  <div class="text-[9px] text-gray-400 mt-1">
+                    4 of 6 capsules recorded
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Labeled Explanations Right -->
+          <div class="lg:col-span-7 space-y-3 text-xs">
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">H-BOX1</span>
+              <strong class="text-white block text-sm">Episode Pill & Sponsored Indicator</strong>
+              <p class="text-gray-400 mt-1">
+                Each episode box on the Home tab starts with the `EPISODE NN` badge. If marked as sponsored, the yellow `★ SPONSORED` badge is displayed right beside it.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">H-BOX2</span>
+              <strong class="text-white block text-sm">Location Row (With Yellow Map Pin)</strong>
+              <p class="text-gray-400 mt-1">
+                Located on the line immediately below the episode number. Features a prominent yellow map pin icon with white location title text (e.g. Langkawi, Penang).
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">H-BOX3</span>
+              <strong class="text-white block text-sm">Special Theme Subtitle</strong>
+              <p class="text-gray-400 mt-1">
+                Positioned directly under the location. Custom tagline or theme for this specific episode (e.g. "Empowering Women & Wellness").
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">H-BOX4</span>
+              <strong class="text-white block text-sm">Capsule Count Progress</strong>
+              <p class="text-gray-400 mt-1">
+                Reports how many stories have been assigned to this episode out of the series target (e.g. "6 of 6 capsules recorded for this episode").
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 4: EPISODE TAB (HERO & CAPSULES)
+         ========================================== -->
+    <section class="slide-container flex-col gap-6" data-slide="4" data-title="Episode Tab: Hero Card, Gear Edit & Lineup">
+      <div class="bg-[#18181f] border border-[#2e2e38] rounded-2xl p-6 shadow-xl">
+        <div class="border-b border-[#2e2e38] pb-3 mb-4 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-[#f4cc57]">SLIDE 4 OF 10 · EPISODE TAB</span>
+            <h2 class="text-xl font-bold text-white mt-1">Episode Tab (Lineup, Hero & Gear Settings)</h2>
+          </div>
+          <span class="badge-code code-hero">VIEW: overview</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <!-- Mockup Left -->
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="app-phone-mockup p-3">
+              <!-- Minimalist Ep Picker Toggle -->
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-base font-bold text-white">Episode</span>
+                <span class="px-2.5 py-0.5 rounded-full bg-[#f4cc5722] text-[#f4cc57] border border-[#f4cc57] text-xs font-bold">1</span>
+                <span class="text-gray-400 text-xs">▼</span>
+              </div>
+
+              <!-- Hero Box -->
+              <div class="bg-[#244a40] text-[#f6f9eb] rounded-2xl p-4 relative mb-3 shadow-md border border-[#2e5e52]">
+                <!-- Badge row -->
+                <div class="flex items-center gap-1.5 mb-2">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#f6f9eb22] text-white">EPISODE 01</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#f4cc57] text-[#18181b]">★ SPONSORED</span>
+                </div>
+
+                <!-- Location Header with Yellow Logo -->
+                <div class="flex items-start gap-1.5 text-base font-bold text-white leading-tight mb-1">
+                  <svg class="w-5 h-5 text-[#f4cc57] shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                  <span>Langkawi & Normah</span>
+                </div>
+
+                <!-- Special Theme -->
+                <div class="text-[11px] font-semibold text-[#d9e9b2] mb-1">
+                  Empowering Women & Wellness
+                </div>
+
+                <div class="text-[9.5px] text-[#e0e8db] max-w-[190px]">
+                  6 of 6 capsules recorded for this episode.
+                </div>
+
+                <!-- Gear Button -->
+                <button class="absolute right-3 bottom-3 w-8 h-8 rounded-full bg-[#1b3d34] border border-[#376b5e] text-[#f4cc57] flex items-center justify-center text-sm shadow">
+                  ⚙
+                </button>
+              </div>
+
+              <!-- Capsule Grid Section -->
+              <div class="text-[10px] font-bold text-gray-400 mb-1.5">CAPSULES IN EPISODE 1</div>
+              <div class="space-y-1.5">
+                <div class="p-2.5 rounded-xl bg-[#222227] border border-[#2e2e38] flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded-full bg-[#f4cc5722] text-[#f4cc57] text-[10px] font-bold flex items-center justify-center">IV</span>
+                    <div>
+                      <div class="text-[11px] font-bold text-white">Atma Alam Batik</div>
+                      <div class="text-[9px] text-gray-400">Capsule 01 · Langkawi</div>
+                    </div>
+                  </div>
+                  <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">EDITED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Labeled Explanations Right -->
+          <div class="lg:col-span-7 space-y-3 text-xs">
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">EP-1</span>
+              <strong class="text-white block text-sm">Episode Switcher Header</strong>
+              <p class="text-gray-400 mt-1">
+                A clean minimalist toggle button at top left displaying the active episode pill. Tapping it drops down the 1..13 grid to switch episodes instantly.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">EP-2</span>
+              <strong class="text-white block text-sm">Episode Hero Box</strong>
+              <p class="text-gray-400 mt-1">
+                The green hero card showcasing the episode's identity:
+                <br>• `EPISODE NN` + `★ SPONSORED` badge
+                <br>• Location title with yellow map pin SVG
+                <br>• Special Theme subtitle
+                <br>• Capsule recording progress count
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-modal mb-1 inline-block">EP-GEAR</span>
+              <strong class="text-white block text-sm">Episode Details Gear Button (Settings)</strong>
+              <p class="text-gray-400 mt-1">
+                The gear icon at the bottom right of the hero box. Tapping it opens the popup to edit Location, Special Theme, and toggle the Sponsored checkbox.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">EP-GRID</span>
+              <strong class="text-white block text-sm">Episode Capsule Cards & "＋ Add Capsule"</strong>
+              <p class="text-gray-400 mt-1">
+                The cards below the hero list every story assigned to this episode. Clicking any card opens the record dialog.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 5: ITEM TAB - SPLIT STATE
+         ========================================== -->
+    <section class="slide-container flex-col gap-6" data-slide="5" data-title="Item Tab: Split State (Questions vs Capsule)">
+      <div class="bg-[#18181f] border border-[#2e2e38] rounded-2xl p-6 shadow-xl">
+        <div class="border-b border-[#2e2e38] pb-3 mb-4 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-[#9cc8ea]">SLIDE 5 OF 10 · ITEM TAB (SPLIT VIEW)</span>
+            <h2 class="text-xl font-bold text-white mt-1">Item Tab: The Dual Cover Cards (State Split)</h2>
+          </div>
+          <span class="badge-code code-item">STATE: state-split</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <!-- Mockup Left -->
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="app-phone-mockup p-3">
+              <div class="text-[10px] font-bold text-gray-400 mb-1">ITEM / PRODUCTION LOG</div>
+              <div class="text-sm font-bold text-white mb-3">Workspace</div>
+
+              <!-- THE 2 SPLIT CARDS -->
+              <div class="flex-1 flex gap-2 overflow-hidden pb-1">
+                <!-- Left Split Card: Questions -->
+                <div class="flex-1 bg-gradient-to-b from-[#242429] to-[#1a1a1e] border-2 border-[#383842] rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:border-[#f4cc57] transition shadow-lg">
+                  <span class="text-xs text-[#9cc8ea] font-mono font-bold block mb-2">[ CARD 1 ]</span>
+                  <h3 class="text-2xl font-black text-white m-0 tracking-tight">Questions</h3>
+                  <span class="text-[10px] text-gray-400 mt-2 block">Tap to expand interview question list</span>
+                </div>
+
+                <!-- Right Split Card: Capsule -->
+                <div class="flex-1 bg-gradient-to-b from-[#242429] to-[#1a1a1e] border-2 border-[#383842] rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:border-[#f4cc57] transition shadow-lg">
+                  <span class="text-xs text-[#f4cc57] font-mono font-bold block mb-2">[ CARD 2 ]</span>
+                  <h3 class="text-2xl font-black text-white m-0 tracking-tight">Capsule</h3>
+                  <span class="text-[10px] text-gray-400 mt-2 block">Tap to expand story record log</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Labeled Explanations Right -->
+          <div class="lg:col-span-7 space-y-3.5 text-xs">
+            <div class="p-4 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-item mb-1 inline-block">IT-SPLIT-Q</span>
+              <strong class="text-white block text-sm">Card 1: "Questions" Cover Card</strong>
+              <p class="text-gray-300 mt-1 leading-relaxed">
+                The left card in the Item tab. Displays the title <strong>"Questions"</strong>.
+                <br>• When you tap this card, it expands into the full <strong>Questions Box</strong> and shrinks the Capsule card into a yellow peeking tab on the right.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">IT-SPLIT-C</span>
+              <strong class="text-white block text-sm">Card 2: "Capsule" Cover Card</strong>
+              <p class="text-gray-300 mt-1 leading-relaxed">
+                The right card in the Item tab. Displays the title <strong>"Capsule"</strong>.
+                <br>• When you tap this card, it expands into the full <strong>Capsule Story Records Log</strong> and shrinks the Questions card into a yellow peeking tab on the left.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#121215] border border-[#2a2a35] text-gray-400">
+              <strong class="text-[#f4cc57] block mb-0.5">Gesture & Navigation:</strong>
+              You can tap either card to open it, or swipe left/right to glide between Questions and Capsule.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 6: ITEM TAB - QUESTIONS EXPANDED STATE
+         ========================================== -->
+    <section class="slide-container flex-col gap-6" data-slide="6" data-title="Item Tab: Questions Expanded & Right Capsule Tab">
+      <div class="bg-[#18181f] border border-[#2e2e38] rounded-2xl p-6 shadow-xl">
+        <div class="border-b border-[#2e2e38] pb-3 mb-4 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-[#9cc8ea]">SLIDE 6 OF 10 · ITEM TAB (QUESTIONS EXPANDED)</span>
+            <h2 class="text-xl font-bold text-white mt-1">Questions Box Expanded & Yellow Capsule Tab</h2>
+          </div>
+          <span class="badge-code code-item">STATE: state-question</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <!-- Mockup Left -->
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="app-phone-mockup p-2.5">
+              <div class="text-[10px] font-bold text-gray-400 mb-1 px-1">ITEM / PRODUCTION LOG</div>
+
+              <!-- VIEWPORT: Questions Expanded + Right Peeking Tab -->
+              <div class="flex-1 flex gap-2 overflow-hidden">
+                <!-- EXPANDED QUESTIONS BOX (Left) -->
+                <div class="flex-1 bg-[#1c1c20] border-1.5 border-[#32323c] rounded-2xl p-3 flex flex-col overflow-hidden">
+                  <div class="flex items-center justify-between pb-2 mb-2 border-b border-[#2e2e38]">
+                    <span class="text-[10px] font-extrabold text-[#f4cc57] tracking-wider">QUESTIONS (3)</span>
+                  </div>
+
+                  <!-- List of question capsule boxes -->
+                  <div class="space-y-2 overflow-y-auto pr-0.5">
+                    <!-- Box 1 -->
+                    <div class="p-2.5 rounded-xl bg-[#222227] border border-[#32323c] flex items-center gap-2">
+                      <div class="flex items-center gap-1 shrink-0">
+                        <span class="px-1.5 py-0.5 rounded bg-[#f4cc5722] text-[#f4cc57] text-[9px] font-bold border border-[#f4cc5744]">EP 01</span>
+                        <span class="px-1.5 py-0.5 rounded bg-[#35353d] text-white text-[10px] font-bold">1</span>
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <div class="text-xs font-bold text-white truncate">Kanser Servik</div>
+                        <div class="text-[9.5px] text-gray-400 truncate">Dr. Natalie · 4 questions</div>
+                      </div>
+                      <span class="text-[#f4cc57] font-bold text-xs shrink-0">↗</span>
+                    </div>
+
+                    <!-- Box 2 -->
+                    <div class="p-2.5 rounded-xl bg-[#222227] border border-[#32323c] flex items-center gap-2">
+                      <div class="flex items-center gap-1 shrink-0">
+                        <span class="px-1.5 py-0.5 rounded bg-[#f4cc5722] text-[#f4cc57] text-[9px] font-bold border border-[#f4cc5744]">EP 01</span>
+                        <span class="px-1.5 py-0.5 rounded bg-[#35353d] text-white text-[10px] font-bold">2</span>
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <div class="text-xs font-bold text-white truncate">Langkawi Sushi</div>
+                        <div class="text-[9.5px] text-gray-400 truncate">Masako Kato · 5 questions</div>
+                      </div>
+                      <span class="text-[#f4cc57] font-bold text-xs shrink-0">↗</span>
+                    </div>
+
+                    <!-- FILMED SECTION AT BOTTOM -->
+                    <div class="pt-2 border-t border-dashed border-[#3a3a45] mt-2">
+                      <div class="text-[9px] font-extrabold text-[#9cc8ea] uppercase tracking-wider mb-1">
+                        FILMED (1)
+                      </div>
+                      <div class="p-2 rounded-xl bg-[#181d22] border border-[#2a3540] flex items-center gap-2 opacity-75">
+                        <span class="px-1.5 py-0.5 rounded bg-[#35353d] text-gray-300 text-[9px] font-bold">EP 07</span>
+                        <div class="min-w-0 flex-1">
+                          <div class="text-xs font-bold text-gray-200 truncate">Atma Alam</div>
+                          <div class="text-[9px] text-gray-400 truncate">Completed session</div>
+                        </div>
+                        <span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800 shrink-0">FILMED</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- YELLOW PEEKING TAB (Right) -->
+                <div class="w-[42px] min-w-[42px] bg-[#f4cc57] border-1.5 border-[#dfb945] rounded-2xl flex items-center justify-center shadow-md cursor-pointer hover:bg-[#ffd966]">
+                  <span class="peeking-v-label text-[#18181b] font-black text-xs">Capsule ›</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Labeled Explanations Right -->
+          <div class="lg:col-span-7 space-y-3 text-xs">
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-item mb-1 inline-block">IT-Q1</span>
+              <strong class="text-white block text-sm">Kotak Questions Utama (Expanded Panel)</strong>
+              <p class="text-gray-300 mt-1 leading-relaxed">
+                The large main dark panel containing interview question sets for upcoming filming sessions.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-item mb-1 inline-block">IT-Q2</span>
+              <strong class="text-white block text-sm">Kotak Setiap Set Soalan (Clickable Question Row Cards)</strong>
+              <p class="text-gray-300 mt-1 leading-relaxed">
+                The individual cards inside the questions box:
+                <br>• <strong>EP pill & Capsule pill</strong>: Tells you episode and capsule number.
+                <br>• <strong>Topic & Guest</strong>: Topic title, interviewee name, shoot date.
+                <br>• <strong>Arrow ↗</strong>: Tapping any card opens the spacious On-Set Interview sheet popup.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-item mb-1 inline-block">IT-Q3</span>
+              <strong class="text-white block text-sm">Seksyen FILMED (Completed Questions)</strong>
+              <p class="text-gray-300 mt-1 leading-relaxed">
+                Positioned at the bottom of the question list with a dashed divider. Question sets that have passed their date or are marked FILMED drop here automatically to keep active questions clean.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">IT-Q4</span>
+              <strong class="text-white block text-sm">Tab Kuning Kapsul di Sebelah Kanan (Right Peeking Tab)</strong>
+              <p class="text-gray-300 mt-1 leading-relaxed">
+                The 42px yellow vertical bar on the right edge with vertical text <strong>"Capsule ›"</strong>. Tapping it smoothly transitions to the Capsule records view.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 7: ITEM TAB - CAPSULE EXPANDED STATE
+         ========================================== -->
+    <section class="slide-container flex-col gap-6" data-slide="7" data-title="Item Tab: Capsule Expanded & Left Questions Tab">
+      <div class="bg-[#18181f] border border-[#2e2e38] rounded-2xl p-6 shadow-xl">
+        <div class="border-b border-[#2e2e38] pb-3 mb-4 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-[#f4cc57]">SLIDE 7 OF 10 · ITEM TAB (CAPSULE EXPANDED)</span>
+            <h2 class="text-xl font-bold text-white mt-1">Capsule Records Expanded & Yellow Questions Tab</h2>
+          </div>
+          <span class="badge-code code-hero">STATE: state-capsule</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <!-- Mockup Left -->
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="app-phone-mockup p-2.5">
+              <div class="text-[10px] font-bold text-gray-400 mb-1 px-1">ITEM / PRODUCTION LOG</div>
+
+              <!-- VIEWPORT: Left Peeking Tab + Capsule Expanded -->
+              <div class="flex-1 flex gap-2 overflow-hidden">
+                <!-- YELLOW PEEKING TAB (Left) -->
+                <div class="w-[42px] min-w-[42px] bg-[#f4cc57] border-1.5 border-[#dfb945] rounded-2xl flex items-center justify-center shadow-md cursor-pointer hover:bg-[#ffd966]">
+                  <span class="peeking-v-left text-[#18181b] font-black text-xs">‹ Questions</span>
+                </div>
+
+                <!-- EXPANDED CAPSULE BOX (Right) -->
+                <div class="flex-1 bg-[#1c1c20] border-1.5 border-[#32323c] rounded-2xl p-3 flex flex-col overflow-hidden">
+                  <div class="flex items-center justify-between pb-2 mb-2 border-b border-[#2e2e38]">
+                    <span class="text-[10px] font-extrabold text-[#f4cc57] tracking-wider">CAPSULES (15)</span>
+                  </div>
+
+                  <!-- Toolbar & Add Capsule -->
+                  <div class="mb-2">
+                    <button class="w-full py-1.5 rounded-lg bg-[#204d43] text-white font-bold text-xs border border-[#d9e9b233] shadow-sm mb-1.5">
+                      ＋ Add Capsule
+                    </button>
+                    <div class="bg-[#24242b] rounded-lg p-1 text-[10px] text-gray-400 flex items-center gap-1">
+                      <span>⌕</span>
+                      <span>Search topics, guests or locations…</span>
+                    </div>
+                  </div>
+
+                  <!-- Active Story Rows -->
+                  <div class="space-y-1.5 overflow-y-auto pr-0.5">
+                    <div class="p-2 rounded-xl bg-[#222227] border border-[#32323c] flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-[#f4cc5722] text-[#f4cc57] text-[9px] font-bold flex items-center justify-center">IV</span>
+                        <div>
+                          <div class="text-xs font-bold text-white">Batik Village</div>
+                          <div class="text-[9px] text-gray-400">EP 01 · 1 · Langkawi</div>
+                        </div>
+                      </div>
+                      <span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">EDITED</span>
+                    </div>
+
+                    <!-- CANCELLED SECTION AT BOTTOM -->
+                    <div class="pt-2 border-t border-dashed border-[#443235] mt-2">
+                      <div class="text-[9px] font-extrabold text-[#f0b9ba] uppercase tracking-wider mb-1">
+                        CANCELLED (1)
+                      </div>
+                      <div class="p-2 rounded-xl bg-[#1a1516] border border-[#422c2d] opacity-60 flex items-center justify-between">
+                        <div>
+                          <div class="text-xs font-bold text-gray-300">Old Cancelled Story</div>
+                          <div class="text-[9px] text-gray-400">Unassigned</div>
+                        </div>
+                        <span class="text-[8px] font-bold px-1 py-0.5 rounded bg-red-950 text-red-300">CANCELLED</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Labeled Explanations Right -->
+          <div class="lg:col-span-7 space-y-3 text-xs">
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">IT-C1</span>
+              <strong class="text-white block text-sm">Tab Kuning Questions di Sebelah Kiri (Left Peeking Tab)</strong>
+              <p class="text-gray-300 mt-1 leading-relaxed">
+                The 42px yellow vertical bar on the left edge with text <strong>"‹ Questions"</strong>. Tapping it smoothly returns to the Questions panel.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">IT-C2</span>
+              <strong class="text-white block text-sm">Kotak Capsule Records Utama (Expanded Panel)</strong>
+              <p class="text-gray-300 mt-1 leading-relaxed">
+                The large main panel holding all production story records, filter tools, and the Add Capsule button.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">IT-C3</span>
+              <strong class="text-white block text-sm">Kotak Record Capsule (Active Story Cards)</strong>
+              <p class="text-gray-300 mt-1 leading-relaxed">
+                Cards showing capsule assignment (`EP 01 / 1`), circular badge (`IV` for Interview or `OT` for Other), topic, location, shoot date, and status pill.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-modal mb-1 inline-block">IT-C4</span>
+              <strong class="text-white block text-sm">Seksyen CANCELLED (Muted Cancelled Stories)</strong>
+              <p class="text-gray-300 mt-1 leading-relaxed">
+                Positioned at the bottom of the capsule list with a dashed red border. When a capsule is cancelled, its episode and capsule number are stripped and it is dropped here while remaining fully clickable.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 8: CONTINUITY SHEET TAB
+         ========================================== -->
+    <section class="slide-container flex-col gap-6" data-slide="8" data-title="Continuity Sheet Tab: Camera & Audio Takes">
+      <div class="bg-[#18181f] border border-[#2e2e38] rounded-2xl p-6 shadow-xl">
+        <div class="border-b border-[#2e2e38] pb-3 mb-4 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-[#b4e6a0]">SLIDE 8 OF 10 · CONTINUITY TAB</span>
+            <h2 class="text-xl font-bold text-white mt-1">Continuity Sheet (Field Take Logging)</h2>
+          </div>
+          <span class="badge-code code-conti">VIEW: conti</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="app-phone-mockup p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-white">Continuity Sheet</span>
+                <span class="text-[9px] px-2 py-0.5 rounded bg-[#204d43] text-[#d9e9b2]">PDF Ready</span>
+              </div>
+
+              <!-- Scene / Throw Tabs -->
+              <div class="flex gap-1.5 overflow-x-auto pb-2 mb-2">
+                <span class="px-2.5 py-1 rounded-lg bg-[#f4cc57] text-[#18181b] text-xs font-bold shrink-0">Throw 1</span>
+                <span class="px-2.5 py-1 rounded-lg bg-[#25252e] text-gray-300 text-xs font-bold shrink-0">Throw 2</span>
+                <span class="px-2.5 py-1 rounded-lg bg-[#25252e] text-gray-300 text-xs font-bold shrink-0">Opening</span>
+              </div>
+
+              <!-- Takes Table Mockup -->
+              <div class="bg-[#1b1b22] border border-[#2e2e38] rounded-xl overflow-hidden mb-3">
+                <table class="w-full text-[10px] text-left">
+                  <thead class="bg-[#24242e] text-gray-300 font-bold">
+                    <tr>
+                      <th class="p-1.5">TK</th>
+                      <th class="p-1.5">CAM 1</th>
+                      <th class="p-1.5">CAM 2</th>
+                      <th class="p-1.5">GT</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#2a2a35] text-gray-200">
+                    <tr>
+                      <td class="p-1.5 font-bold">1</td>
+                      <td class="p-1.5 font-mono">C001</td>
+                      <td class="p-1.5 font-mono">A001</td>
+                      <td class="p-1.5"><span class="text-red-400 font-bold">NG</span></td>
+                    </tr>
+                    <tr class="bg-[#204d4322]">
+                      <td class="p-1.5 font-bold text-[#f4cc57]">2</td>
+                      <td class="p-1.5 font-mono">C002</td>
+                      <td class="p-1.5 font-mono">A002</td>
+                      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded bg-emerald-800 text-white font-extrabold text-[9px]">GT</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Action buttons -->
+              <div class="grid grid-cols-2 gap-2 mt-auto">
+                <button class="py-2 rounded-xl bg-[#204d43] text-white font-bold text-xs">＋ Add Take</button>
+                <button class="py-2 rounded-xl bg-[#25252e] text-gray-300 font-bold text-xs">End Record</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 space-y-3 text-xs">
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-conti mb-1 inline-block">CT-1</span>
+              <strong class="text-white block text-sm">Scene / Host Throw Tabs</strong>
+              <p class="text-gray-400 mt-1">
+                Horizontal tab row allowing on-set script supervisors to jump between Throw 1..N, Opening, Promo, and Closing.
+              </p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-conti mb-1 inline-block">CT-2</span>
+              <strong class="text-white block text-sm">Take Logger & Auto File Numbering</strong>
+              <p class="text-gray-400 mt-1">
+                Logs chronological file numbers across Camera 1, 2, 3 and external Audio recorder. Numbering never resets mid-day to prevent media overwrite.
+              </p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-conti mb-1 inline-block">CT-3</span>
+              <strong class="text-white block text-sm">GT (Good Take) / NG Toggles & PDF Export</strong>
+              <p class="text-gray-400 mt-1">
+                Marks the chosen take as Good Take (highlighted in emerald green for the editor). Tapping Share exports the official PDF log.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 9: SCRIPT EDITOR TAB
+         ========================================== -->
+    <section class="slide-container flex-col gap-6" data-slide="9" data-title="Script Tab: Video/Audio Split Columns & Rundown">
+      <div class="bg-[#18181f] border border-[#2e2e38] rounded-2xl p-6 shadow-xl">
+        <div class="border-b border-[#2e2e38] pb-3 mb-4 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-[#f4cc57]">SLIDE 9 OF 10 · SCRIPT TAB</span>
+            <h2 class="text-xl font-bold text-white mt-1">Script Tab (Rundown, AV Columns & Slot Calculator)</h2>
+          </div>
+          <span class="badge-code code-hero">VIEW: script</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="app-phone-mockup p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-white">Episode 1 Script</span>
+                <span class="text-[9px] font-mono text-[#f4cc57]">24:30 / 25:00</span>
+              </div>
+
+              <!-- Rundown Sections -->
+              <div class="space-y-2 overflow-y-auto">
+                <!-- Section 1 -->
+                <div class="p-2.5 rounded-xl bg-[#1e1e24] border border-[#2f2f3a]">
+                  <div class="flex items-center justify-between text-[10px] mb-1">
+                    <strong class="text-[#f4cc57]">1. OPENING HOST THROW</strong>
+                    <span class="text-gray-400">01:30</span>
+                  </div>
+                  <div class="grid grid-cols-2 gap-1.5 text-[9px] bg-[#141418] p-1.5 rounded">
+                    <div>
+                      <span class="font-bold text-gray-400 block">VIDEO:</span>
+                      <span class="text-gray-300">MCU Host on Langkawi beach</span>
+                    </div>
+                    <div>
+                      <span class="font-bold text-gray-400 block">AUDIO:</span>
+                      <span class="text-gray-300">"Selamat datang ke Anggun musim 4..."</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Section 2 -->
+                <div class="p-2.5 rounded-xl bg-[#1e1e24] border border-[#2f2f3a]">
+                  <div class="flex items-center justify-between text-[10px] mb-1">
+                    <strong class="text-[#9cc8ea]">2. CAPSULE 01 (IV)</strong>
+                    <span class="text-gray-400">06:00</span>
+                  </div>
+                  <div class="text-[9px] text-gray-300">
+                    Atma Alam Batik Village · Dr. Rokayah
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 space-y-3 text-xs">
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">SC-1</span>
+              <strong class="text-white block text-sm">Episode Script Picker</strong>
+              <p class="text-gray-400 mt-1">
+                Select an episode to write and structure its rundown.
+              </p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">SC-2</span>
+              <strong class="text-white block text-sm">Two-Column Video & Audio Format</strong>
+              <p class="text-gray-400 mt-1">
+                Standard broadcast television layout separating visual direction (camera angles, B-Roll, graphics) from spoken audio (host throw, voice-over, interview bites).
+              </p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-[#1b1b22] border border-[#2e2e38]">
+              <span class="badge-code code-hero mb-1 inline-block">SC-3</span>
+              <strong class="text-white block text-sm">Broadcast Timing & Slot Countdown</strong>
+              <p class="text-gray-400 mt-1">
+                Live total content calculator against target broadcast slot duration, automatically accounting for commercial breaks.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 10: POPUPS & MODALS REFERENCE
+         ========================================== -->
+    <section class="slide-container flex-col gap-6" data-slide="10" data-title="Modal & Dialog Reference Catalog">
+      <div class="bg-[#18181f] border border-[#2e2e38] rounded-2xl p-6 shadow-xl">
+        <div class="border-b border-[#2e2e38] pb-3 mb-4 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-[#f0b9ba]">SLIDE 10 OF 10 · MODALS & POPUPS</span>
+            <h2 class="text-xl font-bold text-white mt-1">Complete Dialog Catalog (Popups & Modals)</h2>
+          </div>
+          <span class="badge-code code-modal">CATALOG: dialogs</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <!-- Dialog 1 -->
+          <div class="bg-[#15151a] border border-[#2f2f3d] rounded-xl p-4 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="badge-code code-modal">DLG-1</span>
+                <span class="text-[10px] text-[#f4cc57] font-bold">Gear Button Trigger</span>
+              </div>
+              <strong class="text-white text-sm block mb-1">Episode Settings Dialog</strong>
+              <p class="text-gray-400 text-[11.5px] leading-relaxed mb-3">
+                Opened by the gear icon on Episode Tab Hero.
+              </p>
+              <div class="bg-[#1f1f28] p-2.5 rounded-lg border border-[#2f2f3d] space-y-1.5 text-[11px]">
+                <div><span class="text-gray-400">Field 1:</span> <strong class="text-white">Location</strong></div>
+                <div><span class="text-gray-400">Field 2:</span> <strong class="text-white">Special Theme</strong></div>
+                <div><span class="text-gray-400">Field 3:</span> <strong class="text-[#f4cc57]">Sponsored Checkbox</strong></div>
+              </div>
+            </div>
+            <div class="text-[10px] text-gray-500 mt-3 pt-2 border-t border-[#2a2a35]">Function: `episodeOverviewDialog()`</div>
+          </div>
+
+          <!-- Dialog 2 -->
+          <div class="bg-[#15151a] border border-[#2f2f3d] rounded-xl p-4 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="badge-code code-modal">DLG-2</span>
+                <span class="text-[10px] text-[#9cc8ea] font-bold">Story Record Editor</span>
+              </div>
+              <strong class="text-white text-sm block mb-1">Capsule Record Dialog</strong>
+              <p class="text-gray-400 text-[11.5px] leading-relaxed mb-3">
+                Opened by tapping any Capsule row or "＋ Add Capsule".
+              </p>
+              <div class="bg-[#1f1f28] p-2.5 rounded-lg border border-[#2f2f3d] space-y-1 text-[11px]">
+                <div><span class="text-gray-400">Fields:</span> Topic, Guest, Title, Location</div>
+                <div><span class="text-gray-400">Type:</span> Interview (IV) / Other (OT)</div>
+                <div><span class="text-gray-400">Assignment:</span> Episode + Capsule #</div>
+                <div><span class="text-gray-400">Status:</span> PREPRO, FILMED, EDITED, TX, CANCELLED</div>
+              </div>
+            </div>
+            <div class="text-[10px] text-gray-500 mt-3 pt-2 border-t border-[#2a2a35]">Function: `recordDialog()`</div>
+          </div>
+
+          <!-- Dialog 3 -->
+          <div class="bg-[#15151a] border border-[#2f2f3d] rounded-xl p-4 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="badge-code code-modal">DLG-3</span>
+                <span class="text-[10px] text-[#d9e9b2] font-bold">On-Set Interview Sheet</span>
+              </div>
+              <strong class="text-white text-sm block mb-1">Interview Questions Popup</strong>
+              <p class="text-gray-400 text-[11.5px] leading-relaxed mb-3">
+                Opened by tapping any Question card on the Questions Box.
+              </p>
+              <div class="bg-[#1f1f28] p-2.5 rounded-lg border border-[#2f2f3d] space-y-1 text-[11px]">
+                <div><span class="text-gray-400">Header:</span> Episode, Capsule, Topic, Guest</div>
+                <div><span class="text-gray-400">Body:</span> Numbered list of primary questions & follow-ups in high-readability on-set format.</div>
+              </div>
+            </div>
+            <div class="text-[10px] text-gray-500 mt-3 pt-2 border-t border-[#2a2a35]">Function: `viewInterviewQuestionsPopup()`</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM STATUS & KEYBOARD HINTS FOOTER -->
+  <footer class="border-t border-[#24242c] bg-[#141418] px-6 py-2.5 flex items-center justify-between text-xs text-[#8e8e99]">
+    <div class="flex items-center gap-3">
+      <span>⌨ Keyboard Shortcuts: <kbd class="px-1.5 py-0.5 rounded bg-[#25252e] text-white font-mono text-[10px]">←</kbd> Previous · <kbd class="px-1.5 py-0.5 rounded bg-[#25252e] text-white font-mono text-[10px]">→</kbd> Next · <kbd class="px-1.5 py-0.5 rounded bg-[#25252e] text-white font-mono text-[10px]">M</kbd> Menu</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-[#f4cc57] font-semibold">2list System Guide</span>
+      <span>·</span>
+      <span>Ready to reference anytime</span>
+    </div>
+  </footer>
+
+  <script>
+    const slides = document.querySelectorAll('.slide-container');
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+
+    const currentSlideNumEl = document.getElementById('currentSlideNum');
+    const totalSlidesNumEl = document.getElementById('totalSlidesNum');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const tocBtn = document.getElementById('tocBtn');
+    const tocModal = document.getElementById('tocModal');
+    const closeTocBtn = document.getElementById('closeTocBtn');
+    const tocGrid = document.getElementById('tocGrid');
+
+    totalSlidesNumEl.textContent = totalSlides;
+
+    // Populate TOC grid
+    slides.forEach((s, idx) => {
+      const num = idx + 1;
+      const title = s.dataset.title || `Slide ${num}`;
+      const btn = document.createElement('button');
+      btn.className = 'text-left p-3 rounded-xl bg-[#22222b] hover:bg-[#2b2b38] border border-[#2f2f3d] flex items-center justify-between transition cursor-pointer text-white';
+      btn.innerHTML = `<span class="font-bold text-xs"><span class="text-[#f4cc57] font-mono mr-2">#${num}</span>${title}</span><span class="text-gray-400 text-xs">→</span>`;
+      btn.onclick = () => {
+        goToSlide(num);
+        closeToc();
+      };
+      tocGrid.appendChild(btn);
+    });
+
+    function showSlide(n) {
+      if (n < 1) n = 1;
+      if (n > totalSlides) n = totalSlides;
+      currentSlide = n;
+
+      slides.forEach(s => s.classList.remove('active'));
+      const activeSlide = document.querySelector(`.slide-container[data-slide="${n}"]`);
+      if (activeSlide) activeSlide.classList.add('active');
+
+      currentSlideNumEl.textContent = currentSlide;
+      prevBtn.disabled = (currentSlide === 1);
+      nextBtn.disabled = (currentSlide === totalSlides);
+      window.scrollTo(0, 0);
+    }
+
+    function goToSlide(n) { showSlide(n); }
+    function prevSlide() { showSlide(currentSlide - 1); }
+    function nextSlide() { showSlide(currentSlide + 1); }
+
+    function openToc() { tocModal.classList.remove('hidden'); }
+    function closeToc() { tocModal.classList.add('hidden'); }
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    tocBtn.addEventListener('click', openToc);
+    closeTocBtn.addEventListener('click', closeToc);
+    tocModal.addEventListener('click', (e) => {
+      if (e.target === tocModal) closeToc();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key === 'Home') {
+        goToSlide(1);
+      } else if (e.key === 'End') {
+        goToSlide(totalSlides);
+      } else if (e.key === 'm' || e.key === 'M') {
+        tocModal.classList.toggle('hidden');
+      } else if (e.key === 'Escape') {
+        closeToc();
+      }
+    });
+
+    showSlide(1);
+  </script>
+</body>
+</html>
