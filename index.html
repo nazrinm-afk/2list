@@ -458,18 +458,22 @@ body[data-project-type="conti"] .sidebar nav{display:none!important}
 .conti-pending-shot-deck{display:flex;flex-direction:column;gap:8px;width:100%}
 .conti-back-shot-btn{min-height:46px;padding:10px 20px;border-radius:10px;font-weight:700;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--paper);border:1px solid var(--line);color:var(--ink);width:100%;cursor:pointer}
 .conti-back-shot-btn:hover{background:#2a2a30;color:var(--paper)}
-body[data-view="home"] #main{overflow-x:hidden!important;max-width:1390px;width:100%;box-sizing:border-box}
+body[data-view="home"] #main{overflow-x:hidden!important;max-width:1390px;width:100%;box-sizing:border-box;padding-top:24px!important}
+body[data-view="home"] .page-heading{display:none!important}
+@media(max-width:760px){
+  body[data-view="home"] #main{padding:14px 14px 35px!important}
+}
 .home-view-wrapper{width:100%;max-width:1390px;margin:0 auto;box-sizing:border-box;position:relative}
-.home-page{width:100%;box-sizing:border-box}
-.home-page-identity{padding:0 2px 24px}
-.home-page-episodes{padding:0 2px 36px}
-.home-view-wrapper.page-identity .home-page-identity{display:block;animation:homePageFadeIn .22s cubic-bezier(0.2,1,0.3,1)}
+.home-page{width:100%;box-sizing:border-box;will-change:transform,opacity}
+.home-page-identity{padding:0 0 24px}
+.home-page-episodes{padding:0 0 36px}
+.home-view-wrapper.page-identity .home-page-identity{display:block;animation:slideInFromLeft .28s cubic-bezier(0.22,1,0.36,1) both}
 .home-view-wrapper.page-identity .home-page-episodes{display:none!important}
-.home-view-wrapper.page-episodes .home-page-episodes{display:block;animation:homePageFadeIn .22s cubic-bezier(0.2,1,0.3,1)}
+.home-view-wrapper.page-episodes .home-page-episodes{display:block;animation:slideInFromRight .28s cubic-bezier(0.22,1,0.36,1) both}
 .home-view-wrapper.page-episodes .home-page-identity{display:none!important}
-@keyframes homePageFadeIn{0%{opacity:0;transform:translateY(6px)}100%{opacity:1;transform:translateY(0)}}
-.home-episodes-footer{display:flex;justify-content:center;margin-top:24px;padding-top:16px;border-top:1px dashed var(--line)}
-.home-episodes-footer .footer-back-btn{width:100%;max-width:320px;min-height:42px;display:flex;align-items:center;justify-content:center;gap:8px}
+@keyframes slideInFromRight{0%{opacity:0;transform:translate3d(24px,0,0)}100%{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes slideInFromLeft{0%{opacity:0;transform:translate3d(-24px,0,0)}100%{opacity:1;transform:translate3d(0,0,0)}}
+.home-episodes-back-prompt{margin-top:14px}
 .home-swipe-prompt{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--paper);border:1px solid var(--line);border-radius:12px;margin-top:6px;font-size:13px;font-weight:600;color:var(--muted);width:100%;cursor:pointer;text-align:left}
 .home-swipe-prompt:hover{border-color:var(--green);color:var(--ink)}
 .home-swipe-arrow{color:var(--green);font-weight:700}
@@ -1286,18 +1290,13 @@ function home(){
     </div>
   </div>
   <div class="home-page home-page-episodes" id="home-page-episodes">
-    <div class="home-episodes-stack-view">
-      <div class="home-episodes-stack-header">
-        <button type="button" class="home-swipe-back-btn" data-action="switch-home-page" data-page="identity">← Main Home</button>
-        <span class="eyebrow">SERIES EPISODES OVERVIEW (${totalEps})</span>
-      </div>
-      <div class="home-episodes-vertical-stack">
-        ${episodeBoxes}
-      </div>
-      <div class="home-episodes-footer">
-        <button type="button" class="home-swipe-back-btn footer-back-btn" data-action="switch-home-page" data-page="identity">← Back to Program Identity</button>
-      </div>
+    <div class="home-episodes-vertical-stack">
+      ${episodeBoxes}
     </div>
+    <button type="button" class="home-swipe-prompt home-episodes-back-prompt" data-action="switch-home-page" data-page="identity">
+      <span>Program Identity</span>
+      <span class="home-swipe-arrow">Swipe right ➔</span>
+    </button>
   </div>
  </div>`;
 }
@@ -2751,13 +2750,13 @@ document.addEventListener('touchend',e=>{
  if(hwrap&&e.changedTouches&&e.changedTouches[0]){
   const diffX=e.changedTouches[0].screenX-homeTouchStartX;
   const diffY=e.changedTouches[0].screenY-homeTouchStartY;
-  if(Math.abs(diffX)>45&&Math.abs(diffX)>Math.abs(diffY)*1.1){
-   if(diffX<-45&&homeSubPage==='identity'){
+  if(Math.abs(diffX)>38&&Math.abs(diffX)>Math.abs(diffY)*1.05){
+   if(diffX<-38&&homeSubPage==='identity'){
     homeSubPage='episodes';
     window.scrollTo(0,0);
     hwrap.className='home-view-wrapper page-episodes';
     hwrap.dataset.page='episodes';
-   }else if(diffX>45&&homeSubPage==='episodes'){
+   }else if(diffX>38&&homeSubPage==='episodes'){
     homeSubPage='identity';
     window.scrollTo(0,0);
     hwrap.className='home-view-wrapper page-identity';
