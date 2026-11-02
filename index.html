@@ -722,6 +722,17 @@ details.question-display-card[open] .q-chevron{transform:rotate(180deg);color:va
 .question-capsule-row .status.filmed{font-size:8px!important;padding:2px 5px!important;border-radius:4px!important;letter-spacing:0.5px!important;flex-shrink:0!important;white-space:nowrap!important;margin-right:2px!important}
 .q-row-arrow{font-size:15px!important;color:var(--green)!important;font-weight:700!important;flex-shrink:0!important;transition:transform .15s ease!important}
 .question-capsule-row:hover .q-row-arrow{transform:translate(2px,-2px)!important}
+@media(max-width:760px){
+.question-capsule-row{padding:8px 10px!important;gap:8px!important;border-radius:10px!important}
+.question-capsule-row .question-meta-badge{max-width:78px!important;gap:3px!important}
+.question-capsule-row .q-ep-pill{max-width:50px!important;font-size:8px!important;padding:2px 4px!important}
+.question-capsule-row .q-cap-pill{font-size:9px!important;padding:2px 5px!important}
+.question-capsule-row h4{font-size:12.5px!important}
+.question-capsule-row small{font-size:10px!important}
+.question-capsule-row .status.filmed{font-size:7.5px!important;padding:2px 4px!important}
+.question-capsule-row .q-row-arrow{font-size:13px!important}
+.question-filmed-section{margin-top:14px!important;padding-top:10px!important}
+}
 
 /* Interview Questions Sheet Modal (On-Set Pop-up) */
 .interview-sheet-popup{display:flex;flex-direction:column}
@@ -1336,7 +1347,7 @@ function log(){
     <div class="question-stacks-wrap question-filmed-stacks">
       ${filmedQuestions.map(r=>{
         const totalQ=getRecordTotalQuestionsCount(r);
-        return `<div role="button" tabindex="0" class="question-capsule-row is-filmed" data-action="view-interview-questions-popup" data-id="${r.id}"><div class="question-meta-badge"><span class="q-ep-pill">${r.episode===null?'UNASSIGNED':`EP ${String(r.episode).padStart(2,'0')}`}</span><span class="q-cap-pill">${esc(r.capsule||'—')}</span></div><div class="question-header-info"><h4>${esc(r.topic||'Untitled Capsule')}</h4><small>${esc([r.guest?`Interviewee: ${r.guest}`:'',r.date?`Date: ${r.date}`:'',`${totalQ} question${totalQ>1?'s':''}`].filter(Boolean).join(' · '))}</small></div><span class="status filmed" style="font-size:9px;padding:3px 7px;border-radius:4px;margin-right:4px;flex-shrink:0">FILMED</span><span class="q-row-arrow" aria-hidden="true">↗</span></div>`;
+        return `<div role="button" tabindex="0" class="question-capsule-row is-filmed" data-action="view-interview-questions-popup" data-id="${r.id}"><div class="question-meta-badge"><span class="q-ep-pill">${r.episode===null?'UNASSIGNED':`EP ${String(r.episode).padStart(2,'0')}`}</span><span class="q-cap-pill">${esc(r.capsule||'—')}</span></div><div class="question-header-info"><h4>${esc(r.topic||'Untitled Capsule')}</h4><small>${esc([r.guest?`Interviewee: ${r.guest}`:'',r.date?`Date: ${r.date}`:'',`${totalQ} question${totalQ>1?'s':''}`].filter(Boolean).join(' · '))}</small></div><span class="status filmed">FILMED</span><span class="q-row-arrow" aria-hidden="true">↗</span></div>`;
       }).join('')}
     </div>
   </div>`:'' ;
