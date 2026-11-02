@@ -515,8 +515,8 @@ body[data-view="home"] #main{overflow-x:hidden!important;max-width:1390px;width:
 body[data-view="log"] #main{display:flex;flex-direction:column;height:calc(100vh - 84px);max-height:calc(100vh - 84px);padding-bottom:18px;overflow:hidden}
 body[data-view="log"] footer{display:none}
 body[data-view="log"] .page-heading{margin-bottom:12px;flex-shrink:0}
-.item-slider-viewport{display:flex;gap:12px;width:100%;flex:1 1 auto;min-height:0;height:100%;max-height:100%;align-items:stretch;position:relative;overflow:hidden;touch-action:pan-y}
-.item-panel{border-radius:24px;position:relative;overflow:hidden;display:flex;flex-direction:column;transition:flex .48s cubic-bezier(0.22,1,0.36,1),width .48s cubic-bezier(0.22,1,0.36,1),background .3s ease,border-color .3s ease,box-shadow .3s ease;will-change:flex,width}
+.item-slider-viewport{display:flex;gap:12px;width:100%;max-width:100%;box-sizing:border-box;flex:1 1 auto;min-height:0;height:100%;max-height:100%;align-items:stretch;position:relative;overflow:hidden;touch-action:pan-y}
+.item-panel{border-radius:24px;position:relative;overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box;transition:flex .4s cubic-bezier(0.22,1,0.36,1),width .4s cubic-bezier(0.22,1,0.36,1),max-width .4s cubic-bezier(0.22,1,0.36,1),background .3s ease,border-color .3s ease,box-shadow .3s ease;will-change:flex,width,max-width}
 .panel-cover{width:100%;height:100%;padding:24px;border:1.5px solid var(--line);border-radius:24px;background:linear-gradient(180deg,#25252a 0%,#17171a 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;box-shadow:0 16px 36px rgba(0,0,0,0.35);transition:transform .32s cubic-bezier(0.2,1,0.3,1),border-color .32s ease,box-shadow .32s ease;user-select:none}
 .panel-cover:hover{transform:translateY(-3px) scale(1.012);border-color:var(--green);box-shadow:0 20px 48px rgba(0,0,0,0.5),0 0 24px rgba(244,204,87,0.18)}
 .panel-cover:hover .split-card-title{color:var(--green);transform:scale(1.04)}
@@ -533,29 +533,39 @@ body[data-view="log"] .page-heading{margin-bottom:12px;flex-shrink:0}
 .item-panel:hover .item-peeking-tab{color:var(--green)!important}
 .peeking-label{writing-mode:vertical-rl;transform:rotate(180deg);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
 .right-tab .peeking-label{writing-mode:vertical-rl;transform:rotate(0deg)}
-.item-slider-viewport.state-split .item-panel{flex:1 1 50%;min-width:0}
+.item-slider-viewport.state-split .item-panel{flex:1 1 calc(50% - 6px);max-width:calc(50% - 6px);min-width:0}
 .item-slider-viewport.state-split .panel-cover{display:flex;background:linear-gradient(180deg, #242429 0%, #1a1a1e 100%)!important;border:1.5px solid var(--line)!important;box-shadow:0 14px 34px rgba(0,0,0,0.35)!important}
 .item-slider-viewport.state-split .panel-cover .split-card-title{color:#f5f5f7!important}
 .item-slider-viewport.state-split .panel-cover:hover{background:linear-gradient(180deg, #28282e 0%, #1e1e24 100%)!important;border-color:var(--green)!important;box-shadow:0 16px 40px rgba(0,0,0,0.45)!important}
 .item-slider-viewport.state-split .panel-expanded,.item-slider-viewport.state-split .item-peeking-tab{display:none!important}
-.item-slider-viewport.state-question .question-panel{flex:1 1 calc(100% - 58px);min-width:0}
+.item-slider-viewport.state-question .question-panel{flex:1 1 0%;width:calc(100% - 58px);max-width:calc(100% - 58px);min-width:0;box-sizing:border-box}
 .item-slider-viewport.state-question .question-panel .panel-cover{display:none!important}
-.item-slider-viewport.state-question .question-panel .panel-expanded{display:flex!important;background:#1c1c20!important;border:1.5px solid var(--line)!important}
+.item-slider-viewport.state-question .question-panel .panel-expanded{display:flex!important;background:#1c1c20!important;border:1.5px solid var(--line)!important;box-sizing:border-box;width:100%}
 .item-slider-viewport.state-question .question-panel .item-peeking-tab{display:none!important}
-.item-slider-viewport.state-question .capsule-panel{flex:0 0 46px;width:46px;min-width:46px;border-radius:18px;background:#f4cc57!important;border:1.5px solid #dfb945!important;box-shadow:0 8px 24px rgba(244,204,87,0.25)!important;cursor:pointer}
+.item-slider-viewport.state-question .capsule-panel{flex:0 0 46px;width:46px;min-width:46px;max-width:46px;flex-shrink:0;border-radius:18px;background:#f4cc57!important;border:1.5px solid #dfb945!important;box-shadow:0 8px 24px rgba(244,204,87,0.25)!important;cursor:pointer;box-sizing:border-box}
 .item-slider-viewport.state-question .capsule-panel:hover{background:#ffd966!important}
 .item-slider-viewport.state-question .capsule-panel .panel-cover,.item-slider-viewport.state-question .capsule-panel .panel-expanded{display:none!important}
 .item-slider-viewport.state-question .capsule-panel .item-peeking-tab{display:flex!important}
 .item-slider-viewport.state-question .capsule-panel .peeking-label{color:#18181b!important}
-.item-slider-viewport.state-capsule .capsule-panel{flex:1 1 calc(100% - 58px);min-width:0}
+.item-slider-viewport.state-capsule .capsule-panel{flex:1 1 0%;width:calc(100% - 58px);max-width:calc(100% - 58px);min-width:0;box-sizing:border-box}
 .item-slider-viewport.state-capsule .capsule-panel .panel-cover{display:none!important}
-.item-slider-viewport.state-capsule .capsule-panel .panel-expanded{display:flex!important;background:#1c1c20!important;border:1.5px solid var(--line)!important}
+.item-slider-viewport.state-capsule .capsule-panel .panel-expanded{display:flex!important;background:#1c1c20!important;border:1.5px solid var(--line)!important;box-sizing:border-box;width:100%}
 .item-slider-viewport.state-capsule .capsule-panel .item-peeking-tab{display:none!important}
-.item-slider-viewport.state-capsule .question-panel{flex:0 0 46px;width:46px;min-width:46px;border-radius:18px;background:#f4cc57!important;border:1.5px solid #dfb945!important;box-shadow:0 8px 24px rgba(244,204,87,0.25)!important;cursor:pointer}
+.item-slider-viewport.state-capsule .question-panel{flex:0 0 46px;width:46px;min-width:46px;max-width:46px;flex-shrink:0;border-radius:18px;background:#f4cc57!important;border:1.5px solid #dfb945!important;box-shadow:0 8px 24px rgba(244,204,87,0.25)!important;cursor:pointer;box-sizing:border-box}
 .item-slider-viewport.state-capsule .question-panel:hover{background:#ffd966!important}
 .item-slider-viewport.state-capsule .question-panel .panel-cover,.item-slider-viewport.state-capsule .question-panel .panel-expanded{display:none!important}
 .item-slider-viewport.state-capsule .question-panel .item-peeking-tab{display:flex!important}
 .item-slider-viewport.state-capsule .question-panel .peeking-label{color:#18181b!important}
+.cancelled-records-wrap{margin-top:24px;padding-top:16px;border-top:1.5px dashed #443235}
+.cancelled-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:0 4px}
+.cancelled-tag{font-size:11px;font-weight:800;letter-spacing:1.8px;color:#f0b9ba;text-transform:uppercase}
+.record-row.is-cancelled{opacity:0.62;filter:saturate(0.5);border-color:#422c2d!important;background:#1a1516!important}
+.record-row.is-cancelled:hover{opacity:0.95;border-color:#f0b9ba!important;background:#24191b!important}
+.question-filmed-section{margin-top:22px;padding-top:16px;border-top:1.5px dashed var(--line)}
+.filmed-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:0 4px}
+.filmed-tag{font-size:11px;font-weight:800;letter-spacing:1.8px;color:#9cc8ea;text-transform:uppercase}
+.question-capsule-row.is-filmed{opacity:0.68;filter:saturate(0.65);border-color:#2a3540!important;background:#181d22!important}
+.question-capsule-row.is-filmed:hover{opacity:0.95;border-color:#9cc8ea!important;background:#1e2630!important}
 .question-stacks-wrap{display:flex;flex-direction:column;gap:14px}
 .question-display-card{background:#222227;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,0.25);transition:border-color .15s ease}
 .question-display-card:hover{border-color:#5a5a64}
@@ -591,7 +601,12 @@ dialog input:not([type="checkbox"]):not([type="radio"]),dialog select,dialog tex
 .pill.is-sponsored{background:#f4cc57!important;color:#18181b!important;font-weight:800!important;border:0!important;box-shadow:0 0 14px #f4cc5755}
 .danger-btn{background:#422323!important;border-color:#5a2e2e!important;color:#ffabab!important}
 .danger-btn:hover{background:#5a2e2e!important;border-color:#ffabab!important}
-@media(max-width:760px){body[data-view="log"] #main{flex:1 1 auto;height:calc(100dvh - (56px + max(env(safe-area-inset-top,0px),52px) + 12px) - var(--phone-tabs) - 18px)!important;max-height:calc(100dvh - (56px + max(env(safe-area-inset-top,0px),52px) + 12px) - var(--phone-tabs) - 18px)!important;padding:8px 14px 14px!important;min-height:0;overflow:hidden;box-sizing:border-box!important}body[data-view="conti"] #main{min-height:calc(100dvh - 56px - max(env(safe-area-inset-top,0px),50px) - var(--phone-tabs));box-sizing:border-box;padding-bottom:calc(var(--phone-tabs) + 24px)}body[data-view="log"] .page-heading{margin-bottom:8px}.panel-expanded{padding:14px;border-radius:18px}.item-panel-nav{margin-bottom:8px;padding-bottom:8px}.item-slider-viewport.state-capsule .question-panel,.item-slider-viewport.state-question .capsule-panel{flex:0 0 42px;width:42px;min-width:42px;border-radius:16px}.peeking-label{font-size:11px;letter-spacing:1.5px}.split-card-title{font-size:clamp(26px,7vw,38px)!important}}
+@media(max-width:760px){body[data-view="log"] #main{flex:1 1 auto;height:calc(100dvh - (56px + max(env(safe-area-inset-top,0px),52px) + 12px) - var(--phone-tabs) - 18px)!important;max-height:calc(100dvh - (56px + max(env(safe-area-inset-top,0px),52px) + 12px) - var(--phone-tabs) - 18px)!important;padding:8px 14px 14px!important;min-height:0;overflow:hidden;box-sizing:border-box!important}body[data-view="conti"] #main{min-height:calc(100dvh - 56px - max(env(safe-area-inset-top,0px),50px) - var(--phone-tabs));box-sizing:border-box;padding-bottom:calc(var(--phone-tabs) + 24px)}body[data-view="log"] .page-heading{margin-bottom:8px}.panel-expanded{padding:14px;border-radius:18px}.item-panel-nav{margin-bottom:8px;padding-bottom:8px}.item-slider-viewport{gap:8px!important;width:100%!important;max-width:100%!important}
+.item-slider-viewport.state-split .item-panel{flex:1 1 calc(50% - 4px)!important;max-width:calc(50% - 4px)!important;min-width:0!important}
+.item-slider-viewport.state-question .question-panel{flex:1 1 0%!important;width:calc(100% - 50px)!important;max-width:calc(100% - 50px)!important;min-width:0!important}
+.item-slider-viewport.state-question .capsule-panel{flex:0 0 42px!important;width:42px!important;min-width:42px!important;max-width:42px!important;border-radius:16px}
+.item-slider-viewport.state-capsule .capsule-panel{flex:1 1 0%!important;width:calc(100% - 50px)!important;max-width:calc(100% - 50px)!important;min-width:0!important}
+.item-slider-viewport.state-capsule .question-panel{flex:0 0 42px!important;width:42px!important;min-width:42px!important;max-width:42px!important;border-radius:16px}.peeking-label{font-size:11px;letter-spacing:1.5px}.split-card-title{font-size:clamp(26px,7vw,38px)!important}}
 
 /* iOS Safari auto-zoom prevention & keyboard-aware dialog layout */
 @media (max-width: 900px) {
@@ -815,11 +830,36 @@ function newThrow(ep=1){ return {id:uid(),episode:Number(ep)||1,topic:'',descrip
 function keys(p) {return Array.from({length:Number(p?.settings?.capsules)||3},(_,i)=>String(i+1));}
 // Missing optional episode values from older drafts / the Sheets bridge mean
 // unassigned. Do not coerce strings, zero, or out-of-range assignments.
+function isDatePassed(dateStr){
+  if(!dateStr||typeof dateStr!=='string')return false;
+  const t=dateStr.trim();
+  if(!t)return false;
+  const iso=t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if(iso){
+    const d=new Date(Number(iso[1]),Number(iso[2])-1,Number(iso[3]),23,59,59);
+    return !isNaN(d.getTime())&&d.getTime()<Date.now();
+  }
+  const d2=new Date(t);
+  if(!isNaN(d2.getTime())){
+    d2.setHours(23,59,59);
+    return d2.getTime()<Date.now();
+  }
+  return false;
+}
 function normalizeOptionalEpisode(project) {
   if(Array.isArray(project?.records)){
     for(const r of project.records){
       if(!r)continue;
-      if(r.episode===''||r.episode===undefined||r.episode===null||Number.isNaN(Number(r.episode))||Number(r.episode)<=0){
+      if((!r.status||r.status==='PREPRO')&&r.date&&isDatePassed(r.date)){
+        r.status='FILMED';
+      }
+      if(!r.status){
+        r.status='PREPRO';
+      }
+      if(r.status==='CANCELLED'){
+        r.episode=null;
+        r.capsule='';
+      }else if(r.episode===''||r.episode===undefined||r.episode===null||Number.isNaN(Number(r.episode))||Number(r.episode)<=0){
         r.episode=null;
       }else{
         r.episode=Math.floor(Number(r.episode));
@@ -1187,7 +1227,7 @@ function home(){
   const isEpSpons=Boolean(p.settings?.episodeSponsored?.[n]||(p.throws||[]).some(t=>Number(t.episode)===n&&Boolean(t.sponsored)));
   const epLoc=(p.settings?.episodeLocations?.[n]||'').trim();
   const epTheme=(p.settings?.episodeThemes?.[n]||'').trim();
-  return `<div class="home-ep-box" aria-label="Episode ${n} Overview"><div class="home-ep-box-head"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><strong>EPISODE ${String(n).padStart(2,'0')}</strong>${isEpSpons?'<span class="pill is-sponsored" style="font-size:8px!important;padding:2px 7px!important;margin:0!important">★ SPONSORED</span>':''}${epTheme?`<span class="pill" style="font-size:8px!important;padding:2px 7px!important;margin:0!important;background:#ffffff15;border-color:var(--lime);color:var(--lime)">${esc(epTheme)}</span>`:''}${epLoc?`<span style="font-size:11px;font-weight:600;color:var(--muted);display:inline-flex;align-items:center;gap:3px"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#f4cc57" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${esc(epLoc)}</span>`:''}</div></div><ul class="home-ep-caps-list">${capRows}</ul></div>`;
+  return `<div class="home-ep-box" aria-label="Episode ${n} Overview"><div class="home-ep-box-head"><div style="display:flex;flex-direction:column;gap:5px;width:100%"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><strong>EPISODE ${String(n).padStart(2,'0')}</strong>${isEpSpons?'<span class="pill is-sponsored" style="font-size:8px!important;padding:2px 7px!important;margin:0!important">★ SPONSORED</span>':''}${epTheme?`<span class="pill" style="font-size:8px!important;padding:2px 7px!important;margin:0!important;background:#ffffff15;border-color:var(--lime);color:var(--lime)">${esc(epTheme)}</span>`:''}</div>${epLoc?`<div class="home-ep-box-loc" style="font-size:11px;font-weight:600;color:var(--muted);display:inline-flex;align-items:center;gap:4px"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#f4cc57" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>${esc(epLoc)}</span></div>`:''}</div></div><ul class="home-ep-caps-list">${capRows}</ul></div>`;
  }).join('');
 
  return `<div class="home-slider-viewport" aria-label="Home and Episodes Views">
@@ -1220,9 +1260,11 @@ function home(){
   </div>
  </div>`;
 }
-function overview(){const rs=p.records.filter(r=>r.episode===ep&&/^\d+$/.test(r.capsule)&&r.status!=='CANCELLED');const s=p.scripts[ep];const total=s?s.sections.reduce((a,x)=>a+x.seconds,0):0;const epThrows=(p.throws||[]).filter(t=>Number(t.episode)===Number(ep));const isSponsored=Boolean(p.settings?.episodeSponsored?.[ep]||epThrows.some(t=>Boolean(t.sponsored)));const epLocation=(p.settings?.episodeLocations?.[ep]||'').trim();const epTheme=(p.settings?.episodeThemes?.[ep]||'').trim();return `<section class="hero episode-hero"><div><div class="hero-badge-wrap"><span class="pill">EPISODE ${String(ep).padStart(2,'0')}</span></div><h2 class="episode-hero-location-title"><svg viewBox="0 0 24 24" width="32" height="32" class="ep-loc-icon" fill="none" stroke="#f4cc57" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" fill="rgba(244,204,87,0.18)"/><circle cx="12" cy="10" r="3" fill="#f4cc57"/></svg><span>${esc(epLocation||'Location TBA')}</span></h2>${(epTheme||isSponsored)?`<div class="episode-hero-meta-row">${epTheme?`<span class="episode-hero-theme">${esc(epTheme)}</span>`:''}${isSponsored?'<span class="pill is-sponsored">★ SPONSORED</span>':''}</div>`:''}<p>${rs.length} of ${p.settings.capsules} capsules recorded for this episode.</p></div><div class="hero-art" aria-hidden="true"><div class="paper"><small>EP ${String(ep).padStart(2,'0')} / SCRIPT</small><div>VIDEO <span>AUDIO</span></div><i></i><i></i><i></i><i></i><b>STORIES, IN THE MAKING.</b></div><span class="orbit">✳</span></div><button type="button" class="hero-gear-btn episode-gear-btn" data-action="edit-episode-overview" data-ep="${ep}" aria-label="Edit episode details" title="Edit episode text & sponsorship"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></section><section class="stats">${stat(String(rs.length).padStart(2,'0'),'Capsules this episode',`${rs.filter(r=>['EDITED','TX'].includes(r.status)).length} edited`)}${stat(s?tc(total):'—','Content duration',`Target ${p.settings.target} min · slot ${p.settings.slot} min`)}${stat(String(Object.keys(p.scripts).length).padStart(2,'0'),'Saved scripts','In this project')}${stat(breaksForSlot(p.settings.slot),'Commercial breaks','Excludes advertising time')}</section><div class="section-title"><h2>Capsules in episode ${ep}</h2><button class="text-button" data-action="nav" data-view="log">View production log →</button></div><div class="capsule-grid">${rs.length?rs.sort((a,b)=>+a.capsule-+b.capsule).map(r=>`<button class="capsule-card" data-action="edit-record" data-id="${r.id}"><div><span class="capsule-number">${String(r.capsule).padStart(2,'0')}</span><span class="status ${r.status.toLowerCase()}">${r.status}</span></div><h3>${esc(r.topic||'Topic not entered')}</h3><p>${esc(r.description||'Add a description of this story.')}</p><small>${esc(r.location||'Location not entered')} <span>${esc(r.duration||'--:--')} ↗</span></small></button>`).join(''):'<div class="empty">No capsules yet. Start with your first story.</div>'}<button class="add-card" data-action="add-record"><span>＋</span>Add Capsule</button></div><div class="note"><b>Your workspace, on phone and desktop.</b><p>${adapter.mode==='local'?'This preview saves data in this browser. Use JSON backups to move between devices; Sheets sync needs a one-time setup.':'Project data is read from Sheets. Click Reload after editing the spreadsheet manually.'}</p></div>`;}
+function overview(){const rs=p.records.filter(r=>r.episode===ep&&/^\d+$/.test(r.capsule)&&r.status!=='CANCELLED');const s=p.scripts[ep];const total=s?s.sections.reduce((a,x)=>a+x.seconds,0):0;const epThrows=(p.throws||[]).filter(t=>Number(t.episode)===Number(ep));const isSponsored=Boolean(p.settings?.episodeSponsored?.[ep]||epThrows.some(t=>Boolean(t.sponsored)));const epLocation=(p.settings?.episodeLocations?.[ep]||'').trim();const epTheme=(p.settings?.episodeThemes?.[ep]||'').trim();return `<section class="hero episode-hero"><div><div class="hero-badge-wrap"><span class="pill">EPISODE ${String(ep).padStart(2,'0')}</span>${isSponsored?'<span class="pill is-sponsored">★ SPONSORED</span>':''}</div><h2 class="episode-hero-location-title"><svg viewBox="0 0 24 24" width="32" height="32" class="ep-loc-icon" fill="none" stroke="#f4cc57" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" fill="rgba(244,204,87,0.18)"/><circle cx="12" cy="10" r="3" fill="#f4cc57"/></svg><span>${esc(epLocation||'Location TBA')}</span></h2>${epTheme?`<div class="episode-hero-meta-row"><span class="episode-hero-theme">${esc(epTheme)}</span></div>`:''}<p>${rs.length} of ${p.settings.capsules} capsules recorded for this episode.</p></div><div class="hero-art" aria-hidden="true"><div class="paper"><small>EP ${String(ep).padStart(2,'0')} / SCRIPT</small><div>VIDEO <span>AUDIO</span></div><i></i><i></i><i></i><i></i><b>STORIES, IN THE MAKING.</b></div><span class="orbit">✳</span></div><button type="button" class="hero-gear-btn episode-gear-btn" data-action="edit-episode-overview" data-ep="${ep}" aria-label="Edit episode details" title="Edit episode text & sponsorship"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></section><section class="stats">${stat(String(rs.length).padStart(2,'0'),'Capsules this episode',`${rs.filter(r=>['EDITED','TX'].includes(r.status)).length} edited`)}${stat(s?tc(total):'—','Content duration',`Target ${p.settings.target} min · slot ${p.settings.slot} min`)}${stat(String(Object.keys(p.scripts).length).padStart(2,'0'),'Saved scripts','In this project')}${stat(breaksForSlot(p.settings.slot),'Commercial breaks','Excludes advertising time')}</section><div class="section-title"><h2>Capsules in episode ${ep}</h2><button class="text-button" data-action="nav" data-view="log">View production log →</button></div><div class="capsule-grid">${rs.length?rs.sort((a,b)=>+a.capsule-+b.capsule).map(r=>`<button class="capsule-card" data-action="edit-record" data-id="${r.id}"><div><span class="capsule-number">${String(r.capsule).padStart(2,'0')}</span><span class="status ${r.status.toLowerCase()}">${r.status}</span></div><h3>${esc(r.topic||'Topic not entered')}</h3><p>${esc(r.description||'Add a description of this story.')}</p><small>${esc(r.location||'Location not entered')} <span>${esc(r.duration||'--:--')} ↗</span></small></button>`).join(''):'<div class="empty">No capsules yet. Start with your first story.</div>'}<button class="add-card" data-action="add-record"><span>＋</span>Add Capsule</button></div><div class="note"><b>Your workspace, on phone and desktop.</b><p>${adapter.mode==='local'?'This preview saves data in this browser. Use JSON backups to move between devices; Sheets sync needs a one-time setup.':'Project data is read from Sheets. Click Reload after editing the spreadsheet manually.'}</p></div>`;}
 function log(){
- const rsCapsules=p.records.filter(r=>(filter==='all'||(filter==='unassigned'?r.episode===null||!r.capsule:r.episode===ep))&&`${r.topic} ${r.guest} ${r.location} ${r.capsule}`.toLowerCase().includes(search.toLowerCase())).sort((a,b)=>a.episode-b.episode||(/^\d+$/.test(a.capsule)?+a.capsule:100+keys(p).indexOf(a.capsule))-( /^\d+$/.test(b.capsule)?+b.capsule:100+keys(p).indexOf(b.capsule)));
+ const allMatchingCapsules=p.records.filter(r=>(filter==='all'||(filter==='unassigned'?r.episode===null||!r.capsule:r.episode===ep))&&`${r.topic} ${r.guest} ${r.location} ${r.capsule}`.toLowerCase().includes(search.toLowerCase()));
+ const activeCapsules=allMatchingCapsules.filter(r=>r.status!=='CANCELLED').sort((a,b)=>a.episode-b.episode||(/^\d+$/.test(a.capsule)?+a.capsule:100+keys(p).indexOf(a.capsule))-( /^\d+$/.test(b.capsule)?+b.capsule:100+keys(p).indexOf(b.capsule)));
+ const cancelledCapsules=allMatchingCapsules.filter(r=>r.status==='CANCELLED');
  if(!Array.isArray(p.throws))p.throws=[];
  const rsThrows=p.throws.filter(t=>{
   const matchFilter=throwFilter==='all'||(throwFilter==='sponsored'?t.sponsored:(throwFilter==='episode'?Number(t.episode)===Number(ep):true));
@@ -1230,17 +1272,58 @@ function log(){
   return matchFilter&&matchSearch;
  }).sort((a,b)=>(Number(a.episode)||0)-(Number(b.episode)||0));
 
- const capsuleExpanded=`<div class="panel-expanded capsule-expanded"><div class="item-panel-nav"><span class="item-panel-tag">CAPSULES (${rsCapsules.length})</span></div><div class="item-panel-scroll"><div class="production-actions"><button class="primary add-capsule" data-action="add-record">＋ Add Capsule</button><span>${rsCapsules.length} records</span></div><details class="log-tools" ${search||filter!=='all'?'open':''}><summary>Search / filter <span aria-hidden="true">⌕</span></summary><div class="toolbar"><div class="search"><span aria-hidden="true">⌕</span><input id="search" aria-label="Search records" placeholder="Search topics, guests or locations…" value="${esc(search)}"></div><select id="log-filter" aria-label="Filter episodes"><option value="all" ${filter==='all'?'selected':''}>All episodes</option><option value="unassigned" ${filter==='unassigned'?'selected':''}>Unassigned</option><option value="episode" ${filter==='episode'?'selected':''}>Selected episode</option></select><label class="log-episode">Episode<select id="episode-select">${options(Array.from({length:p.settings.episodes},(_,i)=>i+1),ep)}</select></label></div></details><div class="record-list">${rsCapsules.length?rsCapsules.map(r=>{
+ const cancelledSection=cancelledCapsules.length?`
+  <div class="cancelled-records-wrap">
+    <div class="cancelled-header">
+      <span class="cancelled-tag">CANCELLED (${cancelledCapsules.length})</span>
+      <small class="muted">Stripped from episode and capsule assignment</small>
+    </div>
+    <div class="record-list cancelled-record-list">
+      ${cancelledCapsules.map(r=>{
+        const isOther=(r.type||'Interview')==='Other';
+        return `<button class="record-row is-cancelled" data-action="edit-record" data-id="${r.id}"><span class="record-key"><small>CANCELLED</small><b>—</b></span><span class="record-main"><strong class="record-title-row"><span class="capsule-type-badge ${isOther?'type-ot':'type-iv'}" aria-label="${isOther?'Other':'Interview'}">${isOther?'OT':'IV'}</span><span>${esc(r.topic||'Untitled topic')}</span></strong><small><span class="mobile-assignment">Unassigned · </span>${esc(r.location||r.guest||'Location not entered')}</small></span><span class="record-date">${esc(r.date||'Date not entered')}</span><span class="status cancelled">CANCELLED</span><span class="record-duration">${esc(r.duration||'--:--')}</span><span class="record-chevron" aria-hidden="true">›</span></button>`;
+      }).join('')}
+    </div>
+  </div>`:'' ;
+
+ const capsuleExpanded=`<div class="panel-expanded capsule-expanded"><div class="item-panel-nav"><span class="item-panel-tag">CAPSULES (${allMatchingCapsules.length})</span></div><div class="item-panel-scroll"><div class="production-actions"><button class="primary add-capsule" data-action="add-record">＋ Add Capsule</button><span>${activeCapsules.length} active records</span></div><details class="log-tools" ${search||filter!=='all'?'open':''}><summary>Search / filter <span aria-hidden="true">⌕</span></summary><div class="toolbar"><div class="search"><span aria-hidden="true">⌕</span><input id="search" aria-label="Search records" placeholder="Search topics, guests or locations…" value="${esc(search)}"></div><select id="log-filter" aria-label="Filter episodes"><option value="all" ${filter==='all'?'selected':''}>All episodes</option><option value="unassigned" ${filter==='unassigned'?'selected':''}>Unassigned</option><option value="episode" ${filter==='episode'?'selected':''}>Selected episode</option></select><label class="log-episode">Episode<select id="episode-select">${options(Array.from({length:p.settings.episodes},(_,i)=>i+1),ep)}</select></label></div></details><div class="record-list">${activeCapsules.length?activeCapsules.map(r=>{
   const isOther = (r.type||'Interview') === 'Other';
   return `<button class="record-row" data-action="edit-record" data-id="${r.id}"><span class="record-key"><small>${r.episode===null?'UNASSIGNED':`EP ${String(r.episode).padStart(2,'0')}`}</small><b>${esc(r.capsule||'—')}</b></span><span class="record-main"><strong class="record-title-row"><span class="capsule-type-badge ${isOther?'type-ot':'type-iv'}" aria-label="${isOther?'Other':'Interview'}">${isOther?'OT':'IV'}</span><span>${esc(r.topic||'Untitled topic')}</span></strong><small><span class="mobile-assignment">${r.episode===null?'Unassigned':`Ep ${r.episode}${r.capsule?' · '+esc(r.capsule):''}`} · </span>${esc(r.location||r.guest||'Location not entered')}</small></span><span class="record-date">${esc(r.date||'Date not entered')}</span><span class="status ${r.status.toLowerCase()}">${r.status}</span><span class="record-duration">${esc(r.duration||'--:--')}</span><span class="record-chevron" aria-hidden="true">›</span></button>`;
- }).join(''):'<div class="empty">No stories here yet. Add your first capsule.</div>'}</div><p class="muted production-hint">Assign episodes and capsules when the lineup is ready.</p></div></div>`;
+ }).join(''):'<div class="empty">No active stories here yet. Add your first capsule.</div>'}</div>${cancelledSection}<p class="muted production-hint">Assign episodes and capsules when the lineup is ready.</p></div></div>`;
 
- const rsQuestions=p.records.filter(r=>(r.type||'Interview')!=='Other'&&getRecordTotalQuestionsCount(r)>0).sort((a,b)=>(a.episode||99)-(b.episode||99)||String(a.capsule||'').localeCompare(String(b.capsule||''),undefined,{numeric:true}));
+ const allQuestionsRecords=p.records.filter(r=>(r.type||'Interview')!=='Other'&&r.status!=='CANCELLED'&&getRecordTotalQuestionsCount(r)>0);
+ const isFilmed=r=>['FILMED','EDITED','TX'].includes(r.status)||(r.date&&isDatePassed(r.date));
+ const activeQuestions=allQuestionsRecords.filter(r=>!isFilmed(r)).sort((a,b)=>{
+  const da=a.date?a.date.trim():'',db=b.date?b.date.trim():'';
+  if(da&&db&&da!==db)return da.localeCompare(db);
+  if(da&&!db)return -1;
+  if(!da&&db)return 1;
+  return (a.episode||99)-(b.episode||99)||String(a.capsule||'').localeCompare(String(b.capsule||''),undefined,{numeric:true});
+ });
+ const filmedQuestions=allQuestionsRecords.filter(r=>isFilmed(r)).sort((a,b)=>{
+  const da=a.date?a.date.trim():'',db=b.date?b.date.trim():'';
+  if(da&&db&&da!==db)return db.localeCompare(da);
+  return (a.episode||99)-(b.episode||99)||String(a.capsule||'').localeCompare(String(b.capsule||''),undefined,{numeric:true});
+ });
 
- const questionExpanded=`<div class="panel-expanded question-expanded"><div class="item-panel-nav"><span class="item-panel-tag">QUESTIONS (${rsQuestions.length})</span></div><div class="item-panel-scroll"><div class="question-stacks-wrap">${rsQuestions.length?rsQuestions.map(r=>{
+ const filmedQuestionsHtml=filmedQuestions.length?`
+  <div class="question-filmed-section">
+    <div class="filmed-header">
+      <span class="filmed-tag">FILMED (${filmedQuestions.length})</span>
+      <small class="muted">Completed filming sessions</small>
+    </div>
+    <div class="question-stacks-wrap question-filmed-stacks">
+      ${filmedQuestions.map(r=>{
+        const totalQ=getRecordTotalQuestionsCount(r);
+        return `<button type="button" class="question-capsule-row is-filmed" data-action="view-interview-questions-popup" data-id="${r.id}"><div class="question-meta-badge"><span class="q-ep-pill">${r.episode===null?'UNASSIGNED':`EP ${String(r.episode).padStart(2,'0')}`}</span><span class="q-cap-pill">${esc(r.capsule||'—')}</span></div><div class="question-header-info"><h4>${esc(r.topic||'Untitled Capsule')}</h4><small>${esc([r.guest?`Interviewee: ${r.guest}`:'',r.date?`Date: ${r.date}`:'',`${totalQ} question${totalQ>1?'s':''}`].filter(Boolean).join(' · '))}</small></div><span class="status filmed" style="font-size:9px;padding:3px 7px;border-radius:4px;margin-right:4px">FILMED</span><span class="q-row-arrow" aria-hidden="true">↗</span></button>`;
+      }).join('')}
+    </div>
+  </div>`:'' ;
+
+ const questionExpanded=`<div class="panel-expanded question-expanded"><div class="item-panel-nav"><span class="item-panel-tag">QUESTIONS (${allQuestionsRecords.length})</span></div><div class="item-panel-scroll"><div class="question-stacks-wrap">${activeQuestions.length?activeQuestions.map(r=>{
   const totalQ=getRecordTotalQuestionsCount(r);
-  return `<button type="button" class="question-capsule-row" data-action="view-interview-questions-popup" data-id="${r.id}"><div class="question-meta-badge"><span class="q-ep-pill">${r.episode===null?'UNASSIGNED':`EP ${String(r.episode).padStart(2,'0')}`}</span><span class="q-cap-pill">${esc(r.capsule||'—')}</span></div><div class="question-header-info"><h4>${esc(r.topic||'Untitled Capsule')}</h4><small>${esc([r.guest?`Interviewee: ${r.guest}`:'',`${totalQ} question${totalQ>1?'s':''}`].filter(Boolean).join(' · '))}</small></div><span class="q-row-arrow" aria-hidden="true">↗</span></button>`;
- }).join(''):'<div class="empty">No interview questions found yet. Questions added or generated inside Capsules will be stacked here for display.</div>'}</div><p class="muted production-hint">Tap any capsule above to open questions in a spacious on-set interview sheet.</p></div></div>`;
+  return `<button type="button" class="question-capsule-row" data-action="view-interview-questions-popup" data-id="${r.id}"><div class="question-meta-badge"><span class="q-ep-pill">${r.episode===null?'UNASSIGNED':`EP ${String(r.episode).padStart(2,'0')}`}</span><span class="q-cap-pill">${esc(r.capsule||'—')}</span></div><div class="question-header-info"><h4>${esc(r.topic||'Untitled Capsule')}</h4><small>${esc([r.guest?`Interviewee: ${r.guest}`:'',r.date?`Date: ${r.date}`:'',`${totalQ} question${totalQ>1?'s':''}`].filter(Boolean).join(' · '))}</small></div><span class="q-row-arrow" aria-hidden="true">↗</span></button>`;
+ }).join(''):'<div class="empty">No upcoming interview questions. Stories ready to film will appear here.</div>'}</div>${filmedQuestionsHtml}<p class="muted production-hint">Tap any capsule above to open questions in a spacious on-set interview sheet.</p></div></div>`;
 
  return `<div class="item-slider-viewport state-${itemActiveTab}" id="item-slider-viewport" data-state="${itemActiveTab}"><section class="item-panel question-panel" id="question-panel"><div class="panel-cover question-cover" data-action="switch-item-tab" data-tab="question"><h2 class="split-card-title">Questions</h2></div>${questionExpanded}<button type="button" class="item-peeking-tab left-tab" data-action="switch-item-tab" data-tab="question" aria-label="Open Questions"><span class="peeking-label">‹ Questions</span></button></section><section class="item-panel capsule-panel" id="capsule-panel"><div class="panel-cover capsule-cover" data-action="switch-item-tab" data-tab="capsule"><h2 class="split-card-title">Capsule</h2></div>${capsuleExpanded}<button type="button" class="item-peeking-tab right-tab" data-action="switch-item-tab" data-tab="capsule" aria-label="Open Capsule"><span class="peeking-label">Capsule ›</span></button></section></div>`;
 }
@@ -2511,8 +2594,18 @@ document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target
   const recData=collectRecordFormData(f);
   const next=clone(p);
   const old=next.records.find(x=>x.id===f.dataset.id);
-  const parsedEp=(recData.episode!==undefined)?((recData.episode===''||recData.episode===null||Number.isNaN(Number(recData.episode))||Number(recData.episode)<=0)?null:Math.floor(Number(recData.episode))):(old?.episode??null);
-  const r={...newRecord(),...old,...recData,...recordAI,id:f.dataset.id,episode:parsedEp};
+  let statusVal=recData.status||old?.status||'PREPRO';
+  const dateVal=recData.date!==undefined?recData.date:(old?.date||'');
+  if(statusVal==='PREPRO'&&dateVal&&isDatePassed(dateVal)){
+    statusVal='FILMED';
+  }
+  let parsedEp=(recData.episode!==undefined)?((recData.episode===''||recData.episode===null||Number.isNaN(Number(recData.episode))||Number(recData.episode)<=0)?null:Math.floor(Number(recData.episode))):(old?.episode??null);
+  let capVal=recData.capsule!==undefined?recData.capsule:(old?.capsule||'');
+  if(statusVal==='CANCELLED'){
+    parsedEp=null;
+    capVal='';
+  }
+  const r={...newRecord(),...old,...recData,...recordAI,id:f.dataset.id,status:statusVal,episode:parsedEp,capsule:capVal};
   next.records=next.records.filter(x=>x.id!==r.id);
   next.records.push(r);
   normalizeOptionalEpisode(next);
