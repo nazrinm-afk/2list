@@ -167,7 +167,7 @@ function extractGeminiWriting(response){
  return {text:text.trim(),model:GEMINI_FREE_MODEL,provenance:{provider:'gemini',mode:'supplied-facts',generatedAt:new Date().toISOString(),raw,citations:[],consulted:[],searched:false,notes:['Written from supplied facts only. No web research or profile verification.',...notes].join('\n').trim()}};
 }
 
-/** ToList — personal deployment only. No production workbook IDs. */
+/** 2List — personal deployment only. No production workbook IDs. */
 function owner_() {
   const expected=PropertiesService.getScriptProperties().getProperty('OWNER_EMAIL');
   if(!expected) return;
@@ -196,7 +196,7 @@ const FIELDS_=['id','episode','capsule','topic','description','guest','title','l
 const BACKUPS_=3;
 function state_(book){return JSON.parse(PropertiesService.getScriptProperties().getProperty('STORAGE_'+book.getId())||'null');}
 function putState_(book,state){PropertiesService.getScriptProperties().setProperty('STORAGE_'+book.getId(),JSON.stringify(state));}
-function sheet_(book,id){const sheet=book.getSheetById(id);if(!sheet)throw new Error('A ToList data tab is missing. Restore it from a backup before saving.');return sheet;}
+function sheet_(book,id){const sheet=book.getSheetById(id);if(!sheet)throw new Error('A 2List data tab is missing. Restore it from a backup before saving.');return sheet;}
 function versions_(book){return book.getSheets().filter(s=>/^V\d{6}$/.test(s.getName())&&s.getRange('B1').getDisplayValue()==='COMMITTED').sort((a,b)=>a.getName().localeCompare(b.getName()));}
 function withLock_(run){const lock=LockService.getScriptLock();lock.waitLock(30000);try{return run();}finally{lock.releaseLock();}}
 function readVersion_(sheet){
@@ -242,7 +242,7 @@ function readCompact_(book,state){
 function guide_(book,state){
   if(state.guideRevision===state.revision)return;
   let info=book.getSheetByName('GUIDE');if(!info){info=book.getSheets().find(s=>s.getName()==='Sheet1')||book.insertSheet('GUIDE');info.setName('GUIDE');}
-  const rows=[['ToList — CURRENT + 3 recent backups'],['Edit RECORD rows in CURRENT only. Open CURRENT by tab name each time; its tab ID changes after a save.'],['Keep IDs and metadata unchanged. Sort entire rows. Questions/VO follow record IDs. Edit scripts/settings in the app.'],['BACKUP tabs are recent recovery copies, not editing tabs. Older backups are removed after a safe save. Keep JSON backups for longer retention.'],['Save in the app, then reload on the other device. Conflicts retain both versions for review; unresolved recovery tabs are not pruned.'],['An interrupted save may leave _TOLIST_PENDING temporarily. Reopen the app to recover; do not edit or delete it.'],['Legacy history archive (kept unchanged):'],[state.archive?SpreadsheetApp.openById(state.archive.id).getUrl():'No legacy archive needed for this project.']];
+  const rows=[['2List — CURRENT + 3 recent backups'],['Edit RECORD rows in CURRENT only. Open CURRENT by tab name each time; its tab ID changes after a save.'],['Keep IDs and metadata unchanged. Sort entire rows. Questions/VO follow record IDs. Edit scripts/settings in the app.'],['BACKUP tabs are recent recovery copies, not editing tabs. Older backups are removed after a safe save. Keep JSON backups for longer retention.'],['Save in the app, then reload on the other device. Conflicts retain both versions for review; unresolved recovery tabs are not pruned.'],['An interrupted save may leave _2LIST_PENDING temporarily. Reopen the app to recover; do not edit or delete it.'],['Legacy history archive (kept unchanged):'],[state.archive?SpreadsheetApp.openById(state.archive.id).getUrl():'No legacy archive needed for this project.']];
   info.getRange(1,1,rows.length,1).setValues(rows);info.setColumnWidth(1,900);info.getRange(1,1,rows.length,1).setWrap(true);
   const currentUrl=book.getUrl().split('#')[0]+'#gid='+state.current;
   info.getRange('A9').setValue(currentUrl);
@@ -276,7 +276,7 @@ function recover_(book,state){
     state.pruning=null;putState_(book,state);
   }
   if(!state.pending)return state;
-  const pending=state.pending;const stage=pending.id?book.getSheetById(pending.id):book.getSheetByName('_TOLIST_PENDING');
+  const pending=state.pending;const stage=pending.id?book.getSheetById(pending.id):book.getSheetByName('_2LIST_PENDING');
   if(!stage||stage.getRange('B1').getDisplayValue()!=='COMMITTED'){
     if(stage)book.deleteSheet(stage);state.pending=null;putState_(book,state);return state;
   }
@@ -304,7 +304,7 @@ function syncContiSheets_(book,project){
   const sheets=project.settings&&Array.isArray(project.settings.contiSheets)?project.settings.contiSheets:[];
   sheets.forEach(cs=>{
     const tabName=String(cs.tabName||'CONTI SHEET').slice(0,95);
-    if(['GUIDE','CURRENT','_TOLIST_PENDING'].includes(tabName)||/^BACKUP_|^V\d{6}$/.test(tabName))return;
+    if(['GUIDE','CURRENT','_2LIST_PENDING'].includes(tabName)||/^BACKUP_|^V\d{6}$/.test(tabName))return;
     let tab=book.getSheetByName(tabName);
     if(!tab)tab=book.insertSheet(tabName);
     else tab.clear();
@@ -352,7 +352,7 @@ function syncContiSheets_(book,project){
 }
 function commit_(book,state,project,basis,review){
   state.pending={revision:state.revision+1,basis:basis||'',review:review||null};putState_(book,state);
-  const stage=writeSnapshot_(book,project,basis,'_TOLIST_PENDING');state.pending.id=stage.getSheetId();putState_(book,state);
+  const stage=writeSnapshot_(book,project,basis,'_2LIST_PENDING');state.pending.id=stage.getSheetId();putState_(book,state);
   state=recover_(book,state);state=prune_(book,state);guide_(book,state);syncContiSheets_(book,project);return readCompact_(book,state);
 }
 function emptyState_(projectId,archive){return {format:2,projectId:projectId,current:null,revision:0,backups:[],archive:archive||null,pending:null,pruning:null};}
@@ -381,7 +381,7 @@ function saveInto_(id,book,project,current,review){
   if(!state){
     const registry=registry_();const entry=registry[id];let target;
     if(entry.migration)target=SpreadsheetApp.openById(entry.migration);
-    else{target=SpreadsheetApp.create('ToList — '+project.name+' — Current');putState_(target,emptyState_(id,archiveWatch_(book)));entry.migration=target.getId();putRegistry_(registry);}
+    else{target=SpreadsheetApp.create('2List — '+project.name+' — Current');putState_(target,emptyState_(id,archiveWatch_(book)));entry.migration=target.getId();putRegistry_(registry);}
     // Recheck before starting a migration; any later edits stay in the untouched archive.
     const archive=archiveWatch_(book);
     if(archive.token!==current.token)throw new Error('Sheets changed before migration. Reload before saving.');
@@ -398,7 +398,7 @@ function saveProject(project,expectedToken){
     let registry=registry_();let book,current=null;
     if(!registry[project.id]){
       if(expectedToken)return {error:'The project has changed. Reload first.'};
-      book=SpreadsheetApp.create('ToList — '+project.name);putState_(book,emptyState_(project.id));
+      book=SpreadsheetApp.create('2List — '+project.name);putState_(book,emptyState_(project.id));
       registry[project.id]={sheet:book.getId(),name:project.name,creating:true};putRegistry_(registry);
     }else{
       book=projectBook_(project.id);const state=state_(book);
@@ -443,7 +443,7 @@ function draftHost(project,options){
 }
 
 // Owner-only, read-only diagnostic. Does not call AI, save, migrate or recover files.
-function diagnoseToListRecords(){
+function diagnose2ListRecords(){
  owner_();const registry=registry_();const report=[];
  Object.keys(registry).forEach(id=>{
   const book=SpreadsheetApp.openById(registry[id].sheet);const state=state_(book);

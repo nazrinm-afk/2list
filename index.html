@@ -98,7 +98,7 @@ html:has(dialog[open]){overflow:hidden}
 }
 @media(max-width:450px){.phone-stage{padding:16px 8px}.phone-stage-header{padding:0 8px;gap:10px}.phone-stage-header a{font-size:10px;padding:10px}.phone-shell{width:min(410px,100%);padding:0;border:0;border-radius:0}.phone-shell iframe{width:100%;height:calc(100dvh - 150px);border-radius:0}.phone-stage-note{font-size:10px}}
 
-/* ToList dark appearance. Printed scripts retain white paper and dark ink. */
+/* 2List dark appearance. Printed scripts retain white paper and dark ink. */
 @media screen {
  :root{color-scheme:dark;--ink:#f2f2f4;--muted:#ababB2;--green:#f4cc57;--lime:#f4cc57;--paper:#1c1c1e;--bg:#101011;--line:#38383c;--serif:var(--font-sans)}
  button:hover{border-color:#626268;background:#2c2c2f}
@@ -1019,7 +1019,7 @@ function withStorageLock(indexedDB,name,run){return new Promise((resolve,reject)
   const fail=error=>{settled=true;reject(error);};
   opening.onupgradeneeded=()=>opening.result.createObjectStore('locks');
   opening.onerror=()=>fail(new Error('Safe saving is unavailable. Keep this tab open and download a JSON backup.'));
-  opening.onblocked=()=>fail(new Error('Another tab is blocking safe saving. Close other ToList tabs and try again.'));
+  opening.onblocked=()=>fail(new Error('Another tab is blocking safe saving. Close other 2List tabs and try again.'));
   opening.onsuccess=()=>{
     const db=opening.result;if(settled){db.close();return;}db.onversionchange=()=>db.close();
     let tx,result,error;
@@ -1598,12 +1598,12 @@ async function shareContiPdf(sheetId=''){
  const active=syncActiveContiSheet();
  const sheet=(sheetId&&p?.settings?.contiSheets?.find(s=>s.id===sheetId))||active;
  if(!sheet)return;
- const safeName=String(`${p?.name||'ToList'}-${sheet.contiType||'Conti'}-${sheet.date||'Sheet'}`).trim().replace(/[^a-zA-Z0-9_-]+/g,'-').replace(/^-|-$/g,'')||'conti-sheet';
+ const safeName=String(`${p?.name||'2List'}-${sheet.contiType||'Conti'}-${sheet.date||'Sheet'}`).trim().replace(/[^a-zA-Z0-9_-]+/g,'-').replace(/^-|-$/g,'')||'conti-sheet';
  const filename=`${safeName}.pdf`;
- const blob=buildContiPdfBlob(p?.name||'ToList',sheet);
+ const blob=buildContiPdfBlob(p?.name||'2List',sheet);
  const file=new File([blob],filename,{type:'application/pdf'});
  if(navigator.canShare?.({files:[file]})){
-  try{await navigator.share({files:[file],title:`${p?.name||'ToList'} — Continuity Sheet`,text:`Continuity Sheet (${sheet.date||todayShootDate()})`});return;}catch(e){if(e?.name==='AbortError')return;}
+  try{await navigator.share({files:[file],title:`${p?.name||'2List'} — Continuity Sheet`,text:`Continuity Sheet (${sheet.date||todayShootDate()})`});return;}catch(e){if(e?.name==='AbortError')return;}
  }
  const u=URL.createObjectURL(blob);
  const a=document.createElement('a');a.href=u;a.download=filename;a.click();
@@ -1859,10 +1859,10 @@ async function shareQuestionsPdf(){
  }
  const safeTopic=String(data.topic||'capsule').trim().replace(/[^a-zA-Z0-9_-]+/g,'-').replace(/^-|-$/g,'')||'capsule';
  const filename=`${safeTopic}-questions.pdf`;
- const blob=buildQuestionsPdfBlob(p?.name||'ToList',data);
+ const blob=buildQuestionsPdfBlob(p?.name||'2List',data);
  const file=new File([blob],filename,{type:'application/pdf'});
  if(navigator.canShare?.({files:[file]})){
-  try{await navigator.share({files:[file],title:`${data.topic||'Capsule'} — Interview Questions`,text:`Interview questions for ${data.topic||p?.name||'ToList'}`});return;}catch(e){if(e?.name==='AbortError')return;}
+  try{await navigator.share({files:[file],title:`${data.topic||'Capsule'} — Interview Questions`,text:`Interview questions for ${data.topic||p?.name||'2List'}`});return;}catch(e){if(e?.name==='AbortError')return;}
  }
  const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(u),10000);
  notify(`PDF downloaded (${filename}) — ready to share on WhatsApp.`);
@@ -2083,7 +2083,7 @@ function episodeOverviewDialog(targetEp=ep){
 }
 function projectDialog(){dialog(`<form id="project-form"><div class="dialog-heading"><h2>New project</h2><button type="button" data-action="close" aria-label="Close">✕</button></div>${field('Program name','name','','text','required maxlength="100" placeholder="Example: Anggun"')}<p>Each program has separate data, including episodes and capsules with the same numbers.</p><p class="form-error" role="alert"></p><button type="submit" class="primary">Create project</button></form>`);}
 function projectTypeDialog(name){
- dialog(`<div><div class="dialog-heading"><div><p class="eyebrow">${esc(name)}</p><h2>Choose project type</h2></div><button type="button" data-action="close" aria-label="Close">✕</button></div><p>Select how you want to use ToList for this project.</p><div class="project-type-grid"><button type="button" class="project-type-btn" data-action="select-project-type" data-type="conti"><strong><span>Conti Sheet</span><span aria-hidden="true">→</span></strong><small>Dedicated continuity sheet workspace for clappers and script supervisors on set.</small></button><button type="button" class="project-type-btn is-featured" data-action="select-project-type" data-type="script"><strong><span>Script</span><span aria-hidden="true">→</span></strong><small>Full scriptwriting workspace with Episodes, Capsules, Continuity Sheet and Script Editor.</small></button></div></div>`);
+ dialog(`<div><div class="dialog-heading"><div><p class="eyebrow">${esc(name)}</p><h2>Choose project type</h2></div><button type="button" data-action="close" aria-label="Close">✕</button></div><p>Select how you want to use 2List for this project.</p><div class="project-type-grid"><button type="button" class="project-type-btn" data-action="select-project-type" data-type="conti"><strong><span>Conti Sheet</span><span aria-hidden="true">→</span></strong><small>Dedicated continuity sheet workspace for clappers and script supervisors on set.</small></button><button type="button" class="project-type-btn is-featured" data-action="select-project-type" data-type="script"><strong><span>Script</span><span aria-hidden="true">→</span></strong><small>Full scriptwriting workspace with Episodes, Capsules, Continuity Sheet and Script Editor.</small></button></div></div>`);
 }
 function scriptFormatDialog(name){
  dialog(`<div><div class="dialog-heading"><div><p class="eyebrow">${esc(name)} / SCRIPT</p><h2>Choose script format</h2></div><button type="button" data-action="back-to-project-type" aria-label="Back">✕</button></div><p>Select your program format.</p><div class="project-type-grid script-format-grid"><button type="button" class="project-type-btn is-featured" data-action="select-script-format" data-format="tv-magazine"><strong><span>TV Magazine</span><span aria-hidden="true">→</span></strong></button><button type="button" class="project-type-btn is-disabled" disabled aria-disabled="true"><strong><span>Talk Show</span><span class="format-lock-badge">PRO</span></strong></button><button type="button" class="project-type-btn is-disabled" disabled aria-disabled="true"><strong><span>Documentary</span><span class="format-lock-badge">PRO</span></strong></button><button type="button" class="project-type-btn is-disabled" disabled aria-disabled="true"><strong><span>Social Media Content</span><span class="format-lock-badge">PRO</span></strong></button></div></div>`);
@@ -2361,10 +2361,10 @@ async function doAction(a,b){
   if(r){
    const safeTopic=String(r.topic||'capsule').trim().replace(/[^a-zA-Z0-9_-]+/g,'-').replace(/^-|-$/g,'')||'capsule';
    const filename=`${safeTopic}-questions.pdf`;
-   const blob=buildQuestionsPdfBlob(p?.name||'ToList',r);
+   const blob=buildQuestionsPdfBlob(p?.name||'2List',r);
    const file=new File([blob],filename,{type:'application/pdf'});
    if(navigator.canShare?.({files:[file]})){
-    try{await navigator.share({files:[file],title:`${r.topic||'Capsule'} — Interview Questions`,text:`Interview questions for ${r.topic||p?.name||'ToList'}`});return;}catch(e){if(e?.name==='AbortError')return;}
+    try{await navigator.share({files:[file],title:`${r.topic||'Capsule'} — Interview Questions`,text:`Interview questions for ${r.topic||p?.name||'2List'}`});return;}catch(e){if(e?.name==='AbortError')return;}
    }
    const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(u),10000);
    notify(`PDF downloaded (${filename}) — ready to share on WhatsApp.`);
@@ -2408,7 +2408,7 @@ async function doAction(a,b){
    const guestRec={...rec,guest:gName,title:g.title,questions:gQ};
    const safeTopic=String(rec.topic||'capsule').trim().replace(/[^a-zA-Z0-9_-]+/g,'-')||'capsule';
    const filename=`${safeTopic}-${gName.replace(/[^a-zA-Z0-9_-]+/g,'-')}-questions.pdf`;
-   const blob=buildQuestionsPdfBlob(p?.name||'ToList',guestRec);
+   const blob=buildQuestionsPdfBlob(p?.name||'2List',guestRec);
    const file=new File([blob],filename,{type:'application/pdf'});
    if(navigator.canShare?.({files:[file]})){
     try{await navigator.share({files:[file],title:`${rec.topic||'Capsule'} — Questions for ${gName}`,text:`Interview questions for ${gName}`});return;}catch(e){if(e?.name==='AbortError')return;}
