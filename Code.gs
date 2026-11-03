@@ -174,11 +174,111 @@ function owner_() {
   const actual=Session.getActiveUser().getEmail();
   if(actual && expected && actual.toLowerCase()!==expected.toLowerCase()) throw new Error('Personal access only.');
 }
-function doGet(){
+function doGet(e){
+  if (e && e.parameter && e.parameter.action) {
+    return handleApiRequest_(e.parameter);
+  }
   return HtmlService.createHtmlOutputFromFile('Index')
     .setTitle('2list')
     .addMetaTag('viewport','width=device-width, initial-scale=1')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+function doPost(e){
+  try {
+    let payload = {};
+    if (e && e.postData && e.postData.contents) {
+      payload = JSON.parse(e.postData.contents);
+    }
+    return handleApiRequest_(payload);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({ status: 'error', error: err.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function handleApiRequest_(params){
+  const action = params.action;
+  let result = null;
+  if (action === 'save' || action === 'saveProject') {
+    const p = params.project;
+    result = syncContentSheet_(p);
+    try { saveProject(p, params.token); } catch(e) {}
+  } else if (action === 'load' || action === 'loadProject') {
+    result = loadProject(params.id);
+  } else if (action === 'list' || action === 'listProjects') {
+    result = listProjects();
+  } else if (action === 'ping') {
+    result = { pong: true, time: new Date().toISOString() };
+  }
+  return ContentService.createTextOutput(JSON.stringify({ status: 'ok', result: result }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function syncContentSheet_(project){
+  if (!project) return { error: 'No project provided' };
+  const targetId = '182wThTNzgTGfqDin5n3GoAbGjmIEYbk3vpD43pFfli8';
+  let book = null;
+  try {
+    book = SpreadsheetApp.openById(targetId);
+  } catch(e) {
+    const files = DriveApp.getFilesByName('2List — ' + project.name);
+    if (files.hasNext()) book = SpreadsheetApp.open(files.next());
+  }
+  if (!book) return { error: 'Spreadsheet not found' };
+  
+  let sheet = book.getSheetByName('Content');
+  if (!sheet) sheet = book.insertSheet('Content');
+  
+  const rows = [];
+  rows.push(['#', 'EP', 'CAP', 'TYPE', 'TOPIC', 'DESCRIPTION', 'GUEST', 'TITLE', 'LOCATION', 'DATE', 'STATUS', 'DURATION', 'QUESTIONS', 'VOICE-OVER', 'REMARKS']);
+  
+  (project.records || []).forEach(r => {
+    const num = String(r.id || '').replace(/^rec-anggun-/, '');
+    rows.push([
+      num || '',
+      r.episode ? String(r.episode) : '',
+      r.capsule || '',
+      r.type || 'Interview',
+      r.topic || '',
+      r.description || '',
+      r.guest || '',
+      r.title || '',
+      r.location || '',
+      r.date || '',
+      r.status || '',
+      r.duration || '',
+      r.questions || '',
+      r.vo || '',
+      r.remarks || ''
+    ]);
+  });
+  
+  (project.throws || []).forEach(t => {
+    const num = String(t.id || '').replace(/^thr-anggun-/, '');
+    rows.push([
+      num || '',
+      t.episode ? String(t.episode) : '',
+      'Throw',
+      'Host Throw',
+      t.topic || '',
+      t.description || '',
+      '',
+      '',
+      t.location || '',
+      t.date || '',
+      t.status || '',
+      '',
+      '',
+      '',
+      t.remarks || ''
+    ]);
+  });
+  
+  sheet.clearContents();
+  const range = sheet.getRange(1, 1, rows.length, rows[0].length);
+  range.setValues(rows);
+  return { updated: rows.length, spreadsheetId: book.getId(), sheetName: 'Content' };
 }
 function registry_(){return JSON.parse(PropertiesService.getScriptProperties().getProperty('PROJECTS')||'{}');}
 function putRegistry_(registry){PropertiesService.getScriptProperties().setProperty('PROJECTS',JSON.stringify(registry));}
