@@ -1734,7 +1734,7 @@ function accountPage(){
  return `<form id="account-form" class="settings-form"><section class="panel"><h2>Writer</h2><p>Your name appears as the writer on every script you prepare. It follows your account across all projects.</p>${field('Writer name','writerName',writerName,'text','required maxlength="100" placeholder="Your full name" autocomplete="name"')}<p class="form-error" role="alert"></p></section><button class="primary" type="submit">Save account</button></form>`;
 }
 function conflictView(){return `<section class="conflict"><h2>Sheets changes need review</h2><p>A saved copy was edited after the app read it. Both versions are preserved for review. Download both, then choose a version to continue with.</p>${conflict.source?`<p>Source: ${esc(conflict.source)}${conflict.pendingCount>1?` · ${conflict.pendingCount} changes need separate review`:""}</p>`:""}<div class="actions"><button data-action="conflict-download" data-choice="manual">Back up manual version</button><button data-action="conflict-download" data-choice="app">Back up app version</button><button data-action="resolve" data-choice="manual">Use manual version…</button><button data-action="resolve" data-choice="app">Use app version…</button></div></section>`;}
-async function openProject(id){const loaded=await adapter.load(id);p=loaded.project;token=loaded.token;conflict=loaded.conflict||null;dirty=false;try{const d=JSON.parse(safeStorage.getItem(draftKey(id))||'null');if(d){validate(d.project);p=d.project;token=d.token;dirty=true;notify('Unsaved draft restored.');}}catch{notify('Could not read the draft; opened the last saved version.');}if(!Array.isArray(p.throws))p.throws=[];if(p?.settings?.episodeThemes){for(const k in p.settings.episodeThemes){p.settings.episodeThemes[k]=cleanSpecialTheme(p.settings.episodeThemes[k]);}}ep=Math.min(ep,p.settings.episodes);view=p.settings.projectType==='conti'?'conti':'home';filter='all';search='';contiSearch='';contiMonthFilter='all';itemActiveTab='split';throwSearch='';throwFilter='all';render();window.scrollTo(0,0);}
+async function openProject(id){const loaded=await adapter.load(id);p=loaded.project;token=loaded.token;conflict=loaded.conflict||null;dirty=false;try{const d=JSON.parse(safeStorage.getItem(draftKey(id))||'null');if(d){if(id==='anggun-s4'&&d.project?.settings?.episodeLocations?.['1']!=='Shang Ri La, KL'){safeStorage.removeItem(draftKey(id));}else{validate(d.project);p=d.project;token=d.token;dirty=true;notify('Unsaved draft restored.');}}}catch{notify('Could not read the draft; opened the last saved version.');}if(!Array.isArray(p.throws))p.throws=[];if(p?.settings?.episodeThemes){for(const k in p.settings.episodeThemes){p.settings.episodeThemes[k]=cleanSpecialTheme(p.settings.episodeThemes[k]);}}ep=Math.min(ep,p.settings.episodes);view=p.settings.projectType==='conti'?'conti':'home';filter='all';search='';contiSearch='';contiMonthFilter='all';itemActiveTab='split';throwSearch='';throwFilter='all';render();window.scrollTo(0,0);}
 async function save(){if(busy||!p)return;const invalid=document.querySelector('[data-section-field]:invalid');if(invalid){invalid.reportValidity();throw new Error('Correct the duration before saving.');}if(conflict)throw new Error('Resolve the Sheets conflict first. Back up your draft before choosing a version.');activity='Saving…';busy=true;render();try{const result=await adapter.save(p,token);p=result.project;token=result.token;conflict=result.conflict||null;if(conflict)throw new Error('Manual changes detected during save. Both versions are preserved.');dirty=false;try{safeStorage.removeItem(draftKey(p.id));}catch{}projects=await adapter.list();notify('Project and scripts saved.');}finally{busy=false;render();}}
 
 function getRecordGuestList(r){
@@ -2500,7 +2500,7 @@ async function doAction(a,b){
  if(a==='help'){dialog(`<div class="dialog-heading"><h2>Quick guide</h2><button data-action="close" aria-label="Close">✕</button></div><ol class="help-list"><li><b>Choose a project.</b> Create separate programs to keep capsules organized.</li><li><b>Fill in the log.</b> Enter topics, dates, guests and questions. Assign episodes and capsules later. Edit host text in the Script Editor.</li><li><b>Generate a script.</b> Arrange log text into the script format. Generate AI writes host text directly into the script. Regenerate a throw or use Undo; research sources are kept separately.</li><li><b>Edit & save.</b> Refresh preserves your edits. Click Save to save the entire project.</li><li><b>PDF.</b> Open Preview → Print / Save PDF. On iPhone, use Safari’s available print or share PDF options.</li></ol><h3>Google Sheets</h3><p>${adapter.mode==='local'?'This preview uses local mode. The apps-script folder contains the Apps Script package. Follow GOOGLE-SETUP.md to set up a personal app with your Google account.':'You are using Sheets storage. Edit RECORD rows in CURRENT, then reload in the app before continuing. Open CURRENT by tab name each time; its tab ID changes after Save. Keep JSON backups for longer retention.'}</p><p>Save a JSON backup before switching devices or clearing browser data.</p>`);}
  if(a==='reload'){dialog(`<h2>Reload saved version?</h2><p>This will replace your current draft. Download a backup first if you want to keep it.</p><div class="actions"><button data-action="backup">Back up draft</button><button data-action="close">Cancel</button><button class="primary" data-action="reload-confirm">Reload</button></div>`);}
  if(a==='reload-confirm'){safeStorage.removeItem(draftKey(p.id));closeDialog();await openProject(p.id);}
- if(a==='refresh-pwa'){notify('Checking for updates…');if('serviceWorker' in navigator){const reg=await navigator.serviceWorker.getRegistration();if(reg)await reg.update();}if('caches' in window){const keys=await caches.keys();await Promise.all(keys.map(k=>caches.delete(k)));}setTimeout(()=>window.location.reload(true),300);}
+ if(a==='refresh-pwa'){notify('Resetting cache and loading fresh data…');safeStorage.removeItem('rs:draft:local:anggun-s4');safeStorage.removeItem('rs:seed:anggun-s4:version');if('serviceWorker' in navigator){const reg=await navigator.serviceWorker.getRegistration();if(reg)await reg.update();}if('caches' in window){const keys=await caches.keys();await Promise.all(keys.map(k=>caches.delete(k)));}setTimeout(()=>window.location.reload(true),300);}
  if(a==='preset'){const s=preset(+b.dataset.slot);for(const [k,v] of Object.entries(s)){const input=$(`#settings-form [name="${k}"]`);if(input&&!['host','description','tone','aiNotes','station'].includes(k))input.value=v;}notify('Preset filled in. Click Apply settings to confirm.');}
  if(a==='review'){const s=p.scripts[ep].sections.find(s=>s.id===b.dataset.id);dialog(`<h2>Suggestion from log</h2><p>Your edits are preserved until you choose Replace.</p><div class="compare"><div><h3>Current edits</h3><pre>${esc(s.video)}\n\n${esc(s.audio)}</pre><small>Duration ${tc(s.seconds)}</small></div><div><h3>Log suggestion</h3><pre>${esc(s.suggested.video)}\n\n${esc(s.suggested.audio)}</pre><small>Duration ${tc(s.suggested.seconds)}</small></div></div><div class="actions"><button data-action="close">Keep edits</button><button class="primary" data-action="replace-section" data-id="${esc(s.id)}">Replace this section</button></div>`);}
  if(a==='replace-section'){p.scripts[ep].sections=p.scripts[ep].sections.map(s=>s.id===b.dataset.id?s.suggested:s);closeDialog();draft();render();}
@@ -2878,37 +2878,32 @@ const SEED_ANGGUN_S4 = {"schema": 1, "id": "anggun-s4", "name": "ANGGUN S4", "sp
 
 async function ensureSeedProjects(){
  try{
-  const list=await adapter.list();
-  const existing=list.find(x=>x.id==='anggun-s4'||x.name==='ANGGUN S4');
+  const currentSeedVer='v20261104-03';
   const storedSeedVer=safeStorage.getItem('rs:seed:anggun-s4:version');
-  if(!existing||storedSeedVer!=='v20261104-01'){
-   await adapter.save(SEED_ANGGUN_S4);
-   safeStorage.setItem('rs:seed:anggun-s4:version','v20261104-01');
-   if(p?.id==='anggun-s4'){
+  if(storedSeedVer!==currentSeedVer){
+   safeStorage.removeItem('rs:draft:local:anggun-s4');
+   safeStorage.removeItem('rs:draft:sheets:anggun-s4');
+   safeStorage.setItem('rs:project:anggun-s4', JSON.stringify({project:clone(SEED_ANGGUN_S4), token:uid()}));
+   safeStorage.setItem('rs:seed:anggun-s4:version', currentSeedVer);
+   if(!p||p.id==='anggun-s4'||p.name==='ANGGUN S4'){
     p=clone(SEED_ANGGUN_S4);
+    token=uid();
+    dirty=false;
    }
-  } else if(existing){
-   const loaded=await adapter.load(existing.id);
-   if(loaded?.project?.settings?.episodeThemes){
-    let themeCleaned=false;
-    for(const k in loaded.project.settings.episodeThemes){
-     const cur=loaded.project.settings.episodeThemes[k];
-     const cleaned=cleanSpecialTheme(cur);
-     if(cleaned!==cur){
-      loaded.project.settings.episodeThemes[k]=cleaned;
-      themeCleaned=true;
-     }
-    }
-    if(themeCleaned){
-     await adapter.save(loaded.project, loaded.token);
-     if(p?.id===existing.id){
-      p.settings.episodeThemes=clone(loaded.project.settings.episodeThemes);
-     }
+  }else if(!p||p.id==='anggun-s4'){
+   if(!p?.settings?.episodeLocations||p.settings.episodeLocations['1']!=='Shang Ri La, KL'){
+    safeStorage.removeItem('rs:draft:local:anggun-s4');
+    safeStorage.setItem('rs:project:anggun-s4', JSON.stringify({project:clone(SEED_ANGGUN_S4), token:uid()}));
+    if(p){
+     p.settings.episodeLocations=clone(SEED_ANGGUN_S4.settings.episodeLocations);
+     p.settings.episodeSponsored=clone(SEED_ANGGUN_S4.settings.episodeSponsored);
+     p.records=clone(SEED_ANGGUN_S4.records);
+     p.throws=clone(SEED_ANGGUN_S4.throws);
     }
    }
   }
  }catch(err){
-  console.warn('Seed project setup:',err);
+  console.error('Seed project setup error:',err);
  }
 }
 async function init(){try{await ensureSeedProjects();projects=await adapter.list();if(p?.settings?.episodeThemes){for(const k in p.settings.episodeThemes){p.settings.episodeThemes[k]=cleanSpecialTheme(p.settings.episodeThemes[k]);}}render();if(new URLSearchParams(location.search).get('new-project')==='1')projectDialog();}catch(e){$('#app').innerHTML=`<main class="welcome"><h1>Could not open workspace</h1><p>${esc(e.message)}</p><button onclick="location.reload()">Try again</button></main>`;}}
