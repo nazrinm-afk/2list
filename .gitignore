@@ -1,3 +1,4 @@
 .cloudflared_bin
 .DS_Store
 *.xlsx
+!ANGGUN S4.xlsx
