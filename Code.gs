@@ -336,11 +336,25 @@ function syncContentSheet_(project){
   let sheetThrows = book.getSheetByName('Throws');
   if (!sheetThrows) sheetThrows = book.insertSheet('Throws');
   
-  const throwsHeaders = ['#', 'EP', 'THROW', 'TOPIC / SEGMENT', 'LOCATION', 'SPONSORED', 'STATUS', 'REMARKS'];
+  const throwsHeaders = ['#', 'EP', 'THROW', 'TOPIC / SEGMENT', 'LOCATION', 'SPONSORED', 'STATUS', 'SCRIPT / HOST TEXT', 'REMARKS'];
   const throwEntries = [];
+  const scripts = project.scripts || {};
+  
   (project.throws || []).forEach(t => {
     const numStr = String(t.id || '').replace(/^[^\d]*/, '');
     const num = parseInt(numStr, 10) || 0;
+    
+    // Look up script text if already generated or written in app
+    let scriptContent = t.scriptText || '';
+    if (!scriptContent && t.episode && scripts[t.episode]?.sections) {
+      const matchLabel = String(t.topic || '').trim().toLowerCase();
+      const sec = scripts[t.episode].sections.find(s => {
+        const l = String(s.label || '').trim().toLowerCase();
+        return l === matchLabel || l.includes(matchLabel) || matchLabel.includes(l);
+      });
+      if (sec && sec.audio) scriptContent = sec.audio;
+    }
+    
     throwEntries.push({
       num: num,
       row: [
@@ -351,6 +365,7 @@ function syncContentSheet_(project){
         t.location || '',
         t.sponsored ? 'YES' : 'NO',
         t.status || '',
+        scriptContent || '',
         t.remarks || ''
       ]
     });
