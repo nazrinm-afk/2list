@@ -231,12 +231,11 @@ function syncContentSheet_(project){
   }
   if (!book) return { error: 'Spreadsheet not found' };
   
-  let sheet = book.getSheetByName('Content');
-  if (!sheet) sheet = book.insertSheet('Content');
+  // 1. CONTENT SUB-SHEET (Master Production Log)
+  let sheetContent = book.getSheetByName('Content');
+  if (!sheetContent) sheetContent = book.insertSheet('Content');
   
-  const rows = [];
-  rows.push(['#', 'EP', 'CAP', 'TYPE', 'TOPIC', 'DESCRIPTION', 'GUEST', 'TITLE', 'LOCATION', 'DATE', 'STATUS', 'DURATION', 'QUESTIONS', 'VOICE-OVER', 'REMARKS']);
-  
+  const contentHeaders = ['#', 'EP', 'CAP', 'TYPE', 'TOPIC', 'DESCRIPTION', 'GUEST', 'TITLE', 'LOCATION', 'DATE', 'STATUS', 'DURATION', 'REMARKS'];
   const allEntries = [];
   
   (project.records || []).forEach(r => {
@@ -257,8 +256,6 @@ function syncContentSheet_(project){
         r.date || '',
         r.status || '',
         r.duration || '',
-        r.questions || '',
-        r.vo || '',
         r.remarks || ''
       ]
     });
@@ -282,20 +279,95 @@ function syncContentSheet_(project){
         t.date || '',
         t.status || '',
         '',
-        '',
-        '',
         t.remarks || ''
       ]
     });
   });
   
   allEntries.sort((a, b) => a.num - b.num);
-  allEntries.forEach(item => rows.push(item.row));
+  const contentRows = [contentHeaders];
+  allEntries.forEach(item => contentRows.push(item.row));
   
-  sheet.clearContents();
-  const range = sheet.getRange(1, 1, rows.length, rows[0].length);
-  range.setValues(rows);
-  return { updated: rows.length, spreadsheetId: book.getId(), sheetName: 'Content' };
+  sheetContent.clearContents();
+  sheetContent.getRange(1, 1, contentRows.length, contentHeaders.length).setValues(contentRows);
+  sheetContent.getRange(1, 1, 1, contentHeaders.length).setBackground('#204d43').setFontColor('#ffffff').setFontWeight('bold').setHorizontalAlignment('center');
+  sheetContent.setFrozenRows(1);
+  if (contentRows.length > 1) {
+    sheetContent.getRange(2, 1, contentRows.length - 1, contentHeaders.length).setVerticalAlignment('top');
+  }
+
+  // 2. QUESTIONS SUB-SHEET
+  let sheetQuestions = book.getSheetByName('Questions');
+  if (!sheetQuestions) sheetQuestions = book.insertSheet('Questions');
+  
+  const questionsHeaders = ['#', 'EP', 'CAP', 'TOPIC', 'GUEST', 'TITLE', 'QUESTIONS', 'VOICE-OVER', 'STATUS'];
+  const questionEntries = [];
+  (project.records || []).forEach(r => {
+    const numStr = String(r.id || '').replace(/^[^\d]*/, '');
+    const num = parseInt(numStr, 10) || 0;
+    questionEntries.push({
+      num: num,
+      row: [
+        num ? String(num) : '',
+        r.episode ? String(r.episode) : '',
+        r.capsule || '',
+        r.topic || '',
+        r.guest || '',
+        r.title || '',
+        r.questions || '',
+        r.vo || '',
+        r.status || ''
+      ]
+    });
+  });
+  questionEntries.sort((a, b) => a.num - b.num);
+  const questionsRows = [questionsHeaders];
+  questionEntries.forEach(item => questionsRows.push(item.row));
+  
+  sheetQuestions.clearContents();
+  sheetQuestions.getRange(1, 1, questionsRows.length, questionsHeaders.length).setValues(questionsRows);
+  sheetQuestions.getRange(1, 1, 1, questionsHeaders.length).setBackground('#204d43').setFontColor('#ffffff').setFontWeight('bold').setHorizontalAlignment('center');
+  sheetQuestions.setFrozenRows(1);
+  if (questionsRows.length > 1) {
+    sheetQuestions.getRange(2, 1, questionsRows.length - 1, questionsHeaders.length).setVerticalAlignment('top');
+  }
+
+  // 3. THROWS SUB-SHEET
+  let sheetThrows = book.getSheetByName('Throws');
+  if (!sheetThrows) sheetThrows = book.insertSheet('Throws');
+  
+  const throwsHeaders = ['#', 'EP', 'THROW', 'TOPIC / SEGMENT', 'LOCATION', 'SPONSORED', 'STATUS', 'REMARKS'];
+  const throwEntries = [];
+  (project.throws || []).forEach(t => {
+    const numStr = String(t.id || '').replace(/^[^\d]*/, '');
+    const num = parseInt(numStr, 10) || 0;
+    throwEntries.push({
+      num: num,
+      row: [
+        num ? String(num) : '',
+        t.episode ? String(t.episode) : '',
+        t.topic || '',
+        t.description || '',
+        t.location || '',
+        t.sponsored ? 'YES' : 'NO',
+        t.status || '',
+        t.remarks || ''
+      ]
+    });
+  });
+  throwEntries.sort((a, b) => a.num - b.num);
+  const throwsRows = [throwsHeaders];
+  throwEntries.forEach(item => throwsRows.push(item.row));
+  
+  sheetThrows.clearContents();
+  sheetThrows.getRange(1, 1, throwsRows.length, throwsHeaders.length).setValues(throwsRows);
+  sheetThrows.getRange(1, 1, 1, throwsHeaders.length).setBackground('#204d43').setFontColor('#ffffff').setFontWeight('bold').setHorizontalAlignment('center');
+  sheetThrows.setFrozenRows(1);
+  if (throwsRows.length > 1) {
+    sheetThrows.getRange(2, 1, throwsRows.length - 1, throwsHeaders.length).setVerticalAlignment('top');
+  }
+
+  return { updated: contentRows.length, spreadsheetId: book.getId(), sheets: ['Content', 'Questions', 'Throws'] };
 }
 
 function syncContiSheetSpreadsheet_(project){
