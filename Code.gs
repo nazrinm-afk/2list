@@ -203,7 +203,11 @@ function handleApiRequest_(params){
   if (action === 'save' || action === 'saveProject') {
     const p = params.project;
     result = syncContentSheet_(p);
+    try { syncContiSheetSpreadsheet_(p); } catch(e) {}
     try { saveProject(p, params.token); } catch(e) {}
+  } else if (action === 'syncConti') {
+    const p = params.project;
+    result = syncContiSheetSpreadsheet_(p);
   } else if (action === 'load' || action === 'loadProject') {
     result = loadProject(params.id);
   } else if (action === 'list' || action === 'listProjects') {
@@ -279,6 +283,92 @@ function syncContentSheet_(project){
   const range = sheet.getRange(1, 1, rows.length, rows[0].length);
   range.setValues(rows);
   return { updated: rows.length, spreadsheetId: book.getId(), sheetName: 'Content' };
+}
+
+function syncContiSheetSpreadsheet_(project){
+  if (!project) return { error: 'No project provided' };
+  const targetId = '1KXSrY5rYnuOlrYqG4UpOWXXJKyhu2FD34DDeXCwKUPA';
+  let book = null;
+  try {
+    book = SpreadsheetApp.openById(targetId);
+  } catch(e) {
+    const files = DriveApp.getFilesByName('Conti Sheet');
+    if (files.hasNext()) book = SpreadsheetApp.open(files.next());
+  }
+  if (!book) return { error: 'Conti Sheet spreadsheet not found' };
+  
+  const contiSheets = project.settings?.contiSheets || [];
+  if (!contiSheets.length && project.settings?.contiRows?.length) {
+    const cType = project.settings.contiType || 'Capsule';
+    const epNum = project.settings.episode || 1;
+    const dateStr = project.settings.contiShootDate || '';
+    contiSheets.push({
+      tabName: 'Ep ' + String(epNum).padStart(2, '0') + ' · ' + cType + (dateStr ? ' · ' + dateStr : ''),
+      episode: epNum,
+      contiType: cType,
+      date: dateStr,
+      rows: project.settings.contiRows
+    });
+  }
+  
+  const updatedTabs = [];
+  contiSheets.forEach((s) => {
+    const epStr = 'Ep ' + String(s.episode || 1).padStart(2, '0');
+    const typeLabel = s.contiType === 'Host Throw' ? 'Host Throw' : 'Capsule';
+    const dateLabel = s.date ? ' · ' + s.date : '';
+    let tabTitle = (s.tabName && (s.tabName.includes('Capsule') || s.tabName.includes('Host Throw')))
+      ? s.tabName.replace(/^CONTI · /, '')
+      : `${epStr} · ${typeLabel}${dateLabel}`;
+    
+    tabTitle = tabTitle.replace(/[\\/?*[\]:]/g, '-').slice(0, 95);
+    
+    let sheet = book.getSheetByName(tabTitle);
+    if (!sheet) {
+      sheet = book.insertSheet(tabTitle);
+    }
+    
+    const cams = Math.min(3, Math.max(1, Number(s.cameras) || 2));
+    const showAudio = s.audio !== 'direct';
+    
+    const headers = ['SCENE', 'SHOT', 'TAKE', 'DESCRIPTION'];
+    for (let c = 1; c <= cams; c++) headers.push('CAM ' + c);
+    if (showAudio) headers.push('AUDIO');
+    headers.push('REMARKS');
+    
+    const rows = [headers];
+    const realRows = (s.rows || []).filter(r => !r.draft && String(r.description || '').trim());
+    
+    realRows.forEach(r => {
+      const rowData = [
+        String(r.scene || ''),
+        String(r.shot || ''),
+        String(r.take || ''),
+        String(r.description || '')
+      ];
+      for (let c = 1; c <= cams; c++) {
+        const isOff = r['cam' + c + '_off'];
+        rowData.push(isOff ? '—' : String(r['cam' + c] || ''));
+      }
+      if (showAudio) {
+        const isOff = r.audio_off;
+        rowData.push(isOff ? '—' : String(r.audio || ''));
+      }
+      rowData.push(String(r.remarks || ''));
+      rows.push(rowData);
+    });
+    
+    sheet.clearContents();
+    const range = sheet.getRange(1, 1, rows.length, headers.length);
+    range.setValues(rows);
+    
+    const headerRange = sheet.getRange(1, 1, 1, headers.length);
+    headerRange.setBackground('#204d43').setFontColor('#ffffff').setFontWeight('bold').setHorizontalAlignment('center');
+    sheet.setFrozenRows(1);
+    
+    updatedTabs.push(tabTitle);
+  });
+  
+  return { updatedTabs: updatedTabs, spreadsheetId: book.getId() };
 }
 function registry_(){return JSON.parse(PropertiesService.getScriptProperties().getProperty('PROJECTS')||'{}');}
 function putRegistry_(registry){PropertiesService.getScriptProperties().setProperty('PROJECTS',JSON.stringify(registry));}
