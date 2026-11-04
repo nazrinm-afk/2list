@@ -237,47 +237,60 @@ function syncContentSheet_(project){
   const rows = [];
   rows.push(['#', 'EP', 'CAP', 'TYPE', 'TOPIC', 'DESCRIPTION', 'GUEST', 'TITLE', 'LOCATION', 'DATE', 'STATUS', 'DURATION', 'QUESTIONS', 'VOICE-OVER', 'REMARKS']);
   
+  const allEntries = [];
+  
   (project.records || []).forEach(r => {
-    const num = String(r.id || '').replace(/^rec-anggun-/, '');
-    rows.push([
-      num || '',
-      r.episode ? String(r.episode) : '',
-      r.capsule || '',
-      r.type || 'Interview',
-      r.topic || '',
-      r.description || '',
-      r.guest || '',
-      r.title || '',
-      r.location || '',
-      r.date || '',
-      r.status || '',
-      r.duration || '',
-      r.questions || '',
-      r.vo || '',
-      r.remarks || ''
-    ]);
+    const numStr = String(r.id || '').replace(/^[^\d]*/, '');
+    const num = parseInt(numStr, 10) || 0;
+    allEntries.push({
+      num: num,
+      row: [
+        num ? String(num) : '',
+        r.episode ? String(r.episode) : '',
+        r.capsule || '',
+        r.type || 'Interview',
+        r.topic || '',
+        r.description || '',
+        r.guest || '',
+        r.title || '',
+        r.location || '',
+        r.date || '',
+        r.status || '',
+        r.duration || '',
+        r.questions || '',
+        r.vo || '',
+        r.remarks || ''
+      ]
+    });
   });
   
   (project.throws || []).forEach(t => {
-    const num = String(t.id || '').replace(/^thr-anggun-/, '');
-    rows.push([
-      num || '',
-      t.episode ? String(t.episode) : '',
-      'Throw',
-      'Host Throw',
-      t.topic || '',
-      t.description || '',
-      '',
-      '',
-      t.location || '',
-      t.date || '',
-      t.status || '',
-      '',
-      '',
-      '',
-      t.remarks || ''
-    ]);
+    const numStr = String(t.id || '').replace(/^[^\d]*/, '');
+    const num = parseInt(numStr, 10) || 0;
+    allEntries.push({
+      num: num,
+      row: [
+        num ? String(num) : '',
+        t.episode ? String(t.episode) : '',
+        'Throw',
+        'Host Throw',
+        t.topic || '',
+        t.description || '',
+        '',
+        '',
+        t.location || '',
+        t.date || '',
+        t.status || '',
+        '',
+        '',
+        '',
+        t.remarks || ''
+      ]
+    });
   });
+  
+  allEntries.sort((a, b) => a.num - b.num);
+  allEntries.forEach(item => rows.push(item.row));
   
   sheet.clearContents();
   const range = sheet.getRange(1, 1, rows.length, rows[0].length);
