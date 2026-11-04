@@ -1157,7 +1157,17 @@ Bahasa: Bahasa Melayu (natural dan santun).
 Tetamu: ${guestName}${guestTitle ? ` (${guestTitle})` : ''}
 Topik / Kapsul: ${topic}
 ${loc ? `Lokasi Penggambaran: ${loc}\n` : ''}${desc ? `Latar Belakang / Fakta Cerita:\n${desc}\n` : ''}${notes ? `Panduan Tambahan:\n${notes}\n` : ''}
-Formatkan output HANYA sebagai senarai bernombor (1., 2., 3., ...), satu soalan setiap baris. Jangan letak sebarang ayat pembuka atau penutup.`;
+PANDUAN FORMAT SOALAN:
+- Formatkan output HANYA sebagai senarai soalan bernombor (1., 2., 3., ...).
+- WAJIB berikan SATU BARIS KOSONG (DOUBLE SPACING / selang sebaris / \\n\\n) di antara setiap soalan supaya setiap soalan terpisah secara individu.
+Contoh:
+1. [Teks soalan pertama]
+
+2. [Teks soalan kedua]
+
+3. [Teks soalan ketiga]
+
+Jangan letak sebarang ayat pembuka atau penutup.`;
   }
 
   // Host text generation
@@ -2019,7 +2029,24 @@ async function shareQuestionsPdf(){
 }
 function parseQuestionsList(raw){
  if(!raw||!String(raw).trim())return [];
- const paragraphs=String(raw).trim().split(/\n\s*\n+/);
+ let paragraphs=String(raw).trim().split(/\n\s*\n+/);
+ if(paragraphs.length<=1){
+  const rawLines=String(raw).trim().split('\n').map(l=>l.trim()).filter(Boolean);
+  const numberedCount=rawLines.filter(l=>/^(?:(?:\d+[\.\)])|(?:Q\d+:?)|(?:Soalan\s*\d+:?))\s*/i.test(l)).length;
+  if(numberedCount>1){
+   paragraphs=[];
+   let curr='';
+   for(const l of rawLines){
+    if(/^(?:(?:\d+[\.\)])|(?:Q\d+:?)|(?:Soalan\s*\d+:?))\s*/i.test(l)){
+     if(curr)paragraphs.push(curr);
+     curr=l;
+    }else{
+     curr=curr?(curr+'\n'+l):l;
+    }
+   }
+   if(curr)paragraphs.push(curr);
+  }
+ }
  const questions=[];
  for(const p of paragraphs){
   const pClean=p.trim();
@@ -3020,6 +3047,10 @@ async function requestAI(project, options) {
   const hostPrefix = new RegExp(`^${project.settings?.host || 'HOST'}\\s*:\\s*`, 'i');
   text = text.replace(hostPrefix, '').trim();
 
+  if (options.target === 'questions') {
+    text = formatQuestionsDoubleSpaced(text);
+  }
+
   return {
     text: text,
     provenance: {
@@ -3042,9 +3073,10 @@ async function generateHostAI(sectionId){
  }finally{busy=false;render();}
 }
 async function generateRecordAI(button){
+ const qf=$('#questions-form');
  const gf=$('#guest-questions-form');
  const rf=$('#record-form');
- const f=gf||rf;if(!f)return;
+ const f=qf||gf||rf;if(!f)return;
  const rId=f.dataset.id;
  const gIdx=gf?Number(gf.dataset.guestIdx||0):0;
  const rec=p.records.find(r=>r.id===rId);
@@ -3058,9 +3090,17 @@ async function generateRecordAI(button){
  const options={...aiOptions('questions',duration(rec.duration)),episode:rec.episode,recordId:rec.id,guestIndex:gIdx,guestName:guestName,guestTitle:guestTitle};button.disabled=true;button.textContent=`Writing questions for ${guestName}…`;
  try{
   const result=await requestAI(next,options);if(!f.isConnected)return;
-  recordAI.questionHistory=[...(recordAI.questionHistory||[]),{text:f.elements.questions.value,research:recordAI.research}].slice(-5);
-  recordAI.research=result.provenance;
-  f.elements.questions.value=result.text;
+  const qList=parseQuestionsList(result.text);
+  const doubleSpacedText=formatQuestionsDoubleSpaced(result.text);
+  if(f.elements?.questions){
+    recordAI.questionHistory=[...(recordAI.questionHistory||[]),{text:f.elements.questions.value,research:recordAI.research}].slice(-5);
+    recordAI.research=result.provenance;
+    f.elements.questions.value=doubleSpacedText;
+  }
+  const numList=$('#questions-numbered-list');
+  if(numList){
+    numList.innerHTML=renderNumberedQuestionsHtml(qList);
+  }
   const src=$('#record-sources');if(src)src.innerHTML=sourcePanel(recordAI.research);
   notify('AI questions generated. Click Save questions to save.');
  }finally{button.disabled=false;button.textContent='✦ Generate questions from facts';}
@@ -3095,7 +3135,7 @@ const SEED_ANGGUN_S4 = {"schema": 1, "id": "anggun-s4", "name": "ANGGUN S4", "sp
 
 async function ensureSeedProjects(){
  try{
-  const currentSeedVer='v20261104-06';
+  const currentSeedVer='v20261104-07';
   const storedSeedVer=safeStorage.getItem('rs:seed:anggun-s4:version');
   
   let existingProj = null;
