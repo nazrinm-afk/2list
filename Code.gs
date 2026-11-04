@@ -73,27 +73,94 @@ function generate(p,ep) {
   validate(p); ep=Number(ep);
   if(!Number.isInteger(ep)||ep<1||ep>p.settings.episodes) throw new Error('Episode is outside the program range.');
   const records=p.records.filter(r=>r.episode===ep&&r.status!=='CANCELLED');
+  const epThrows=(p.throws||[]).filter(t=>Number(t.episode)===ep);
+  const epLocation=p.settings?.episodeLocations?.[ep]||'';
   const sections=[{id:'intro',label:'INTRO MONTAGE',seconds:duration(p.settings.intro),video:'Program opening montage.',audio:'MUSIC / JINGLE',source:'intro'}];
   const warnings=[]; const totalBreaks=breaksForSlot(p.settings.slot); let breakIdx=0;
+
+  // 1. OPENING
+  const openThrow=epThrows.find(t=>String(t.topic||'').trim().toLowerCase()==='opening');
+  sections.push({
+    id:'Op',
+    source:'Op',
+    label:'OPENING',
+    seconds:35,
+    video:`Host on camera establish${epLocation?` at ${epLocation}`:''}.`,
+    audio:openThrow?.scriptText?`${p.settings.host}:\n${openThrow.scriptText}`:'[TEXT NOT ENTERED]'
+  });
+
+  // 2. PROMO
+  const promoThrow=epThrows.find(t=>String(t.topic||'').trim().toLowerCase()==='promo');
+  sections.push({
+    id:'Pr',
+    source:'Pr',
+    label:'PROMO',
+    seconds:duration(p.settings.promo||'00:30'),
+    video:'Highlights & upcoming capsule teasers.',
+    audio:promoThrow?.scriptText?`${p.settings.host}:\n${promoThrow.scriptText}`:'[TEXT NOT ENTERED]'
+  });
+
+  // 3. CAPSULES & THROWS
   for(const key of keys(p)) {
-    const matchingRecords=records.filter(r=>r.capsule===key); const isCap=/^\d+$/.test(key);
-    const label=isCap?`CAPSULE ${key}`:key==='Op'?'OPENING':key==='Pr'?'PROMO':key==='Clo'?'CLOSING':`THROW ${key.slice(1)}`;
+    const matchingRecords=records.filter(r=>r.capsule===key);
+    const matchingThrow=epThrows.find(t=>{
+      const top=String(t.topic||'').trim().toLowerCase();
+      return top===`throw ${key}`||top===key;
+    });
+
+    const capTopic=matchingRecords[0]?.topic||matchingThrow?.description||matchingThrow?.topic||`Capsule ${key}`;
+    const throwLabel=`THROW ${key} · ${capTopic}`;
+    
+    // Host Throw
+    sections.push({
+      id:`T${key}`,
+      source:`T${key}`,
+      label:throwLabel,
+      seconds:20,
+      video:`Host on camera introduces Capsule ${key}.`,
+      audio:matchingThrow?.scriptText?`${p.settings.host}:\n${matchingThrow.scriptText}`:'[TEXT NOT ENTERED]'
+    });
+
+    // Capsule Content
     if(!matchingRecords.length){
-      warnings.push(`${label}: input not entered.`);
-      sections.push({id:`missing:${key}`,source:key,label,seconds:key==='Pr'?duration(p.settings.promo):0,video:'[INPUT NOT ENTERED]',audio:'[TEXT NOT ENTERED]'});
+      warnings.push(`CAPSULE ${key}: input not entered.`);
+      sections.push({id:`missing:${key}`,source:key,label:`CAPSULE ${key}`,seconds:0,video:'[INPUT NOT ENTERED]',audio:'[TEXT NOT ENTERED]'});
     }else{
       matchingRecords.forEach((r,idx)=>{
         const subSuffix=matchingRecords.length>1?` (Part ${idx+1})`:'';
-        if(!r.duration && key!=='Pr') warnings.push(`${label}${subSuffix}: duration not entered.`);
-        sections.push({id:`record:${r.id}`,source:r.id,label:label+subSuffix+(r.topic?` · ${r.topic}`:''),seconds:key==='Pr'?duration(p.settings.promo):duration(r.duration),video:[r.description,formatGuestsText(r),isCap&&r.questions?`QUESTIONS:\n${r.questions}`:''].filter(Boolean).join('\n\n'),audio:r.vo?`${p.settings.host}${isCap?' (V.O)':''}:\n${r.vo}`:'[TEXT NOT ENTERED]'});
+        if(!r.duration) warnings.push(`CAPSULE ${key}${subSuffix}: duration not entered.`);
+        sections.push({
+          id:`record:${r.id}`,
+          source:r.id,
+          label:`CAPSULE ${key}${subSuffix}${r.topic?` · ${r.topic}`:''}`,
+          seconds:duration(r.duration),
+          video:[r.description,formatGuestsText(r),r.questions?`QUESTIONS:\n${r.questions}`:''].filter(Boolean).join('\n\n'),
+          audio:r.vo?`${p.settings.host} (V.O):\n${r.vo}`:'[TEXT NOT ENTERED]'
+        });
       });
     }
-    if(isCap){
-      const capNum=Number(key);
-      const count=p.settings.capsules>totalBreaks?(capNum<=totalBreaks?1:0):(Math.floor(capNum*totalBreaks/p.settings.capsules)-Math.floor((capNum-1)*totalBreaks/p.settings.capsules));
-      for(let b=0;b<count;b++){breakIdx++;sections.push({id:count===1?`break:${key}`:`break:${key}:${b+1}`,source:`break:${breakIdx}`,label:`COMMERCIAL BREAK ${breakIdx}`,seconds:0,video:'COMMERCIAL BREAK',audio:'Advertising duration is excluded from the content timecode.',isBreak:true});}
+
+    // Commercial break if scheduled
+    const capNum=Number(key);
+    const count=p.settings.capsules>totalBreaks?(capNum<=totalBreaks?1:0):(Math.floor(capNum*totalBreaks/p.settings.capsules)-Math.floor((capNum-1)*totalBreaks/p.settings.capsules));
+    for(let b=0;b<count;b++){
+      breakIdx++;
+      sections.push({id:count===1?`break:${key}`:`break:${key}:${b+1}`,source:`break:${breakIdx}`,label:`COMMERCIAL BREAK ${breakIdx}`,seconds:0,video:'COMMERCIAL BREAK',audio:'Advertising duration is excluded from the content timecode.',isBreak:true});
     }
   }
+
+  // 4. CLOSING
+  const closeThrow=epThrows.find(t=>String(t.topic||'').trim().toLowerCase()==='closing');
+  sections.push({
+    id:'Clo',
+    source:'Clo',
+    label:'CLOSING',
+    seconds:35,
+    video:'Host sign-off & next episode preview.',
+    audio:closeThrow?.scriptText?`${p.settings.host}:\n${closeThrow.scriptText}`:'[TEXT NOT ENTERED]'
+  });
+
+  // 5. ENDING CREDIT
   sections.push({id:'credit',label:'ENDING CREDIT',seconds:duration(p.settings.credit||'00:30'),video:'Program ending credits.',audio:'MUSIC / ENDING THEME',source:'credit'});
   return {episode:ep,sections,warnings,generatedAt:new Date().toISOString()};
 }
@@ -350,9 +417,10 @@ function syncContentSheet_(project){
       const matchLabel = String(t.topic || '').trim().toLowerCase();
       const sec = scripts[t.episode].sections.find(s => {
         const l = String(s.label || '').trim().toLowerCase();
-        return l === matchLabel || l.includes(matchLabel) || matchLabel.includes(l);
+        const src = String(s.source || '').trim().toLowerCase();
+        return l === matchLabel || l.includes(matchLabel) || matchLabel.includes(l) || src === matchLabel;
       });
-      if (sec && sec.audio) scriptContent = sec.audio;
+      if (sec && sec.audio) scriptContent = sec.audio.replace(/^[A-Z0-9_\s]+:\s*/i, '').trim();
     }
     
     throwEntries.push({
@@ -380,7 +448,18 @@ function syncContentSheet_(project){
   sheetThrows.setFrozenRows(1);
   if (throwsRows.length > 1) {
     sheetThrows.getRange(2, 1, throwsRows.length - 1, throwsHeaders.length).setVerticalAlignment('top');
+    sheetThrows.getRange(2, 8, throwsRows.length - 1, 1).setWrap(true);
+    sheetThrows.setRowHeights(2, throwsRows.length - 1, 30);
   }
+  sheetThrows.setColumnWidth(1, 45);
+  sheetThrows.setColumnWidth(2, 45);
+  sheetThrows.setColumnWidth(3, 95);
+  sheetThrows.setColumnWidth(4, 220);
+  sheetThrows.setColumnWidth(5, 180);
+  sheetThrows.setColumnWidth(6, 100);
+  sheetThrows.setColumnWidth(7, 90);
+  sheetThrows.setColumnWidth(8, 550);
+  sheetThrows.setColumnWidth(9, 150);
 
   return { updated: contentRows.length, spreadsheetId: book.getId(), sheets: ['Content', 'Questions', 'Throws'] };
 }
