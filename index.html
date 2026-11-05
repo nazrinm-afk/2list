@@ -512,8 +512,18 @@ body[data-view="home"] .page-heading{display:none!important}
 .page-heading p.conti-heading-date{display:block!important;font-size:12px;color:var(--muted);margin:4px 0 0;font-weight:500}
 .conti-top-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
 .conti-top-actions button{margin:0!important;width:100%!important;height:44px!important;min-height:44px!important;padding:0 12px!important;font-size:13px!important;font-weight:700!important;border-radius:10px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;box-sizing:border-box!important}
+.conti-swipe-hint{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin:8px 0 12px;font-weight:600;letter-spacing:.2px}
+.conti-swipe-hint svg{opacity:.7;flex-shrink:0}
+.conti-swipe-row{position:relative;overflow:hidden;border-radius:14px;background:#e03838;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.conti-swipe-actions{position:absolute;top:0;bottom:0;right:0;width:96px;display:flex;align-items:stretch;justify-content:flex-end;border-radius:0 14px 14px 0;overflow:hidden;z-index:1}
+.conti-swipe-delete-btn{width:100%!important;height:100%!important;border:0!important;border-radius:0!important;background:#e03838!important;color:#fff!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:4px!important;font-size:11px!important;font-weight:750!important;letter-spacing:.5px!important;text-transform:uppercase!important;cursor:pointer!important;padding:0!important;margin:0!important;box-shadow:none!important;transition:background .15s ease!important}
+.conti-swipe-delete-btn:hover{background:#c92a2a!important}
+.conti-swipe-delete-btn:active{background:#a81c1c!important}
+.conti-swipe-delete-btn svg{flex-shrink:0;stroke:#fff}
 .conti-archive-list{display:flex;flex-direction:column;gap:12px}
 .conti-archive-card{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 20px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:14px;transition:border-color .15s,background .15s}
+.conti-archive-card.conti-swipe-card{position:relative;z-index:2;margin:0!important;border-radius:14px!important;background:var(--paper)!important;transition:transform .25s cubic-bezier(0.16,1,0.3,1),background .15s,border-color .15s;will-change:transform}
+.conti-swipe-row.is-swiped .conti-swipe-card{transform:translateX(-96px)}
 .conti-archive-card:hover{border-color:var(--green);background:#242428}
 .conti-archive-main{display:flex;flex-direction:column;gap:5px;min-width:0;flex:1}
 .conti-archive-main strong{font-size:16px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:9px;flex-wrap:wrap}
@@ -1818,7 +1828,8 @@ function conti(){
   return matchMonth&&matchEp&&q.includes(contiSearch.toLowerCase());
  });
  const emptyMsg=rawSheets.length===0?'<div class="empty">No continuity sheets yet. Click <b>＋ New Conti Sheet</b> to start.</div>':'<div class="empty">No continuity sheets match your filter.</div>';
- return `<div class="production-actions"><button class="primary add-capsule" data-action="conti-setup">＋ New Conti Sheet</button><span>${filtered.length} sheet${filtered.length===1?'':'s'}</span></div><details class="log-tools" ${contiSearch||contiMonthFilter!=='all'||contiSort!=='desc'?'open':''}><summary>Search / filter <span aria-hidden="true">⌕</span></summary><div class="toolbar"><div class="search"><span aria-hidden="true">⌕</span><input id="conti-search" aria-label="Search continuity sheets" placeholder="Search dates, descriptions or type…" value="${esc(contiSearch)}"></div><select id="conti-month-filter" aria-label="Filter by month"><option value="all" ${contiMonthFilter==='all'?'selected':''}>All months</option>${months.map(m=>`<option value="${esc(m)}" ${contiMonthFilter===m?'selected':''}>${esc(m)}</option>`).join('')}</select><select id="conti-sort" aria-label="Sort order"><option value="desc" ${contiSort==='desc'?'selected':''}>Newest first</option><option value="asc" ${contiSort==='asc'?'selected':''}>Oldest first</option></select></div></details><div class="conti-archive-list" role="list" aria-label="Continuity Sheets">${filtered.length?filtered.map(s=>{const realRows=(s.rows||[]).filter(r=>!r.draft&&String(r.description||'').trim());const scenesCount=new Set(realRows.map(r=>String(r.scene||'1'))).size;const locBadge=s.location?` · ${s.location}`:'';const titleLabel=s.contiType?`${s.date} · ${s.contiType}${locBadge}`:(s.location?`${s.date} · ${s.location}`:(s.date||'Conti Sheet'));return `<button type="button" class="conti-archive-card" data-action="open-conti-sheet" data-id="${esc(s.id)}"><div class="conti-archive-main"><strong><span>${esc(titleLabel)}</span><span class="conti-status-dot ${s.ended?'is-completed':'is-active'}" aria-label="${s.ended?'Completed':'Active'}" title="${s.ended?'Completed':'Active'}"></span></strong><small>${s.contiType==='Capsule'?'':`Episode ${String(s.episode||1).padStart(2,'0')} · `}${s.location?`${esc(s.location)} · `:''}${scenesCount} scene${scenesCount>1?'s':''} · ${realRows.length} take${realRows.length>1?'s':''}</small></div><span aria-hidden="true">›</span></button>`;}).join(''):emptyMsg}</div>`;
+ const hintHtml=filtered.length?'<div class="conti-swipe-hint"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg><span>Swipe left on any sheet to delete</span></div>':'';
+ return `<div class="production-actions"><button class="primary add-capsule" data-action="conti-setup">＋ New Conti Sheet</button><span>${filtered.length} sheet${filtered.length===1?'':'s'}</span></div><details class="log-tools" ${contiSearch||contiMonthFilter!=='all'||contiSort!=='desc'?'open':''}><summary>Search / filter <span aria-hidden="true">⌕</span></summary><div class="toolbar"><div class="search"><span aria-hidden="true">⌕</span><input id="conti-search" aria-label="Search continuity sheets" placeholder="Search dates, descriptions or type…" value="${esc(contiSearch)}"></div><select id="conti-month-filter" aria-label="Filter by month"><option value="all" ${contiMonthFilter==='all'?'selected':''}>All months</option>${months.map(m=>`<option value="${esc(m)}" ${contiMonthFilter===m?'selected':''}>${esc(m)}</option>`).join('')}</select><select id="conti-sort" aria-label="Sort order"><option value="desc" ${contiSort==='desc'?'selected':''}>Newest first</option><option value="asc" ${contiSort==='asc'?'selected':''}>Oldest first</option></select></div></details>${hintHtml}<div class="conti-archive-list" role="list" aria-label="Continuity Sheets">${filtered.length?filtered.map(s=>{const realRows=(s.rows||[]).filter(r=>!r.draft&&String(r.description||'').trim());const scenesCount=new Set(realRows.map(r=>String(r.scene||'1'))).size;const locBadge=s.location?` · ${s.location}`:'';const titleLabel=s.contiType?`${s.date} · ${s.contiType}${locBadge}`:(s.location?`${s.date} · ${s.location}`:(s.date||'Conti Sheet'));return `<div class="conti-swipe-row" data-id="${esc(s.id)}"><div class="conti-swipe-actions"><button type="button" class="conti-swipe-delete-btn" data-action="delete-conti-sheet" data-id="${esc(s.id)}" aria-label="Delete ${esc(titleLabel)}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg><span>Delete</span></button></div><button type="button" class="conti-archive-card conti-swipe-card" data-action="open-conti-sheet" data-id="${esc(s.id)}"><div class="conti-archive-main"><strong><span>${esc(titleLabel)}</span><span class="conti-status-dot ${s.ended?'is-completed':'is-active'}" aria-label="${s.ended?'Completed':'Active'}" title="${s.ended?'Completed':'Active'}"></span></strong><small>${s.contiType==='Capsule'?'':`Episode ${String(s.episode||1).padStart(2,'0')} · `}${s.location?`${esc(s.location)} · `:''}${scenesCount} scene${scenesCount>1?'s':''} · ${realRows.length} take${realRows.length>1?'s':''}</small></div><span aria-hidden="true">›</span></button></div>`;}).join(''):emptyMsg}</div>`;
 }
 function contiRecordPage(){
  syncActiveContiSheet();
@@ -2385,6 +2396,45 @@ async function doAction(a,b){
  if(a==='conti-setup-next')showContiSetupStep(2);
  if(a==='conti-setup-back')showContiSetupStep(1);
  if(a==='open-conti-sheet'){syncActiveContiSheet();const s=(p?.settings?.contiSheets||[]).find(x=>x.id===b.dataset.id);if(s){contiUndoStack=[];p.settings.activeContiSheetId=s.id;p.settings.contiShootDate=s.date||todayShootDate();if(s.contiType)p.settings.contiType=s.contiType;p.settings.contiLocation=s.location||'';p.settings.contiSceneMode=s.sceneMode||'default';p.settings.contiCameras=s.cameras||2;p.settings.contiAudio=s.audio||'separate';p.settings.contiEnded=Boolean(s.ended);ep=Number(s.episode||1);p.settings.contiRows=[...(p.settings.contiRows||[]).filter(r=>Number(r.episode||1)!==ep),...clone(s.rows||[]).map(r=>({...r,episode:ep}))];activeContiScene=String(s.rows?.at(-1)?.scene||s.rows?.[0]?.scene||'1');view='conti-record';render();window.scrollTo(0,0);}}
+ if(a==='delete-conti-sheet'){
+  const s=(p?.settings?.contiSheets||[]).find(x=>x.id===b.dataset.id);
+  if(!s)return;
+  const locBadge=s.location?` · ${s.location}`:'';
+  const label=s.contiType?`${s.date} · ${s.contiType}${locBadge}`:(s.location?`${s.date} · ${s.location}`:(s.date||'Conti Sheet'));
+  const rowsCount=(s.rows||[]).filter(r=>!r.draft&&String(r.description||'').trim()).length;
+  dialog(`<div><div class="dialog-heading"><div><p class="eyebrow">${esc(p?.name||'CONTI SHEET')}</p><h2>Delete continuity sheet?</h2></div><button type="button" data-action="close" aria-label="Close">✕</button></div><p>Are you sure you want to delete <b>${esc(label)}</b>?</p><p class="muted" style="font-size:12px;margin:8px 0 16px">${rowsCount} take${rowsCount===1?'':'s'} recorded in this sheet will be deleted.</p><div class="dialog-actions"><button type="button" data-action="close">Cancel</button><button type="button" class="danger-btn" data-action="confirm-delete-conti-sheet" data-id="${esc(s.id)}">Delete sheet</button></div></div>`);
+  return;
+ }
+ if(a==='confirm-delete-conti-sheet'){
+  const sheetId=b.dataset.id;
+  p.settings.contiSheets=(p?.settings?.contiSheets||[]).filter(x=>x.id!==sheetId);
+  if(p.settings.activeContiSheetId===sheetId){
+   p.settings.activeContiSheetId=p.settings.contiSheets[0]?.id||null;
+   if(p.settings.activeContiSheetId){
+    const nextS=p.settings.contiSheets[0];
+    p.settings.contiShootDate=nextS.date||todayShootDate();
+    p.settings.contiType=nextS.contiType||'Program';
+    p.settings.contiLocation=nextS.location||'';
+    p.settings.contiSceneMode=nextS.sceneMode||'default';
+    p.settings.contiCameras=nextS.cameras||2;
+    p.settings.contiAudio=nextS.audio||'separate';
+    p.settings.contiEnded=Boolean(nextS.ended);
+    ep=Number(nextS.episode||1);
+    p.settings.contiRows=clone(nextS.rows||[]).map(r=>({...r,episode:ep}));
+    activeContiScene=String(nextS.rows?.at(-1)?.scene||nextS.rows?.[0]?.scene||'1');
+   }else{
+    p.settings.contiConfigured=false;
+    p.settings.contiRows=[];
+    activeContiScene='1';
+   }
+  }
+  closeDialog();
+  draft();
+  await save();
+  render();
+  notify('Continuity sheet deleted.');
+  return;
+ }
  if(a==='switch-home-page'||a==='home-scroll-slide'){
   const target=b.dataset.page||(b.dataset.slide==='1'?'episodes':'identity');
   homeSubPage=target;
@@ -2719,7 +2769,19 @@ async function doAction(a,b){
  if(a==='resolve'){dialog(`<h2>Use version ${b.dataset.choice==='manual'?'manual':'app'}?</h2><p>The selected version becomes CURRENT. Other unresolved conflicts remain for review. Keep downloads of both versions if needed; only 3 recent backups are retained after review.</p><div class="actions"><button data-action="backup">Back up draft</button><button data-action="close">Cancel</button><button data-action="resolve-confirm" data-choice="${b.dataset.choice}">Confirm choice</button></div>`);}
  if(a==='resolve-confirm'){const r=await adapter.resolve(p.id,conflict.token,b.dataset.choice);safeStorage.removeItem(draftKey(p.id));p=r.project;token=r.token;conflict=r.conflict||null;dirty=false;closeDialog();render();}
 }
-document.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(b){e.preventDefault();const error=b.closest('form')?.querySelector('.form-error');if(error)error.textContent='';doAction(b.dataset.action,b).catch(err=>{if(error?.isConnected){error.textContent=err.message;error.scrollIntoView({block:'nearest'});}else notify(err.message);});}});
+document.addEventListener('click',e=>{
+ if(suppressContiClick){e.preventDefault();e.stopPropagation();return;}
+ const swipedCard=e.target.closest('.conti-swipe-row.is-swiped .conti-swipe-card');
+ if(swipedCard){e.preventDefault();e.stopPropagation();const row=swipedCard.closest('.conti-swipe-row');if(row){row.classList.remove('is-swiped');swipedCard.style.transform='';}return;}
+ if(!e.target.closest('.conti-swipe-row'))closeAllContiSwipes();
+ const b=e.target.closest('[data-action]');
+ if(b){
+  e.preventDefault();
+  const error=b.closest('form')?.querySelector('.form-error');
+  if(error)error.textContent='';
+  doAction(b.dataset.action,b).catch(err=>{if(error?.isConnected){error.textContent=err.message;error.scrollIntoView({block:'nearest'});}else notify(err.message);});
+ }
+});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const b=e.target.closest?.('[role="button"][data-action]');if(b&&e.target===b){e.preventDefault();b.click();}}});
 document.addEventListener('focusin',e=>{if(e.target.name==='contiStartScene'){const r=e.target.closest('.conti-option-row')?.querySelector('[name="contiSceneMode"]');if(r)r.checked=false;e.target.classList.add('is-active');}if(e.target.closest('#record-form')&&(e.target.name==='capsule'||e.target.name==='episode')){if(!e.target.dataset.prevVal)e.target.dataset.prevVal=e.target.value;}});
 document.addEventListener('change',async e=>{try{if(busy){render();return;}if(e.target.name==='type'&&e.target.closest('#record-form')){const qBox=$('#capsule-questions-box');if(qBox)qBox.hidden=(e.target.value==='Other');}if(e.target.name==='contiType'){const ht=e.target.value==='Host Throw';const sg=$('#conti-scene-group');if(sg)sg.hidden=ht;const eg=$('#conti-episode-group');if(eg)eg.hidden=!ht;const acts=$('#conti-setup-step1-actions');if(acts)acts.hidden=false;const nb=$('#conti-setup-next-btn');if(nb)nb.hidden=false;return;}if(e.target.name==='contiEpisode'){const chosenEp=Number(e.target.value)||1;const locInput=document.querySelector('#conti-setup-form [name="contiLocation"]');if(locInput&&(!locInput.value||locInput.dataset.autoFilled==='true')){const epLoc=p.settings?.episodeLocations?.[chosenEp]||'';if(epLoc){locInput.value=epLoc;locInput.dataset.autoFilled='true';}}return;}if(e.target.name==='contiSceneMode'){const inp=e.target.closest('.conti-option-row')?.querySelector('[name="contiStartScene"]');if(inp){inp.value='';inp.classList.remove('is-active');}return;}if(e.target.name==='contiCameras'){const c=Number(e.target.value)||2;document.querySelectorAll('[data-cam-start]').forEach(el=>{el.hidden=Number(el.dataset.camStart)>c;});return;}if(e.target.name==='contiAudio'){const aud=$('#conti-audio-start');if(aud)aud.hidden=e.target.value==='direct';return;}if(e.target.id==='project-select'){const v=e.target.value;if(v==='__new__'){e.target.value=p?.id||'';projectDialog();}else if(v==='__all__'){p=null;token=null;conflict=null;projects=await adapter.list();render();window.scrollTo(0,0);}else await openProject(v);}if(e.target.id==='episode-select'){ep=+e.target.value;if(view==='script')scriptActiveEp=ep;render();}if(e.target.id==='conti-episode-select'){contiEpFilter=e.target.value==='all'?'all':Number(e.target.value);if(contiEpFilter!=='all')ep=contiEpFilter;render();}if(e.target.dataset.txEp){const n=e.target.dataset.txEp;if(!p.settings.txDates||typeof p.settings.txDates!=='object')p.settings.txDates={};if(e.target.value)p.settings.txDates[n]=e.target.value;else delete p.settings.txDates[n];const st=txStatusForEpisode(Number(n));const dot=document.querySelector(`[data-tx-dot="${n}"]`);if(dot){dot.className=`tx-status-dot ${st.cls}`;dot.title=st.label;dot.setAttribute('aria-label',st.label);}const nx=$('#next-tx-display');if(nx)nx.textContent=nextTxDisplay();draft();return;}if(e.target.id==='log-filter'){filter=e.target.value;render();}
@@ -3007,6 +3069,113 @@ document.addEventListener('touchend',e=>{
  }
 },{passive:true});
 
+let suppressContiClick=false;
+let suppressContiTimer=null;
+function closeAllContiSwipes(exceptRow=null){
+ document.querySelectorAll('.conti-swipe-row.is-swiped').forEach(row=>{
+  if(row!==exceptRow){
+   row.classList.remove('is-swiped');
+   const card=row.querySelector('.conti-swipe-card');
+   if(card){card.style.transition='';card.style.transform='';}
+  }
+ });
+}
+function initContiSwipeHandlers(){
+ let activeRow=null,activeCard=null,startX=0,startY=0,currentX=0,isSwiping=false,isHorizontal=null,wasSwiped=false;
+ const ACTION_WIDTH=96;
+ function onStart(x,y,target){
+  const row=target.closest('.conti-swipe-row');
+  if(!row)return;
+  if(target.closest('.conti-swipe-actions'))return;
+  activeRow=row;
+  activeCard=row.querySelector('.conti-swipe-card');
+  if(!activeCard)return;
+  startX=x;
+  startY=y;
+  currentX=x;
+  isSwiping=false;
+  isHorizontal=null;
+  wasSwiped=activeRow.classList.contains('is-swiped');
+  closeAllContiSwipes(activeRow);
+ }
+ function onMove(x,y,e){
+  if(!activeRow||!activeCard)return;
+  currentX=x;
+  const diffX=currentX-startX;
+  const diffY=y-startY;
+  if(isHorizontal===null){
+   if(Math.abs(diffX)>6||Math.abs(diffY)>6){
+    isHorizontal=Math.abs(diffX)>Math.abs(diffY)*0.9;
+   }
+  }
+  if(!isHorizontal)return;
+  if(e.cancelable)e.preventDefault();
+  isSwiping=true;
+  activeCard.style.transition='none';
+  let baseOffset=wasSwiped?-ACTION_WIDTH:0;
+  let targetOffset=baseOffset+diffX;
+  if(targetOffset>0){
+   targetOffset=targetOffset*0.25;
+  }else if(targetOffset<-ACTION_WIDTH){
+   const over=-ACTION_WIDTH-targetOffset;
+   targetOffset=-ACTION_WIDTH-(over*0.25);
+  }
+  activeCard.style.transform=`translateX(${targetOffset}px)`;
+ }
+ function onEnd(){
+  if(!activeRow||!activeCard){activeRow=null;activeCard=null;return;}
+  activeCard.style.transition='';
+  if(isSwiping){
+   suppressContiClick=true;
+   clearTimeout(suppressContiTimer);
+   suppressContiTimer=setTimeout(()=>{suppressContiClick=false;},200);
+   const diffX=currentX-startX;
+   let shouldOpen=false;
+   if(wasSwiped){
+    shouldOpen=diffX<=25;
+   }else{
+    shouldOpen=diffX<-35;
+   }
+   if(shouldOpen){
+    activeRow.classList.add('is-swiped');
+    activeCard.style.transform=`translateX(-${ACTION_WIDTH}px)`;
+   }else{
+    activeRow.classList.remove('is-swiped');
+    activeCard.style.transform='';
+   }
+  }
+  activeRow=null;
+  activeCard=null;
+  isSwiping=false;
+  isHorizontal=null;
+ }
+ document.addEventListener('touchstart',e=>{
+  if(!e.changedTouches||!e.changedTouches[0])return;
+  onStart(e.changedTouches[0].clientX,e.changedTouches[0].clientY,e.target);
+ },{passive:true});
+ document.addEventListener('touchmove',e=>{
+  if(!activeRow||!e.changedTouches||!e.changedTouches[0])return;
+  onMove(e.changedTouches[0].clientX,e.changedTouches[0].clientY,e);
+ },{passive:false});
+ document.addEventListener('touchend',()=>onEnd(),{passive:true});
+ document.addEventListener('touchcancel',()=>onEnd(),{passive:true});
+ let isMouseDown=false;
+ document.addEventListener('mousedown',e=>{
+  if(e.button!==0)return;
+  if(e.target.closest('.conti-swipe-row')&&!e.target.closest('.conti-swipe-actions')){
+   isMouseDown=true;
+   onStart(e.clientX,e.clientY,e.target);
+  }
+ });
+ document.addEventListener('mousemove',e=>{
+  if(!isMouseDown||!activeRow)return;
+  onMove(e.clientX,e.clientY,e);
+ });
+ document.addEventListener('mouseup',()=>{
+  if(isMouseDown){isMouseDown=false;onEnd();}
+ });
+}
+
 
 function legacyDialog(){
  const d=document.createElement('dialog');d.innerHTML=`<form><div class="dialog-heading"><h2>Import legacy log</h2><button type="button" class="close-legacy">✕</button></div><p>Export the INPUT LOG and INPUT SCRIPT tabs as CSV from Sheets. Import creates new IDs and leaves the original workbook intact. Matching questions/VO requires a unique # and matching facts.</p><label>INPUT LOG CSV<input type="file" name="log" accept=".csv,text/csv" required></label><label>INPUT SCRIPT CSV (optional)<input type="file" name="script" accept=".csv,text/csv"></label><p class="form-error" role="alert"></p><button type="submit" class="primary">Review import</button><div class="legacy-preview"></div></form>`;document.body.append(d);d.showModal();const close=()=>{d.close();d.remove();};d.querySelector('.close-legacy').onclick=close;d.addEventListener('cancel',()=>setTimeout(()=>d.remove(),0));
@@ -3244,7 +3413,7 @@ async function ensureSeedProjects(){
   console.error('Seed project setup error:',err);
  }
 }
-async function init(){try{await ensureSeedProjects();projects=await adapter.list();if(p?.settings?.episodeThemes){for(const k in p.settings.episodeThemes){p.settings.episodeThemes[k]=cleanSpecialTheme(p.settings.episodeThemes[k]);}}render();if(new URLSearchParams(location.search).get('new-project')==='1')projectDialog();}catch(e){$('#app').innerHTML=`<main class="welcome"><h1>Could not open workspace</h1><p>${esc(e.message)}</p><button onclick="location.reload()">Try again</button></main>`;}}
+async function init(){try{await ensureSeedProjects();projects=await adapter.list();if(p?.settings?.episodeThemes){for(const k in p.settings.episodeThemes){p.settings.episodeThemes[k]=cleanSpecialTheme(p.settings.episodeThemes[k]);}}initContiSwipeHandlers();render();if(new URLSearchParams(location.search).get('new-project')==='1')projectDialog();}catch(e){$('#app').innerHTML=`<main class="welcome"><h1>Could not open workspace</h1><p>${esc(e.message)}</p><button onclick="location.reload()">Try again</button></main>`;}}
 init();
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(reg=>{reg.update().catch(()=>{});}).catch(()=>{});let refreshing=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!refreshing){refreshing=true;window.location.reload();}});});}
 </script></body></html>
