@@ -481,10 +481,12 @@ function syncContiSheetSpreadsheet_(project){
     const cType = project.settings.contiType || 'Capsule';
     const epNum = project.settings.episode || 1;
     const dateStr = project.settings.contiShootDate || '';
+    const locStr = project.settings.contiLocation || '';
     contiSheets.push({
-      tabName: 'Ep ' + String(epNum).padStart(2, '0') + ' · ' + cType + (dateStr ? ' · ' + dateStr : ''),
+      tabName: 'Ep ' + String(epNum).padStart(2, '0') + ' · ' + cType + (locStr ? ' · ' + locStr : '') + (dateStr ? ' · ' + dateStr : ''),
       episode: epNum,
       contiType: cType,
+      location: locStr,
       date: dateStr,
       rows: project.settings.contiRows
     });
@@ -494,10 +496,11 @@ function syncContiSheetSpreadsheet_(project){
   contiSheets.forEach((s) => {
     const epStr = 'Ep ' + String(s.episode || 1).padStart(2, '0');
     const typeLabel = s.contiType === 'Host Throw' ? 'Host Throw' : 'Capsule';
+    const locLabel = s.location ? ' · ' + s.location : '';
     const dateLabel = s.date ? ' · ' + s.date : '';
-    let tabTitle = (s.tabName && (s.tabName.includes('Capsule') || s.tabName.includes('Host Throw')))
+    let tabTitle = s.tabName
       ? s.tabName.replace(/^CONTI · /, '')
-      : `${epStr} · ${typeLabel}${dateLabel}`;
+      : `${epStr} · ${typeLabel}${locLabel}${dateLabel}`;
     
     tabTitle = tabTitle.replace(/[\\/?*[\]:]/g, '-').slice(0, 95);
     
