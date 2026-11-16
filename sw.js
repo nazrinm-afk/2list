@@ -1,4 +1,4 @@
-const CACHE_NAME = '2list-pwa-v20261105-02';
+const CACHE_NAME = '2list-pwa-v20261117-01';
 const PRECACHE_ASSETS = [
   './',
   'index.html',
