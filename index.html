@@ -74,15 +74,30 @@ html:has(dialog[open]){overflow:hidden}
   gap:2px!important;
   box-sizing:border-box!important;
   border-radius:999px!important;
-  border:1px solid rgba(255,255,255,0.20)!important;
-  background:rgba(36,36,40,0.48)!important;
-  -webkit-backdrop-filter:blur(24px) saturate(190%)!important;
-  backdrop-filter:blur(24px) saturate(190%)!important;
-  box-shadow:0 12px 32px rgba(0,0,0,0.45),inset 0 1px 0.5px rgba(255,255,255,0.28),inset 0 -1px 0.5px rgba(255,255,255,0.12)!important;
+  border:0!important;
+  background:rgba(24,24,28,0.26)!important;
+  -webkit-backdrop-filter:blur(5px) saturate(185%) contrast(1.06) brightness(1.05)!important;
+  backdrop-filter:blur(5px) saturate(185%) contrast(1.06) brightness(1.05)!important;
+  backdrop-filter:url(#liquid-glass-edge) blur(5px) saturate(185%) contrast(1.06) brightness(1.05)!important;
+  box-shadow:0 14px 36px rgba(0,0,0,0.42),inset 0 1px 2px rgba(255,255,255,0.16),inset 0 -2px 6px rgba(0,0,0,0.20)!important;
   -webkit-transform:translate3d(0,0,0)!important;
   transform:translate3d(0,0,0)!important;
   will-change:transform,backdrop-filter;
   overflow:hidden;
+ }
+ .sidebar nav::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:999px;
+  padding:1px;
+  background:linear-gradient(145deg,rgba(255,255,255,0.52) 0%,rgba(255,255,255,0.14) 22%,rgba(255,255,255,0.03) 50%,rgba(255,255,255,0.12) 78%,rgba(255,255,255,0.36) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask-composite:exclude;
+  pointer-events:none;
+  z-index:5;
  }
  .nav-link{
   flex:1 1 0!important;
@@ -139,8 +154,8 @@ html:has(dialog[open]){overflow:hidden}
  .nav-link.active{
   flex:1.15 1 0!important;
   color:#ffffff!important;
-  background:rgba(0,0,0,0.38)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.08)!important;
+  background:rgba(0,0,0,0.32)!important;
+  box-shadow:inset 0 0.5px 0 rgba(255,255,255,0.14),inset 0 -0.5px 0 rgba(255,255,255,0.05),0 2px 10px rgba(0,0,0,0.18)!important;
  }
  .nav-link.active .nav-svg-icon{stroke-width:1.9!important}
  .nav-link.active .nav-svg-icon .svg-fill-body{fill:#ffffff!important;stroke:#ffffff!important}
@@ -960,7 +975,7 @@ html.is-standalone-pwa .sidebar nav{bottom:calc(max(env(safe-area-inset-bottom,0
 html.is-standalone-pwa dialog{margin-top:max(env(safe-area-inset-top,0px),52px)!important;max-height:calc(var(--visual-height,100dvh) - max(env(safe-area-inset-top,0px),52px) - 30px)!important}
 html.is-standalone-pwa .welcome-signout-btn{top:calc(max(env(safe-area-inset-top,0px),52px) + 16px)!important;right:18px!important}
 html.is-standalone-pwa .welcome{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 30px)!important}
-</style></head><body><div id="app"><p class="loading">Opening your writing workspace…</p></div><div id="toast" role="status" aria-live="polite"></div><dialog id="dialog"></dialog><dialog id="slot-warning-dialog" class="slot-warning-dialog"></dialog><script type="module">
+</style></head><body><svg style="position:fixed;width:0;height:0;pointer-events:none" aria-hidden="true"><defs><filter id="liquid-glass-edge" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB"><feImage href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 62' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='gy' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='rgb(128,255,128)'/%3E%3Cstop offset='24%25' stop-color='rgb(128,128,128)'/%3E%3Cstop offset='76%25' stop-color='rgb(128,128,128)'/%3E%3Cstop offset='100%25' stop-color='rgb(128,0,128)'/%3E%3C/linearGradient%3E%3ClinearGradient id='gx' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0%25' stop-color='rgb(255,128,128)' stop-opacity='0.9'/%3E%3Cstop offset='12%25' stop-color='rgb(128,128,128)' stop-opacity='0'/%3E%3Cstop offset='88%25' stop-color='rgb(128,128,128)' stop-opacity='0'/%3E%3Cstop offset='100%25' stop-color='rgb(0,128,128)' stop-opacity='0.9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='360' height='62' fill='url(%23gy)'/%3E%3Crect width='360' height='62' fill='url(%23gx)'/%3E%3C/svg%3E" result="edgeMap" preserveAspectRatio="none"/><feGaussianBlur in="edgeMap" stdDeviation="2" result="smoothMap"/><feDisplacementMap in="SourceGraphic" in2="smoothMap" scale="26" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg><div id="app"><p class="loading">Opening your writing workspace…</p></div><div id="toast" role="status" aria-live="polite"></div><dialog id="dialog"></dialog><dialog id="slot-warning-dialog" class="slot-warning-dialog"></dialog><script type="module">
 if(window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches){document.documentElement.classList.add('is-standalone-pwa');}
 const statuses = ['PREPRO','FILMED','EDITED','TX','CANCELLED','POST'];
 const uid = () => globalThis.crypto?.randomUUID?.() || `id-${Date.now()}-${Math.random().toString(36).slice(2)}`;
