@@ -62,24 +62,11 @@ html:has(dialog[open]){overflow:hidden}
  .sidebar nav{
   height:62px!important;
   min-height:62px!important;
-  padding:4px!important;
+  padding:5px!important;
   position:fixed!important;
-  bottom:calc(max(env(safe-area-inset-bottom,0px),10px) + 4px)!important;
-  left:14px!important;
-  right:14px!important;
-  z-index:9999!important;
-  display:flex!important;
-  flex-direction:row!important;
-  align-items:stretch!important;
-  justify-content:space-between!important;
-  gap:2px!important;
-  height:58px!important;
-  min-height:58px!important;
-  padding:4px!important;
-  position:fixed!important;
-  bottom:calc(max(env(safe-area-inset-bottom,0px),12px) + 8px)!important;
-  left:16px!important;
-  right:16px!important;
+  bottom:calc(max(env(safe-area-inset-bottom,0px),12px) + 10px)!important;
+  left:18px!important;
+  right:18px!important;
   max-width:440px!important;
   margin:0 auto!important;
   z-index:9999!important;
@@ -90,11 +77,11 @@ html:has(dialog[open]){overflow:hidden}
   gap:0!important;
   box-sizing:border-box!important;
   border-radius:9999px!important;
-  border:0.5px solid rgba(255,255,255,0.18)!important;
-  background:rgba(20,20,24,0.72)!important;
-  -webkit-backdrop-filter:blur(30px) saturate(190%) brightness(1.08)!important;
-  backdrop-filter:blur(30px) saturate(190%) brightness(1.08)!important;
-  box-shadow:0 12px 36px rgba(0,0,0,0.48),0 2px 8px rgba(0,0,0,0.25),inset 0 0.5px 0.5px rgba(255,255,255,0.25)!important;
+  border:0.75px solid rgba(255,255,255,0.22)!important;
+  background:rgba(28,28,34,0.38)!important;
+  -webkit-backdrop-filter:blur(24px) saturate(190%) contrast(1.05) brightness(1.15)!important;
+  backdrop-filter:blur(24px) saturate(190%) contrast(1.05) brightness(1.15)!important;
+  box-shadow:0 16px 38px rgba(0,0,0,0.36),0 2px 8px rgba(0,0,0,0.18),inset 0 1px 1px rgba(255,255,255,0.30),inset 0 -1px 1px rgba(0,0,0,0.15)!important;
   -webkit-transform:translate3d(0,0,0)!important;
   transform:translate3d(0,0,0)!important;
   will-change:transform,-webkit-backdrop-filter;
@@ -104,28 +91,29 @@ html:has(dialog[open]){overflow:hidden}
   content:'';
   position:absolute;
   top:0;
-  left:20px;
-  right:20px;
-  height:0.5px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);
+  left:22px;
+  right:22px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.55) 50%,transparent);
   pointer-events:none;
   z-index:5;
  }
  .nav-active-pill{
   display:block!important;
   position:absolute!important;
-  top:4px!important;
-  bottom:4px!important;
-  width:calc((100% - 8px) / 5)!important;
-  left:4px!important;
+  top:5px!important;
+  bottom:5px!important;
+  width:calc((100% - 10px) / 5)!important;
+  left:5px!important;
   border-radius:9999px!important;
-  background:rgba(255,255,255,0.16)!important;
+  background:rgba(255,255,255,0.18)!important;
   -webkit-backdrop-filter:blur(10px) saturate(120%)!important;
   backdrop-filter:blur(10px) saturate(120%)!important;
-  box-shadow:inset 0 0.5px 0.5px rgba(255,255,255,0.30),0 2px 8px rgba(0,0,0,0.18)!important;
+  box-shadow:inset 0 0.5px 1px rgba(255,255,255,0.38),0 2px 10px rgba(0,0,0,0.20)!important;
+  border:0.5px solid rgba(255,255,255,0.18)!important;
   pointer-events:none!important;
   z-index:1!important;
-  transition:transform 0.38s cubic-bezier(0.16,1,0.3,1)!important;
+  transition:transform 0.36s cubic-bezier(0.16,1,0.3,1)!important;
   will-change:transform!important;
  }
  .nav-link{
@@ -139,12 +127,12 @@ html:has(dialog[open]){overflow:hidden}
   border:0!important;
   border-radius:9999px!important;
   background:transparent!important;
-  color:rgba(255,255,255,0.62)!important;
+  color:rgba(255,255,255,0.58)!important;
   display:flex!important;
   flex-direction:column!important;
   align-items:center!important;
   justify-content:center!important;
-  gap:1px!important;
+  gap:2px!important;
   box-shadow:none!important;
   position:relative!important;
   z-index:2!important;
@@ -155,7 +143,7 @@ html:has(dialog[open]){overflow:hidden}
  .nav-link:active{transform:scale(0.92)!important}
  .nav-link .nav-icon-wrap{
   width:28px;
-  height:22px;
+  height:24px;
   position:relative;
   display:inline-flex;
   align-items:center;
@@ -163,8 +151,8 @@ html:has(dialog[open]){overflow:hidden}
   transition:transform .25s cubic-bezier(0.16,1,0.3,1);
  }
  .nav-link .nav-svg-icon{
-  width:21px;
-  height:21px;
+  width:22px;
+  height:22px;
   stroke:currentColor;
   transition:stroke-width .18s ease,stroke .18s ease,fill .18s ease;
  }
@@ -188,11 +176,11 @@ html:has(dialog[open]){overflow:hidden}
   box-shadow:none!important;
  }
  .nav-link.active .nav-icon-wrap{
-  transform:scale(1.05)!important;
+  transform:scale(1.06)!important;
  }
  .nav-link.active .nav-svg-icon{stroke-width:1.95!important}
  .nav-link.active .nav-svg-icon .svg-fill-body{fill:#ffffff!important;stroke:#ffffff!important}
- .nav-link.active .nav-svg-icon .svg-cutout{stroke:#141418!important}
+ .nav-link.active .nav-svg-icon .svg-cutout{stroke:#1a1a20!important}
  .nav-link.active .mobile-label{font-weight:650!important;color:#ffffff!important;letter-spacing:-.1px!important}
  .topbar{height:52px;padding:0 18px;background:var(--bg);border-bottom:0}
  .topbar>div:first-child{display:none}
@@ -1004,7 +992,7 @@ dialog#slot-warning-dialog[open] {
  }
 }
 html.is-standalone-pwa .sidebar{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 12px)!important;min-height:calc(56px + max(env(safe-area-inset-top,0px),52px) + 12px)!important}
-html.is-standalone-pwa .sidebar nav{bottom:calc(max(env(safe-area-inset-bottom,0px),12px) + 8px)!important;position:fixed!important;padding:4px!important;-webkit-transform:translate3d(0,0,0)!important;transform:translate3d(0,0,0)!important}
+html.is-standalone-pwa .sidebar nav{bottom:calc(max(env(safe-area-inset-bottom,0px),12px) + 10px)!important;position:fixed!important;padding:5px!important;-webkit-transform:translate3d(0,0,0)!important;transform:translate3d(0,0,0)!important}
 html.is-standalone-pwa dialog{margin-top:max(env(safe-area-inset-top,0px),52px)!important;max-height:calc(var(--visual-height,100dvh) - max(env(safe-area-inset-top,0px),52px) - 30px)!important}
 html.is-standalone-pwa .welcome-signout-btn{top:calc(max(env(safe-area-inset-top,0px),52px) + 16px)!important;right:18px!important}
 html.is-standalone-pwa .welcome{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 30px)!important}
