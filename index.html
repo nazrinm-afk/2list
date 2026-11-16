@@ -17,6 +17,7 @@
 .nav-icon-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center}
 .nav-svg-icon{width:20px;height:20px;display:block;stroke:currentColor;stroke-width:1.8;vertical-align:middle;flex-shrink:0}
 .nav-badge{display:none}
+.nav-active-pill{display:none}
 @media(min-width:761px){
  .desktop-badge{display:inline-flex;margin-left:auto;background:#383121;color:#ffda69;border-radius:10px;padding:2px 8px;font-size:11px;font-weight:600}
  .mobile-badge{display:none!important}
@@ -75,11 +76,11 @@ html:has(dialog[open]){overflow:hidden}
   box-sizing:border-box!important;
   border-radius:999px!important;
   border:0!important;
-  background:rgba(24,24,28,0.26)!important;
-  -webkit-backdrop-filter:blur(5px) saturate(185%) contrast(1.06) brightness(1.05)!important;
-  backdrop-filter:blur(5px) saturate(185%) contrast(1.06) brightness(1.05)!important;
-  backdrop-filter:url(#liquid-glass-edge) blur(5px) saturate(185%) contrast(1.06) brightness(1.05)!important;
-  box-shadow:0 14px 36px rgba(0,0,0,0.42),inset 0 1px 2px rgba(255,255,255,0.16),inset 0 -2px 6px rgba(0,0,0,0.20)!important;
+  background:rgba(28,28,34,0.64)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(190%) contrast(1.05) brightness(1.06)!important;
+  backdrop-filter:blur(18px) saturate(190%) contrast(1.05) brightness(1.06)!important;
+  backdrop-filter:url(#liquid-glass-edge) blur(18px) saturate(190%) contrast(1.05) brightness(1.06)!important;
+  box-shadow:0 16px 42px rgba(0,0,0,0.50),inset 0 1.5px 1px rgba(255,255,255,0.22),inset 0 -1.5px 2px rgba(0,0,0,0.35),0 0 0 1px rgba(255,255,255,0.08)!important;
   -webkit-transform:translate3d(0,0,0)!important;
   transform:translate3d(0,0,0)!important;
   will-change:transform,backdrop-filter;
@@ -91,13 +92,30 @@ html:has(dialog[open]){overflow:hidden}
   inset:0;
   border-radius:999px;
   padding:1px;
-  background:linear-gradient(145deg,rgba(255,255,255,0.52) 0%,rgba(255,255,255,0.14) 22%,rgba(255,255,255,0.03) 50%,rgba(255,255,255,0.12) 78%,rgba(255,255,255,0.36) 100%);
+  background:linear-gradient(135deg,rgba(255,255,255,0.55) 0%,rgba(255,255,255,0.18) 20%,rgba(255,255,255,0.04) 50%,rgba(255,255,255,0.12) 75%,rgba(255,255,255,0.40) 100%);
   -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
   -webkit-mask-composite:xor;
   mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
   mask-composite:exclude;
   pointer-events:none;
   z-index:5;
+ }
+ .nav-active-pill{
+  display:block!important;
+  position:absolute!important;
+  top:4px!important;
+  bottom:4px!important;
+  width:calc((100% - 8px) / 5)!important;
+  left:4px!important;
+  border-radius:999px!important;
+  background:rgba(0,0,0,0.40)!important;
+  -webkit-backdrop-filter:blur(8px) brightness(1.15) saturate(125%)!important;
+  backdrop-filter:blur(8px) brightness(1.15) saturate(125%)!important;
+  box-shadow:inset 0 1px 0.8px rgba(255,255,255,0.22),inset 0 -0.8px 1px rgba(0,0,0,0.45),0 3px 12px rgba(0,0,0,0.30)!important;
+  pointer-events:none!important;
+  z-index:1!important;
+  transition:transform 0.38s cubic-bezier(0.16,1,0.3,1)!important;
+  will-change:transform!important;
  }
  .nav-link{
   flex:1 1 0!important;
@@ -110,7 +128,7 @@ html:has(dialog[open]){overflow:hidden}
   border:0!important;
   border-radius:999px!important;
   background:transparent!important;
-  color:rgba(255,255,255,0.88)!important;
+  color:rgba(255,255,255,0.72)!important;
   display:flex!important;
   flex-direction:column!important;
   align-items:center!important;
@@ -118,7 +136,8 @@ html:has(dialog[open]){overflow:hidden}
   gap:2px!important;
   box-shadow:none!important;
   position:relative!important;
-  transition:background .22s ease,color .18s ease,transform .14s cubic-bezier(0.2,0.8,0.2,1),flex .2s ease!important;
+  z-index:2!important;
+  transition:color .18s ease,transform .12s cubic-bezier(0.2,0.8,0.2,1)!important;
   -webkit-tap-highlight-color:transparent!important;
   cursor:pointer!important;
  }
@@ -130,13 +149,13 @@ html:has(dialog[open]){overflow:hidden}
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  transition:transform .15s cubic-bezier(0.2,0.8,0.2,1);
+  transition:transform .25s cubic-bezier(0.16,1,0.3,1);
  }
  .nav-link .nav-svg-icon{
   width:22px;
   height:22px;
   stroke:currentColor;
-  transition:stroke-width .15s ease,stroke .18s ease,fill .18s ease;
+  transition:stroke-width .18s ease,stroke .18s ease,fill .18s ease;
  }
  .nav-link .desktop-label{display:none!important}
  .nav-link .mobile-label{
@@ -149,15 +168,18 @@ html:has(dialog[open]){overflow:hidden}
   margin-top:1px!important;
   white-space:nowrap!important;
   color:inherit!important;
-  transition:font-weight .15s ease,color .15s ease;
+  transition:font-weight .18s ease,color .18s ease;
  }
  .nav-link.active{
-  flex:1.15 1 0!important;
+  flex:1 1 0!important;
   color:#ffffff!important;
-  background:rgba(0,0,0,0.32)!important;
-  box-shadow:inset 0 0.5px 0 rgba(255,255,255,0.14),inset 0 -0.5px 0 rgba(255,255,255,0.05),0 2px 10px rgba(0,0,0,0.18)!important;
+  background:transparent!important;
+  box-shadow:none!important;
  }
- .nav-link.active .nav-svg-icon{stroke-width:1.9!important}
+ .nav-link.active .nav-icon-wrap{
+  transform:scale(1.06)!important;
+ }
+ .nav-link.active .nav-svg-icon{stroke-width:1.95!important}
  .nav-link.active .nav-svg-icon .svg-fill-body{fill:#ffffff!important;stroke:#ffffff!important}
  .nav-link.active .nav-svg-icon .svg-cutout{stroke:#18181c!important}
  .nav-link.active .mobile-label{font-weight:650!important;color:#ffffff!important;letter-spacing:-.1px!important}
@@ -975,7 +997,7 @@ html.is-standalone-pwa .sidebar nav{bottom:calc(max(env(safe-area-inset-bottom,0
 html.is-standalone-pwa dialog{margin-top:max(env(safe-area-inset-top,0px),52px)!important;max-height:calc(var(--visual-height,100dvh) - max(env(safe-area-inset-top,0px),52px) - 30px)!important}
 html.is-standalone-pwa .welcome-signout-btn{top:calc(max(env(safe-area-inset-top,0px),52px) + 16px)!important;right:18px!important}
 html.is-standalone-pwa .welcome{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 30px)!important}
-</style></head><body><svg style="position:fixed;width:0;height:0;pointer-events:none" aria-hidden="true"><defs><filter id="liquid-glass-edge" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB"><feImage href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 62' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='gy' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='rgb(128,255,128)'/%3E%3Cstop offset='24%25' stop-color='rgb(128,128,128)'/%3E%3Cstop offset='76%25' stop-color='rgb(128,128,128)'/%3E%3Cstop offset='100%25' stop-color='rgb(128,0,128)'/%3E%3C/linearGradient%3E%3ClinearGradient id='gx' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0%25' stop-color='rgb(255,128,128)' stop-opacity='0.9'/%3E%3Cstop offset='12%25' stop-color='rgb(128,128,128)' stop-opacity='0'/%3E%3Cstop offset='88%25' stop-color='rgb(128,128,128)' stop-opacity='0'/%3E%3Cstop offset='100%25' stop-color='rgb(0,128,128)' stop-opacity='0.9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='360' height='62' fill='url(%23gy)'/%3E%3Crect width='360' height='62' fill='url(%23gx)'/%3E%3C/svg%3E" result="edgeMap" preserveAspectRatio="none"/><feGaussianBlur in="edgeMap" stdDeviation="2" result="smoothMap"/><feDisplacementMap in="SourceGraphic" in2="smoothMap" scale="26" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg><div id="app"><p class="loading">Opening your writing workspace…</p></div><div id="toast" role="status" aria-live="polite"></div><dialog id="dialog"></dialog><dialog id="slot-warning-dialog" class="slot-warning-dialog"></dialog><script type="module">
+</style></head><body><svg style="position:fixed;width:0;height:0;pointer-events:none" aria-hidden="true"><defs><filter id="liquid-glass-edge" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB"><feImage href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 62' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='gy' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='rgb(128,255,128)'/%3E%3Cstop offset='26%25' stop-color='rgb(128,128,128)'/%3E%3Cstop offset='74%25' stop-color='rgb(128,128,128)'/%3E%3Cstop offset='100%25' stop-color='rgb(128,0,128)'/%3E%3C/linearGradient%3E%3ClinearGradient id='gx' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0%25' stop-color='rgb(255,128,128)' stop-opacity='0.96'/%3E%3Cstop offset='15%25' stop-color='rgb(128,128,128)' stop-opacity='0'/%3E%3Cstop offset='85%25' stop-color='rgb(128,128,128)' stop-opacity='0'/%3E%3Cstop offset='100%25' stop-color='rgb(0,128,128)' stop-opacity='0.96'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='360' height='62' fill='url(%23gy)'/%3E%3Crect width='360' height='62' fill='url(%23gx)'/%3E%3C/svg%3E" result="edgeMap" preserveAspectRatio="none"/><feGaussianBlur in="edgeMap" stdDeviation="2.5" result="smoothMap"/><feDisplacementMap in="SourceGraphic" in2="smoothMap" scale="52" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg><div id="app"><p class="loading">Opening your writing workspace…</p></div><div id="toast" role="status" aria-live="polite"></div><dialog id="dialog"></dialog><dialog id="slot-warning-dialog" class="slot-warning-dialog"></dialog><script type="module">
 if(window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches){document.documentElement.classList.add('is-standalone-pwa');}
 const statuses = ['PREPRO','FILMED','EDITED','TX','CANCELLED','POST'];
 const uid = () => globalThis.crypto?.randomUUID?.() || `id-${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -1428,7 +1450,28 @@ function field(label,name,value='',type='text',extra=''){return `<label>${label}
 function area(label,name,value='',extra=''){return `<label>${label}<textarea name="${name}" ${extra}>${esc(value)}</textarea></label>`;}
 function options(values,selected){return values.map(v=>`<option value="${esc(v)}" ${String(v)===String(selected)?'selected':''}>${esc(v)}</option>`).join('');}
 function stat(n,label,sub=''){return `<div class="stat"><strong>${n}</strong><span>${label}</span><small>${sub}</small></div>`;}
-function header(){const activeTab=view==='preview'?'script':view==='conti-record'?'conti':view;const isContiOnly=p?.settings?.projectType==='conti';const logCount=(p?.records?.length||0)+((p?.throws||[]).length||0);return `<aside class="sidebar"><a class="brand" href="#" data-action="all-projects"><span class="brand-mark" aria-label="2list">${brandEmblemSvg}</span><span>2list<small>WRITING STUDIO</small></span></a><div class="project-picker"><label>ACTIVE PROJECT</label><div class="project-picker-row"><details class="project-menu"><summary aria-label="Active project"><span>${esc(p?.name||'Select project')}</span><span aria-hidden="true">▾</span></summary><div class="project-menu-list">${projects.map(x=>`<button type="button" class="project-menu-item ${x.id===p?.id?'active':''}" data-action="open-project" data-id="${esc(x.id)}"><span>${esc(x.name)}</span>${x.id===p?.id?'<span>✓</span>':''}</button>`).join('')}<div class="project-menu-divider"></div><button type="button" class="project-menu-item" data-action="new-project"><span>＋ Create new project</span></button><button type="button" class="project-menu-item" data-action="all-projects"><span>← All projects</span></button></div></details><details class="dots-menu ${view==='settings'||view==='account'?'active':''}"><summary aria-label="Menu" title="Menu">⋮</summary><div class="dots-menu-list"><button type="button" class="project-menu-item ${view==='account'?'active':''}" data-action="nav" data-view="account"><span>Account</span></button><button type="button" class="project-menu-item ${view==='settings'?'active':''}" data-action="nav" data-view="settings"><span>Settings</span></button></div></details></div></div>${isContiOnly?'':`<nav aria-label="Main navigation">${navs.map(([v,l])=>{const isActive=activeTab===v;const hasBadge=v==='log'&&logCount>0;return `<button data-action="nav" data-view="${v}" class="nav-link ${isActive?'active':''}" aria-label="${l}" ${isActive?'aria-current="page"':''}><div class="nav-icon-wrap"><span class="nav-icon" aria-hidden="true">${icons[v]}</span>${hasBadge?`<span class="nav-badge mobile-badge">${logCount}</span>`:''}</div><span class="nav-label desktop-label">${l}</span><span class="nav-label mobile-label" aria-hidden="true">${tabLabels[v]}</span>${hasBadge?`<span class="nav-badge desktop-badge">${logCount}</span>`:''}</button>`;}).join('')}</nav>`}<div class="sidebar-note"><span class="dot"></span> ${esc(userEmail||(adapter.mode==='local'?'Local preview':'Google Sheets'))}<p>${adapter.mode==='local'?'Connected to Google Sheets (R&D preview).':'Synced to your Google Sheets.'}</p><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="text-button" data-action="help">Quick guide ↗</button><button class="text-button" data-action="sign-out">Sign out</button></div>${adapter.mode==='local'?'<a class="phone-preview-link" href="/?phone-preview=1" target="_blank" rel="noopener">Phone preview ↗</a>':''}</div></aside>`;}
+function header(){const activeTab=view==='preview'?'script':view==='conti-record'?'conti':view;const isContiOnly=p?.settings?.projectType==='conti';const logCount=(p?.records?.length||0)+((p?.throws||[]).length||0);const activeIdx=Math.max(0,navs.findIndex(([v])=>v===activeTab));return `<aside class="sidebar"><a class="brand" href="#" data-action="all-projects"><span class="brand-mark" aria-label="2list">${brandEmblemSvg}</span><span>2list<small>WRITING STUDIO</small></span></a><div class="project-picker"><label>ACTIVE PROJECT</label><div class="project-picker-row"><details class="project-menu"><summary aria-label="Active project"><span>${esc(p?.name||'Select project')}</span><span aria-hidden="true">▾</span></summary><div class="project-menu-list">${projects.map(x=>`<button type="button" class="project-menu-item ${x.id===p?.id?'active':''}" data-action="open-project" data-id="${esc(x.id)}"><span>${esc(x.name)}</span>${x.id===p?.id?'<span>✓</span>':''}</button>`).join('')}<div class="project-menu-divider"></div><button type="button" class="project-menu-item" data-action="new-project"><span>＋ Create new project</span></button><button type="button" class="project-menu-item" data-action="all-projects"><span>← All projects</span></button></div></details><details class="dots-menu ${view==='settings'||view==='account'?'active':''}"><summary aria-label="Menu" title="Menu">⋮</summary><div class="dots-menu-list"><button type="button" class="project-menu-item ${view==='account'?'active':''}" data-action="nav" data-view="account"><span>Account</span></button><button type="button" class="project-menu-item ${view==='settings'?'active':''}" data-action="nav" data-view="settings"><span>Settings</span></button></div></details></div></div>${isContiOnly?'':`<nav aria-label="Main navigation"><div class="nav-active-pill" id="nav-active-pill" style="transform:translateX(${activeIdx * 100}%);"></div>${navs.map(([v,l])=>{const isActive=activeTab===v;const hasBadge=v==='log'&&logCount>0;return `<button data-action="nav" data-view="${v}" class="nav-link ${isActive?'active':''}" aria-label="${l}" ${isActive?'aria-current="page"':''}><div class="nav-icon-wrap"><span class="nav-icon" aria-hidden="true">${icons[v]}</span>${hasBadge?`<span class="nav-badge mobile-badge">${logCount}</span>`:''}</div><span class="nav-label desktop-label">${l}</span><span class="nav-label mobile-label" aria-hidden="true">${tabLabels[v]}</span>${hasBadge?`<span class="nav-badge desktop-badge">${logCount}</span>`:''}</button>`;}).join('')}</nav>`}<div class="sidebar-note"><span class="dot"></span> ${esc(userEmail||(adapter.mode==='local'?'Local preview':'Google Sheets'))}<p>${adapter.mode==='local'?'Connected to Google Sheets (R&D preview).':'Synced to your Google Sheets.'}</p><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="text-button" data-action="help">Quick guide ↗</button><button class="text-button" data-action="sign-out">Sign out</button></div>${adapter.mode==='local'?'<a class="phone-preview-link" href="/?phone-preview=1" target="_blank" rel="noopener">Phone preview ↗</a>':''}</div></aside>`;}
+function updateSidebarNav(activeTab, logCount){
+ const activeIdx = navs.findIndex(([v]) => v === activeTab);
+ const pill = document.getElementById('nav-active-pill');
+ if (pill && activeIdx !== -1) {
+  pill.style.transform = `translateX(${activeIdx * 100}%)`;
+ }
+ document.querySelectorAll('.sidebar .nav-link').forEach(btn => {
+  const isActive = btn.dataset.view === activeTab;
+  btn.classList.toggle('active', isActive);
+  if (isActive) btn.setAttribute('aria-current', 'page');
+  else btn.removeAttribute('aria-current');
+ });
+ document.querySelectorAll('.sidebar .mobile-badge, .sidebar .desktop-badge').forEach(b => {
+  b.textContent = logCount > 0 ? logCount : '';
+  b.style.display = logCount > 0 ? '' : 'none';
+ });
+ const projSummary = document.querySelector('.sidebar .project-menu > summary > span');
+ if (projSummary && p?.name) projSummary.textContent = p.name;
+ const dots = document.querySelector('.sidebar .dots-menu');
+ if (dots) dots.classList.toggle('active', view === 'settings' || view === 'account');
+}
 function googleIcon(){return `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09C3.26 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.98-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>`;}
 function promptContiSceneSwitchRemark(lastRow, targetScene){
  const sc=lastRow.scene||'1';
@@ -1486,7 +1529,17 @@ function render(){
  const headingHtml=view==='conti-record'?`<h1><button type="button" class="conti-back-heading" data-action="nav" data-view="conti"><svg class="back-arrow" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg><span>${esc(headingTitle)}</span></button></h1>`:isScriptEditor?`<h1><button type="button" class="conti-back-heading" data-action="back-to-script-episodes"><svg class="back-arrow" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg><span>${esc(headingTitle)}</span></button></h1>`:view==='overview'?`<h1><button type="button" class="ep-header-toggle" data-action="toggle-overview-ep-picker" aria-expanded="${overviewEpPickerOpen}" title="Select episode"><span>Episode</span><span class="ep-current-pill">${ep}</span><svg class="ep-toggle-chevron ${overviewEpPickerOpen?'is-open':''}" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button></h1>`:`<h1>${esc(headingTitle)}</h1>`;
  const overviewPickerHtml=view==='overview'?`<div class="overview-ep-wrapper" id="overview-ep-picker" ${overviewEpPickerOpen?'':'hidden'}><div class="overview-ep-grid" role="radiogroup" aria-label="Select episode">${Array.from({length:Number(p.settings.episodes)||1},(_,i)=>i+1).map(n=>`<button type="button" class="overview-ep-btn ${n===Number(ep)?'is-active':''}" data-action="select-overview-ep" data-ep="${n}"><span>${n}</span></button>`).join('')}</div></div>`:'';
  const rightHeadHtml=view==='conti-record'?`<button type="button" class="conti-share-icon-btn" data-action="share-conti-pdf" aria-label="Save or Share PDF" title="Save / Share PDF"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>`:(view==='conti'&&p.settings.projectType!=='conti'?`<label class="episode-control">EPISODE<select id="conti-episode-select"><option value="all" ${contiEpFilter==='all'?'selected':''}>All</option>${Array.from({length:p.settings.episodes},(_,i)=>`<option value="${i+1}" ${String(contiEpFilter)===String(i+1)?'selected':''}>${i+1}</option>`).join('')}</select></label>`:(isScriptEditor||(view!=='home'&&view!=='settings'&&view!=='account'&&view!=='log'&&view!=='overview'&&view!=='script'&&p.settings.projectType!=='conti'))?`<label class="episode-control">EPISODE<select id="episode-select">${options(Array.from({length:p.settings.episodes},(_,i)=>i+1),ep)}</select></label>`:'');
- $('#app').innerHTML=`${header()}<div class="workspace">${showSaveBar?`<header class="topbar"><div><span class="eyebrow">TV MAGAZINE</span><span class="top-project">${esc(p.name)}</span></div><div class="save-tools"><span id="save-state" role="status">${dirty?'Local draft · unsaved':'Saved '+(adapter.mode==='local'?'on this device':'in Sheets')}</span><button data-action="save" class="primary" ${busy?'disabled':''}>${busy?activity:'Save script'}</button></div></header>`:''}<main id="main"><div class="page-heading"><div><p class="eyebrow">${esc(p.name)} / WORKSPACE</p>${headingHtml}${subText}${overviewPickerHtml}</div>${rightHeadHtml}</div>${conflict?conflictView():''}${({home:home,overview:overview,log:log,conti:conti,'conti-record':contiRecordPage,script:editor,preview:preview,settings:settings,account:accountPage})[view]()}</main><footer>2list <span>TV magazine · Personal workspace</span></footer></div>`;
+ const activeTab=view==='preview'?'script':view==='conti-record'?'conti':view;
+ const logCount=(p?.records?.length||0)+((p?.throws||[]).length||0);
+ const workspaceHtml=`<div class="workspace">${showSaveBar?`<header class="topbar"><div><span class="eyebrow">TV MAGAZINE</span><span class="top-project">${esc(p.name)}</span></div><div class="save-tools"><span id="save-state" role="status">${dirty?'Local draft · unsaved':'Saved '+(adapter.mode==='local'?'on this device':'in Sheets')}</span><button data-action="save" class="primary" ${busy?'disabled':''}>${busy?activity:'Save script'}</button></div></header>`:''}<main id="main"><div class="page-heading"><div><p class="eyebrow">${esc(p.name)} / WORKSPACE</p>${headingHtml}${subText}${overviewPickerHtml}</div>${rightHeadHtml}</div>${conflict?conflictView():''}${({home:home,overview:overview,log:log,conti:conti,'conti-record':contiRecordPage,script:editor,preview:preview,settings:settings,account:accountPage})[view]()}</main><footer>2list <span>TV magazine · Personal workspace</span></footer></div>`;
+ const existingSidebar=document.querySelector('#app > .sidebar');
+ const existingWs=document.querySelector('#app > .workspace');
+ if(existingSidebar && existingWs){
+  updateSidebarNav(activeTab, logCount);
+  existingWs.outerHTML=workspaceHtml;
+ }else{
+  $('#app').innerHTML=`${header()}${workspaceHtml}`;
+ }
  if(busy)document.querySelectorAll('#app input,#app textarea,#app select,#app button').forEach(el=>el.disabled=true);
 }
 function formatProgramTitle(name){
@@ -2472,7 +2525,26 @@ async function extractScriptText(file){
 }
 async function doAction(a,b){
  if(busy&&a!=='backup'&&a!=='close')return;
- if(a==='nav'){if(b.dataset.view==='script')scriptActiveEp=null;if(b.dataset.view==='log')itemActiveTab='split';if(b.dataset.view==='home')homeSubPage='identity';overviewEpPickerOpen=false;view=b.dataset.view;render();window.scrollTo(0,0);}
+ if(a==='nav'){
+  const targetView=b.dataset.view;
+  const targetIdx=navs.findIndex(([v])=>v===targetView);
+  const pill=document.getElementById('nav-active-pill');
+  if(pill&&targetIdx!==-1)pill.style.transform=`translateX(${targetIdx*100}%)`;
+  document.querySelectorAll('.sidebar .nav-link').forEach(btn=>{
+   const isActive=btn.dataset.view===targetView;
+   btn.classList.toggle('active',isActive);
+   if(isActive)btn.setAttribute('aria-current','page');
+   else btn.removeAttribute('aria-current');
+  });
+  if(targetView==='script')scriptActiveEp=null;
+  if(targetView==='log')itemActiveTab='split';
+  if(targetView==='home')homeSubPage='identity';
+  overviewEpPickerOpen=false;
+  view=targetView;
+  render();
+  window.scrollTo(0,0);
+  return;
+ }
  if(a==='toggle-overview-ep-picker'){overviewEpPickerOpen=!overviewEpPickerOpen;render();return;}
  if(a==='select-overview-ep'){ep=Number(b.dataset.ep)||1;overviewEpPickerOpen=false;render();return;}
  if(a==='edit-episode-overview'){episodeOverviewDialog(b.dataset.ep||ep);return;}
