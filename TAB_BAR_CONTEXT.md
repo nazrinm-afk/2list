@@ -47,7 +47,7 @@ Dokumen ini dicipta khas sebagai **jambatan memori (Context Bridge)** untuk meny
 - **Logik Pertukaran Tab**: `function doAction('nav', b)` di baris ~2524.
 
 ### Fail Service Worker: `sw.js`
-- Cache terkini: `2list-pwa-v20261125-03`. Sentiasa bump versi cache apabila mengemas kini `index.html`.
+- Cache terkini: `2list-pwa-v20261126-01`. Sentiasa bump versi cache apabila mengemas kini `index.html`.
 
 ### Artifak Berkaitan
 - **Atomization Deck**: `tabbar_atomization_deck.html` (Simulator 3D interaktif 6 atom & tuning sandbox).
@@ -60,14 +60,14 @@ Status: **Telah diimplementasikan ke `index.html` (Type A + kedudukan direndahka
   `K=2.00 | RGB=2.5px | Bevel=42% | Blur=0.8px | Tint=35% | Rim=7% | Shadow=ON`
   *(Pantulan terbalik di pinggir border + RGB khusus zon terbalik sahaja; 0.8px micro-blur untuk elak piksel kasar; tengah kekal jelas & normal; kedudukan bawah direndahkan ke `max(calc(env(safe-area-inset-bottom,0px) - 14px), 6px)`.)*
 
-## 5. Fasa 2: Active Pill — LIVE DALAM `index.html`
-Status: **Telah diimplementasikan ke `index.html` (iOS Liquid Pill + Spring Wobble)**
-- **Active Pill Final (`iOS Liquid Pill`)**:
-  `Tone=neutral | Fill=16% | Sheen=70% | Edge=65% | Blur=6.0px | Stretch=20% | Shadow=55% | Lift=ON`
-- **Fizik Interaksi**:
-  - Spring wobble halus (`stiffness: 210 / 340`, `damping: 21 / 26`) dengan *velocity-based liquid stretch* (`scaleX`/`scaleY`) semasa meluncur antara tab.
-  - Menyokong klik terus dan seretan jari melintang (*horizontal scrubbing*) dengan pembesaran titisan (*droplet inflation*) semasa ditekan.
-  - Kontras adaptif: Mod Gelap (kaca putih bercahaya) & Mod Terang (kaca *smoked* lut sinar).
+## 5. Fasa 2: Active Pill (Optical Glass Lens Overlay) — LIVE DALAM `index.html`
+Status: **Telah diimplementasikan ke `index.html` (Optical Lens Overlay + Crisp Icon On Land + Spring Wobble)**
+- **Active Pill Final**:
+  `AP_K=0.80 | AP_RGB=3.5px | AP_Bevel=31% | AP_Blur=1.4px | AP_Tint=2% | AP_Rim=74% | Stretch=40% | CrispOnLand=ON`
+- **Seni Bina & Fizik Interaksi**:
+  - Active Pill berada di **atas** ikon menu (`z-index: 5`) dengan penapis biasan optik `#active-pill-glass-rgb` (sama sifat optik seperti Whole Pill), jadi ikon & label menu di bawahnya membias dengan kesan kaca & RGB pinggir semasa dilintasi/diseret.
+  - **Crisp Icon On Land (`z-index: 6`)**: Sebaik sahaja Active Pill mendarat & berhenti pada tab pilihan, lapisan ikon aktif yang tajam muncul lembut di atas Active Pill (bebas kabur `1.4px`), dan hilang serta-merta apabila mula meluncur/diseret.
+  - **Spring Wobble & Scrubbing**: `Stretch=40%` (`stiffness: 210 / 340`, `damping: 21 / 26`) dengan sokongan klik terus dan seretan jari melintang (*horizontal scrubbing*).
 
 ---
 

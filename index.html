@@ -147,37 +147,95 @@ html:has(dialog[open]){overflow:hidden}
  #mobile-glass-nav .nav-active-pill{
   display:block!important;
   position:absolute!important;
-  top:5px!important;
-  bottom:5px!important;
+  top:4px!important;
+  bottom:4px!important;
   width:calc((100% - 10px) / 5)!important;
   left:5px!important;
   border-radius:9999px!important;
-  background:rgba(255,255,255,0.184)!important;
-  -webkit-backdrop-filter:blur(6px) saturate(150%) brightness(1.10)!important;
-  backdrop-filter:blur(6px) saturate(150%) brightness(1.10)!important;
-  box-shadow:inset 0 1px 1.2px rgba(255,255,255,0.42),inset 0 -1px 1.2px rgba(255,255,255,0.12),0 0 0 0.75px rgba(255,255,255,0.14),0 4px 14px rgba(0,0,0,0.25)!important;
+  background:rgba(255,255,255,0.015)!important;
+  -webkit-backdrop-filter:blur(1.4px) saturate(140%) contrast(1.04)!important;
+  backdrop-filter:blur(1.4px) saturate(140%) contrast(1.04)!important;
+  box-shadow:0 4px 14px rgba(0,0,0,0.31)!important;
   border:none!important;
   pointer-events:none!important;
-  z-index:2!important;
+  z-index:5!important;
   transform-origin:center center!important;
   overflow:hidden!important;
   will-change:transform!important;
  }
- #mobile-glass-nav .nav-active-pill .active-pill-sheen{
+ #mobile-glass-nav.has-svg-lg .nav-active-pill{
+  -webkit-backdrop-filter:url(#active-pill-glass-rgb) saturate(140%) contrast(1.04)!important;
+  backdrop-filter:url(#active-pill-glass-rgb) saturate(140%) contrast(1.04)!important;
+ }
+ #mobile-glass-nav .nav-active-pill .active-pill-rim{
   position:absolute;
   inset:0;
   border-radius:9999px;
   pointer-events:none;
-  background:linear-gradient(180deg,rgba(255,255,255,0.22) 0%,rgba(255,255,255,0.04) 45%,rgba(255,255,255,0) 100%);
+  box-shadow:inset 0 1.2px 1.6px rgba(255,255,255,0.56),inset 0 -1px 1.4px rgba(255,255,255,0.16),0 0 0 0.75px rgba(255,255,255,0.16);
  }
  #mobile-glass-nav.is-light-backdrop .nav-active-pill{
-  background:rgba(15,23,42,0.115)!important;
-  -webkit-backdrop-filter:blur(6px) saturate(150%) brightness(1.02)!important;
-  backdrop-filter:blur(6px) saturate(150%) brightness(1.02)!important;
-  box-shadow:inset 0 1.2px 1.5px rgba(255,255,255,0.59),inset 0 -1px 1.4px rgba(0,0,0,0.09),0 0 0 0.75px rgba(0,0,0,0.08),0 4px 12px rgba(0,0,0,0.09)!important;
+  background:rgba(15,23,42,0.009)!important;
+  box-shadow:0 4px 12px rgba(0,0,0,0.11)!important;
  }
- #mobile-glass-nav.is-light-backdrop .nav-active-pill .active-pill-sheen{
-  background:linear-gradient(180deg,rgba(255,255,255,0.46) 0%,rgba(255,255,255,0.10) 46%,rgba(255,255,255,0) 100%);
+ #mobile-glass-nav.is-light-backdrop .nav-active-pill .active-pill-rim{
+  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.70),inset 0 -1.2px 1.6px rgba(0,0,0,0.13),0 0 0 0.75px rgba(0,0,0,0.10);
+ }
+ #mobile-glass-nav .crisp-overlay-layer{
+  position:absolute!important;
+  inset:5px!important;
+  z-index:6!important;
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:stretch!important;
+  justify-content:space-between!important;
+  pointer-events:none!important;
+ }
+ #mobile-glass-nav .crisp-tab-slot{
+  flex:1 1 0!important;
+  min-width:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:2px!important;
+  color:#ffffff!important;
+  opacity:0;
+  transform:scale(0.98);
+  transition:opacity 0.16s ease,transform 0.2s cubic-bezier(0.16,1,0.3,1)!important;
+  user-select:none!important;
+  pointer-events:none!important;
+ }
+ #mobile-glass-nav .crisp-tab-slot.is-visible{
+  opacity:1;
+  transform:scale(1.03);
+ }
+ #mobile-glass-nav.is-light-backdrop .crisp-tab-slot{
+  color:#050508!important;
+ }
+ #mobile-glass-nav .crisp-tab-slot .nav-icon-wrap{
+  width:24px;
+  height:22px;
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+ }
+ #mobile-glass-nav .crisp-tab-slot .nav-svg-icon{
+  width:20px;
+  height:20px;
+  stroke:currentColor;
+  stroke-width:2.2!important;
+ }
+ #mobile-glass-nav .crisp-tab-slot .mobile-label{
+  display:block!important;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',var(--font-sans)!important;
+  font-size:10px!important;
+  font-weight:700!important;
+  letter-spacing:0.01em!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+  color:currentColor!important;
  }
  #mobile-glass-nav .nav-link{
   flex:1 1 0!important;
@@ -190,7 +248,7 @@ html:has(dialog[open]){overflow:hidden}
   border:0!important;
   border-radius:9999px!important;
   background:transparent!important;
-  color:rgba(255,255,255,0.58)!important;
+  color:rgba(255,255,255,0.62)!important;
   display:flex!important;
   flex-direction:column!important;
   align-items:center!important;
@@ -198,7 +256,7 @@ html:has(dialog[open]){overflow:hidden}
   gap:2px!important;
   box-shadow:none!important;
   position:relative!important;
-  z-index:3!important;
+  z-index:2!important;
   transition:color 0.2s ease,transform 0.24s cubic-bezier(0.16,1,0.3,1)!important;
   -webkit-tap-highlight-color:transparent!important;
   cursor:pointer!important;
@@ -1062,7 +1120,7 @@ html.is-standalone-pwa .sidebar{padding-top:calc(max(env(safe-area-inset-top,0px
 html.is-standalone-pwa dialog{margin-top:max(env(safe-area-inset-top,0px),52px)!important;max-height:calc(var(--visual-height,100dvh) - max(env(safe-area-inset-top,0px),52px) - 30px)!important}
 html.is-standalone-pwa .welcome-signout-btn{top:calc(max(env(safe-area-inset-top,0px),52px) + 16px)!important;right:18px!important}
 html.is-standalone-pwa .welcome{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 30px)!important}
-</style></head><body><svg width="0" height="0" style="position:fixed;left:-9999px;top:-9999px;pointer-events:none" aria-hidden="true"><defs><filter id="whole-pill-type-a" filterUnits="userSpaceOnUse" x="0" y="0" width="358" height="64" color-interpolation-filters="sRGB"><feImage id="wp-img-r" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapR"/><feImage id="wp-img-g" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapG"/><feImage id="wp-img-b" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapB"/><feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="blurred"/><feDisplacementMap id="wp-disp-r" in="blurred" in2="dispMapR" scale="56" xChannelSelector="R" yChannelSelector="G" result="rDisp"/><feColorMatrix in="rDisp" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="redOnly"/><feDisplacementMap id="wp-disp-g" in="blurred" in2="dispMapG" scale="56" xChannelSelector="R" yChannelSelector="G" result="gDisp"/><feColorMatrix in="gDisp" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="greenOnly"/><feDisplacementMap id="wp-disp-b" in="blurred" in2="dispMapB" scale="56" xChannelSelector="R" yChannelSelector="G" result="bDisp"/><feColorMatrix in="bDisp" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blueOnly"/><feBlend in="redOnly" in2="greenOnly" mode="screen" result="rg"/><feBlend in="rg" in2="blueOnly" mode="screen" result="rgb"/></filter></defs></svg><div id="app"><p class="loading">Opening your writing workspace…</p></div><div id="toast" role="status" aria-live="polite"></div><dialog id="dialog"></dialog><dialog id="slot-warning-dialog" class="slot-warning-dialog"></dialog><script type="module">
+</style></head><body><svg width="0" height="0" style="position:fixed;left:-9999px;top:-9999px;pointer-events:none" aria-hidden="true"><defs><filter id="whole-pill-type-a" filterUnits="userSpaceOnUse" x="0" y="0" width="358" height="64" color-interpolation-filters="sRGB"><feImage id="wp-img-r" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapR"/><feImage id="wp-img-g" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapG"/><feImage id="wp-img-b" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapB"/><feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="blurred"/><feDisplacementMap id="wp-disp-r" in="blurred" in2="dispMapR" scale="56" xChannelSelector="R" yChannelSelector="G" result="rDisp"/><feColorMatrix in="rDisp" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="redOnly"/><feDisplacementMap id="wp-disp-g" in="blurred" in2="dispMapG" scale="56" xChannelSelector="R" yChannelSelector="G" result="gDisp"/><feColorMatrix in="gDisp" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="greenOnly"/><feDisplacementMap id="wp-disp-b" in="blurred" in2="dispMapB" scale="56" xChannelSelector="R" yChannelSelector="G" result="bDisp"/><feColorMatrix in="bDisp" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blueOnly"/><feBlend in="redOnly" in2="greenOnly" mode="screen" result="rg"/><feBlend in="rg" in2="blueOnly" mode="screen" result="rgb"/></filter><filter id="active-pill-glass-rgb" filterUnits="userSpaceOnUse" x="0" y="0" width="70" height="56" color-interpolation-filters="sRGB"><feImage id="ap-img-r" x="0" y="0" width="70" height="56" preserveAspectRatio="none" result="apMapR"/><feImage id="ap-img-g" x="0" y="0" width="70" height="56" preserveAspectRatio="none" result="apMapG"/><feImage id="ap-img-b" x="0" y="0" width="70" height="56" preserveAspectRatio="none" result="apMapB"/><feGaussianBlur id="ap-blur-rgb" in="SourceGraphic" stdDeviation="1.4" result="apBlur"/><feDisplacementMap id="ap-disp-r" in="apBlur" in2="apMapR" scale="21" xChannelSelector="R" yChannelSelector="G" result="apRDisp"/><feColorMatrix in="apRDisp" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="apRedOnly"/><feDisplacementMap id="ap-disp-g" in="apBlur" in2="apMapG" scale="21" xChannelSelector="R" yChannelSelector="G" result="apGDisp"/><feColorMatrix in="apGDisp" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="apGreenOnly"/><feDisplacementMap id="ap-disp-b" in="apBlur" in2="apMapB" scale="21" xChannelSelector="R" yChannelSelector="G" result="apBDisp"/><feColorMatrix in="apBDisp" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="apBlueOnly"/><feBlend in="apRedOnly" in2="apGreenOnly" mode="screen" result="apRG"/><feBlend in="apRG" in2="apBlueOnly" mode="screen" result="apRGB"/></filter></defs></svg><div id="app"><p class="loading">Opening your writing workspace…</p></div><div id="toast" role="status" aria-live="polite"></div><dialog id="dialog"></dialog><dialog id="slot-warning-dialog" class="slot-warning-dialog"></dialog><script type="module">
 if(window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches){document.documentElement.classList.add('is-standalone-pwa');}
 const statuses = ['PREPRO','FILMED','EDITED','TX','CANCELLED','POST'];
 const uid = () => globalThis.crypto?.randomUUID?.() || `id-${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -1525,7 +1583,7 @@ function stat(n,label,sub=''){return `<div class="stat"><strong>${n}</strong><sp
 function header(){const activeTab=view==='preview'?'script':view==='conti-record'?'conti':view;const isContiOnly=p?.settings?.projectType==='conti';const logCount=(p?.records?.length||0)+((p?.throws||[]).length||0);return `<aside class="sidebar"><a class="brand" href="#" data-action="all-projects"><span class="brand-mark" aria-label="2list">${brandEmblemSvg}</span><span>2list<small>WRITING STUDIO</small></span></a><div class="project-picker"><label>ACTIVE PROJECT</label><div class="project-picker-row"><details class="project-menu"><summary aria-label="Active project"><span>${esc(p?.name||'Select project')}</span><span aria-hidden="true">▾</span></summary><div class="project-menu-list">${projects.map(x=>`<button type="button" class="project-menu-item ${x.id===p?.id?'active':''}" data-action="open-project" data-id="${esc(x.id)}"><span>${esc(x.name)}</span>${x.id===p?.id?'<span>✓</span>':''}</button>`).join('')}<div class="project-menu-divider"></div><button type="button" class="project-menu-item" data-action="new-project"><span>＋ Create new project</span></button><button type="button" class="project-menu-item" data-action="all-projects"><span>← All projects</span></button></div></details><details class="dots-menu ${view==='settings'||view==='account'?'active':''}"><summary aria-label="Menu" title="Menu">⋮</summary><div class="dots-menu-list"><button type="button" class="project-menu-item ${view==='account'?'active':''}" data-action="nav" data-view="account"><span>Account</span></button><button type="button" class="project-menu-item ${view==='settings'?'active':''}" data-action="nav" data-view="settings"><span>Settings</span></button></div></details></div></div>${isContiOnly?'':`<nav aria-label="Main navigation">${navs.map(([v,l])=>{const isActive=activeTab===v;const hasBadge=v==='log'&&logCount>0;return `<button data-action="nav" data-view="${v}" class="nav-link ${isActive?'active':''}" aria-label="${l}" ${isActive?'aria-current="page"':''}><div class="nav-icon-wrap"><span class="nav-icon" aria-hidden="true">${icons[v]}</span></div><span class="nav-label desktop-label">${l}</span>${hasBadge?`<span class="nav-badge desktop-badge">${logCount}</span>`:''}</button>`;}).join('')}</nav>`}<div class="sidebar-note"><span class="dot"></span> ${esc(userEmail||(adapter.mode==='local'?'Local preview':'Google Sheets'))}<p>${adapter.mode==='local'?'Connected to Google Sheets (R&D preview).':'Synced to your Google Sheets.'}</p><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="text-button" data-action="help">Quick guide ↗</button><button class="text-button" data-action="sign-out">Sign out</button></div>${adapter.mode==='local'?'<a class="phone-preview-link" href="/?phone-preview=1" target="_blank" rel="noopener">Phone preview ↗</a>':''}</div></aside>`;}
 function mobileGlassNavHtml(activeTab){
  const activeIdx=Math.max(0,navs.findIndex(([v])=>v===activeTab));
- return `<nav id="mobile-glass-nav" aria-label="Mobile navigation"><div class="glass-backdrop-layer" id="glass-backdrop-layer" aria-hidden="true"></div><div class="glass-rim-layer" id="glass-rim-layer" aria-hidden="true"></div><div class="nav-active-pill" id="nav-active-pill" style="transform:translate3d(${activeIdx * 100}%,0,0);"><div class="active-pill-sheen" id="active-pill-sheen" aria-hidden="true"></div></div>${navs.map(([v,l])=>{const isActive=activeTab===v;return `<button data-action="nav" data-view="${v}" class="nav-link ${isActive?'active':''}" aria-label="${l}" ${isActive?'aria-current="page"':''}><div class="nav-icon-wrap"><span class="nav-icon" aria-hidden="true">${mobileIcons[v]}</span></div><span class="nav-label mobile-label" aria-hidden="true">${tabLabels[v]}</span></button>`;}).join('')}</nav>`;
+ return `<nav id="mobile-glass-nav" aria-label="Mobile navigation"><div class="glass-backdrop-layer" id="glass-backdrop-layer" aria-hidden="true"></div><div class="glass-rim-layer" id="glass-rim-layer" aria-hidden="true"></div>${navs.map(([v,l])=>{const isActive=activeTab===v;return `<button data-action="nav" data-view="${v}" class="nav-link ${isActive?'active':''}" aria-label="${l}" ${isActive?'aria-current="page"':''}><div class="nav-icon-wrap"><span class="nav-icon" aria-hidden="true">${mobileIcons[v]}</span></div><span class="nav-label mobile-label" aria-hidden="true">${tabLabels[v]}</span></button>`;}).join('')}<div class="nav-active-pill" id="nav-active-pill" style="transform:translate3d(${activeIdx * 100}%,0,0);"><div class="active-pill-rim" id="active-pill-rim" aria-hidden="true"></div></div><div class="crisp-overlay-layer" id="crisp-overlay-layer" aria-hidden="true">${navs.map(([v],idx)=>`<div class="crisp-tab-slot ${idx===activeIdx?'is-visible':''}" data-cidx="${idx}"><div class="nav-icon-wrap"><span class="nav-icon">${mobileIcons[v]}</span></div><span class="nav-label mobile-label">${tabLabels[v]}</span></div>`).join('')}</div></nav>`;
 }
 function updateSidebarNav(activeTab, logCount){
  const activeIdx = navs.findIndex(([v]) => v === activeTab);
@@ -2628,8 +2686,10 @@ async function doAction(a,b){
   if(targetView==='home')homeSubPage='identity';
   overviewEpPickerOpen=false;
   view=targetView;
-  render();
-  window.scrollTo(0,0);
+  requestAnimationFrame(()=>{
+   render();
+   window.scrollTo(0,0);
+  });
   return;
  }
  if(a==='toggle-overview-ep-picker'){overviewEpPickerOpen=!overviewEpPickerOpen;render();return;}
@@ -3618,7 +3678,7 @@ document.addEventListener('focusin',e=>{
  const isWebKitOnly=/AppleWebKit/.test(ua)&&(isIOS||!/Chrome|Chromium|Edg/.test(ua));
  const canUseSvgBackdrop=!isWebKitOnly;
  const WHOLE_PILL_TYPE_A={K:2.00,rgb:2.5,bevel:42,blur:0.8,tint:35,rim:7};
- const ACTIVE_PILL_FINAL={fill:16,sheen:70,edge:65,pblur:6.0,stretch:20,pshadow:55};
+ const ACTIVE_PILL_FINAL={K:0.80,rgb:3.5,bevel:31,blur:1.4,tint:2,rim:74,stretch:40,crispOnLand:true};
  let lastSizeKey='',ro=null,mirrorEl=null;
  let xPos=2,vx=0,target=2,dragging=false,scaleBoost=0,rafId=0,lastT=0;
  let ptrId=null,startX=0,startY=0,didScrub=false,suppressClickUntil=0;
@@ -3627,9 +3687,67 @@ document.addEventListener('focusin',e=>{
   return document.getElementById('whole-pill-type-a');
  }
 
+ function generateCapsuleRgbMaps(W,H,K,bevelPct,rgbPx){
+  const R=H/2;
+  const bevelRatio=Math.max(0.12,Math.min(0.62,bevelPct/100));
+  const start=1-bevelRatio;
+  const L=bevelRatio*R;
+  const baseScalePx=Math.max(0.01,2*K*L);
+  const prismRatio=(rgbPx>0&&K>0.5)?(rgbPx/(baseScalePx*0.5)):0;
+  const maxNorm=1+prismRatio;
+  const uFold=Math.min(1,1/(2*Math.max(0.01,K)));
+  const mk=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');return {c,ctx,img:ctx.createImageData(w,h)};};
+  const mR=mk(W,H),mG=mk(W,H),mB=mk(W,H);
+  const cy=H/2,leftX=R,rightX=Math.max(R,W-R);
+  for(let y=0;y<H;y++){
+   for(let x=0;x<W;x++){
+    const cx=Math.max(leftX,Math.min(rightX,x));
+    const dx=x-cx,dy=y-cy;
+    const dist=Math.hypot(dx,dy);
+    const t=Math.min(1,dist/R);
+    let base=0,prism=0,nx=0,ny=0;
+    if(t>start&&dist>0.0001){
+     const u=(t-start)/bevelRatio;
+     base=u*u;
+     nx=dx/dist;
+     ny=dy/dist;
+     if(prismRatio>0&&u>uFold&&uFold<0.999){
+      const v=(u-uFold)/(1-uFold);
+      prism=v*v;
+     }
+    }
+    const sR=(base+prismRatio*prism)/maxNorm;
+    const sG=base/maxNorm;
+    const sB=Math.max(0,base-prismRatio*prism)/maxNorm;
+    const idx=(y*W+x)*4;
+    mR.img.data[idx]=Math.max(0,Math.min(255,Math.round(128-nx*sR*127)));
+    mR.img.data[idx+1]=Math.max(0,Math.min(255,Math.round(128-ny*sR*127)));
+    mR.img.data[idx+2]=128;mR.img.data[idx+3]=255;
+    mG.img.data[idx]=Math.max(0,Math.min(255,Math.round(128-nx*sG*127)));
+    mG.img.data[idx+1]=Math.max(0,Math.min(255,Math.round(128-ny*sG*127)));
+    mG.img.data[idx+2]=128;mG.img.data[idx+3]=255;
+    mB.img.data[idx]=Math.max(0,Math.min(255,Math.round(128-nx*sB*127)));
+    mB.img.data[idx+1]=Math.max(0,Math.min(255,Math.round(128-ny*sB*127)));
+    mB.img.data[idx+2]=128;mB.img.data[idx+3]=255;
+   }
+  }
+  mR.ctx.putImageData(mR.img,0,0);
+  mG.ctx.putImageData(mG.img,0,0);
+  mB.ctx.putImageData(mB.img,0,0);
+  return {
+   rUrl:mR.c.toDataURL('image/png'),
+   gUrl:mG.c.toDataURL('image/png'),
+   bUrl:mB.c.toDataURL('image/png'),
+   effScale:(baseScalePx*maxNorm).toFixed(1)
+  };
+ }
+
  function buildOpticalMaps(W,H,nav){
   if(W<40||H<24)return;
-  const sizeKey=`${W}x${H}:${canUseSvgBackdrop?1:0}`;
+  const apEl=nav?.querySelector('#nav-active-pill');
+  const apW=Math.max(40,Math.round(apEl?.offsetWidth||((W-10)/5)));
+  const apH=Math.max(36,Math.round(apEl?.offsetHeight||(H-8)));
+  const sizeKey=`${W}x${H}:${apW}x${apH}:${canUseSvgBackdrop?1:0}`;
   if(sizeKey===lastSizeKey)return;
   lastSizeKey=sizeKey;
   const R=H/2;
@@ -3670,6 +3788,7 @@ document.addEventListener('focusin',e=>{
   }
 
   ensureSvgDefs();
+  // 1) Whole Pill Type A (K=2.00, RGB=2.5px, Bevel=42%, Blur=0.8px)
   const wpFilter=document.getElementById('whole-pill-type-a');
   wpFilter.setAttribute('width',W);
   wpFilter.setAttribute('height',H);
@@ -3678,56 +3797,27 @@ document.addEventListener('focusin',e=>{
    el.setAttribute('width',W);
    el.setAttribute('height',H);
   });
+  const wp=generateCapsuleRgbMaps(W,H,WHOLE_PILL_TYPE_A.K,WHOLE_PILL_TYPE_A.bevel,WHOLE_PILL_TYPE_A.rgb);
+  document.getElementById('wp-img-r').setAttribute('href',wp.rUrl);
+  document.getElementById('wp-img-g').setAttribute('href',wp.gUrl);
+  document.getElementById('wp-img-b').setAttribute('href',wp.bUrl);
+  ['wp-disp-r','wp-disp-g','wp-disp-b'].forEach(id=>document.getElementById(id).setAttribute('scale',wp.effScale));
 
-  const L=bevelRatio*R;
-  const baseScalePx=2*WHOLE_PILL_TYPE_A.K*L;
-  const prismRatio=WHOLE_PILL_TYPE_A.rgb/(baseScalePx*0.5);
-  const maxNorm=1+prismRatio;
-  const uFold=1/(2*WHOLE_PILL_TYPE_A.K);
-  const mk=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');return {c,ctx,img:ctx.createImageData(w,h)};};
-  const mR=mk(W,H),mG=mk(W,H),mB=mk(W,H);
-  const cy=H/2,leftX=R,rightX=W-R;
-
-  for(let y=0;y<H;y++){
-   for(let x=0;x<W;x++){
-    const cx=Math.max(leftX,Math.min(rightX,x));
-    const dx=x-cx,dy=y-cy;
-    const dist=Math.hypot(dx,dy);
-    const t=Math.min(1,dist/R);
-    let base=0,prism=0,nx=0,ny=0;
-    if(t>start&&dist>0.0001){
-     const u=(t-start)/bevelRatio;
-     base=u*u;
-     nx=dx/dist;
-     ny=dy/dist;
-     if(u>uFold){
-      const v=(u-uFold)/(1-uFold);
-      prism=v*v;
-     }
-    }
-    const sR=(base+prismRatio*prism)/maxNorm;
-    const sG=base/maxNorm;
-    const sB=Math.max(0,base-prismRatio*prism)/maxNorm;
-    const idx=(y*W+x)*4;
-    mR.img.data[idx]=Math.max(0,Math.min(255,Math.round(128-nx*sR*127)));
-    mR.img.data[idx+1]=Math.max(0,Math.min(255,Math.round(128-ny*sR*127)));
-    mR.img.data[idx+2]=128;mR.img.data[idx+3]=255;
-    mG.img.data[idx]=Math.max(0,Math.min(255,Math.round(128-nx*sG*127)));
-    mG.img.data[idx+1]=Math.max(0,Math.min(255,Math.round(128-ny*sG*127)));
-    mG.img.data[idx+2]=128;mG.img.data[idx+3]=255;
-    mB.img.data[idx]=Math.max(0,Math.min(255,Math.round(128-nx*sB*127)));
-    mB.img.data[idx+1]=Math.max(0,Math.min(255,Math.round(128-ny*sB*127)));
-    mB.img.data[idx+2]=128;mB.img.data[idx+3]=255;
-   }
+  // 2) Active Pill Optical Glass Overlay (K=0.80, RGB=3.5px, Bevel=31%, Blur=1.4px)
+  const apFilter=document.getElementById('active-pill-glass-rgb');
+  if(apFilter){
+   apFilter.setAttribute('width',apW);
+   apFilter.setAttribute('height',apH);
+   ['ap-img-r','ap-img-g','ap-img-b'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.setAttribute('width',apW);el.setAttribute('height',apH);}
+   });
+   const ap=generateCapsuleRgbMaps(apW,apH,ACTIVE_PILL_FINAL.K,ACTIVE_PILL_FINAL.bevel,ACTIVE_PILL_FINAL.rgb);
+   document.getElementById('ap-img-r')?.setAttribute('href',ap.rUrl);
+   document.getElementById('ap-img-g')?.setAttribute('href',ap.gUrl);
+   document.getElementById('ap-img-b')?.setAttribute('href',ap.bUrl);
+   ['ap-disp-r','ap-disp-g','ap-disp-b'].forEach(id=>document.getElementById(id)?.setAttribute('scale',ap.effScale));
   }
-  mR.ctx.putImageData(mR.img,0,0);
-  mG.ctx.putImageData(mG.img,0,0);
-  mB.ctx.putImageData(mB.img,0,0);
-  document.getElementById('wp-img-r').setAttribute('href',mR.c.toDataURL('image/png'));
-  document.getElementById('wp-img-g').setAttribute('href',mG.c.toDataURL('image/png'));
-  document.getElementById('wp-img-b').setAttribute('href',mB.c.toDataURL('image/png'));
-  const effScale=(baseScalePx*maxNorm).toFixed(1);
-  ['wp-disp-r','wp-disp-g','wp-disp-b'].forEach(id=>document.getElementById(id).setAttribute('scale',effScale));
  }
 
  function syncSafariMirrorScroll(){
@@ -3743,29 +3833,43 @@ document.addEventListener('focusin',e=>{
   mirrorEl.style.transform=`translate3d(${tx.toFixed(1)}px,${ty.toFixed(1)}px,0) scaleY(-1)`;
  }
 
+ let mirrorRebuildTimer=0;
  window.__rebuildSafariMirror=()=>{
   if(canUseSvgBackdrop)return;
   if(!window.matchMedia('(max-width: 760px)').matches)return;
-  const nav=document.getElementById('mobile-glass-nav');
-  const bd=nav?.querySelector('.glass-backdrop-layer');
-  const mainEl=document.getElementById('main');
-  if(!bd||!mainEl)return;
-  const clone=mainEl.cloneNode(true);
-  clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
-  clone.querySelectorAll('[data-action],[name]').forEach(el=>{el.removeAttribute('data-action');el.removeAttribute('name');});
-  clone.querySelectorAll('input,textarea,select,button,a,summary').forEach(el=>{el.tabIndex=-1;el.setAttribute('aria-hidden','true');});
-  mirrorEl=document.createElement('div');
-  mirrorEl.className='lg-webkit-bevel-mirror';
-  mirrorEl.setAttribute('aria-hidden','true');
-  mirrorEl.appendChild(clone);
-  bd.innerHTML='';
-  bd.appendChild(mirrorEl);
-  syncSafariMirrorScroll();
+  clearTimeout(mirrorRebuildTimer);
+  mirrorRebuildTimer=setTimeout(()=>{
+   const nav=document.getElementById('mobile-glass-nav');
+   const bd=nav?.querySelector('.glass-backdrop-layer');
+   const mainEl=document.getElementById('main');
+   if(!bd||!mainEl)return;
+   const clone=mainEl.cloneNode(true);
+   clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
+   clone.querySelectorAll('[data-action],[name]').forEach(el=>{el.removeAttribute('data-action');el.removeAttribute('name');});
+   clone.querySelectorAll('input,textarea,select,button,a,summary').forEach(el=>{el.tabIndex=-1;el.setAttribute('aria-hidden','true');});
+   mirrorEl=document.createElement('div');
+   mirrorEl.className='lg-webkit-bevel-mirror';
+   mirrorEl.setAttribute('aria-hidden','true');
+   mirrorEl.appendChild(clone);
+   bd.innerHTML='';
+   bd.appendChild(mirrorEl);
+   syncSafariMirrorScroll();
+  },180);
  };
 
  if(!canUseSvgBackdrop){
   window.addEventListener('scroll',syncSafariMirrorScroll,{passive:true});
   document.addEventListener('scroll',syncSafariMirrorScroll,{capture:true,passive:true});
+ }
+
+ function updateCrispOverlay(){
+  const slots=document.querySelectorAll('#mobile-glass-nav .crisp-tab-slot');
+  if(!slots.length)return;
+  const snapIdx=Math.max(0,Math.min(navs.length-1,Math.round(target)));
+  const settled=ACTIVE_PILL_FINAL.crispOnLand&&!dragging&&Math.abs(xPos-snapIdx)<0.07&&Math.abs(vx)<0.45;
+  slots.forEach((slot,i)=>{
+   slot.classList.toggle('is-visible',settled&&i===snapIdx);
+  });
  }
 
  function applyPillTransform(){
@@ -3777,23 +3881,24 @@ document.addEventListener('focusin',e=>{
   }
   const speed=Math.abs(vx);
   const stretchFactor=ACTIVE_PILL_FINAL.stretch/100;
-  const velStretch=Math.min(0.28,speed*0.018*(stretchFactor/0.18));
-  const inflate=scaleBoost*0.08;
+  const velStretch=Math.min(0.42,speed*0.022*(stretchFactor/0.20));
+  const inflate=scaleBoost*0.10;
   const sx=1+velStretch+inflate;
-  const sy=1-velStretch*0.35+inflate*0.85;
+  const sy=1-velStretch*0.34+inflate*0.85;
   apEl.style.transform=`translate3d(${(xPos*100).toFixed(3)}%,0,0) scale(${sx.toFixed(4)},${sy.toFixed(4)})`;
+  updateCrispOverlay();
  }
 
  function tick(now){
-  const dt=lastT?Math.min(0.032,Math.max(0.001,(now-lastT)/1000)):0.016;
+  const dt=lastT?Math.min(0.024,Math.max(0.001,(now-lastT)/1000)):0.016;
   lastT=now;
-  const stiffness=dragging?340:210;
-  const damping=dragging?26:21;
+  const stiffness=dragging?320:225;
+  const damping=dragging?22:16.5;
   const force=(target-xPos)*stiffness;
   vx+=(force-vx*damping)*dt;
   xPos+=vx*dt;
   const targetBoost=dragging?1:0;
-  scaleBoost+=(targetBoost-scaleBoost)*Math.min(1,dt*16);
+  scaleBoost+=(targetBoost-scaleBoost)*Math.min(1,dt*18);
   applyPillTransform();
   if(Math.abs(target-xPos)>0.0006||Math.abs(vx)>0.002||Math.abs(targetBoost-scaleBoost)>0.004||dragging){
    rafId=requestAnimationFrame(tick);
@@ -3843,6 +3948,11 @@ document.addEventListener('focusin',e=>{
    startY=e.clientY;
    didScrub=false;
    dragging=true;
+   const rect=nav.getBoundingClientRect();
+   const innerW=Math.max(1,rect.width-10);
+   const rel=(e.clientX-rect.left-5)/innerW;
+   const downIdx=Math.max(0,Math.min(navs.length-1,Math.round(rel*navs.length-0.5)));
+   target=downIdx;
    startSpring();
   },{passive:true});
   nav.addEventListener('pointermove',e=>{
@@ -3852,7 +3962,7 @@ document.addEventListener('focusin',e=>{
     if(Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx)){
      ptrId=null;dragging=false;startSpring();return;
     }
-    if(Math.abs(dx)>5&&Math.abs(dx)>=Math.abs(dy)){
+    if(Math.abs(dx)>3&&Math.abs(dx)>=Math.abs(dy)){
      didScrub=true;
      try{nav.setPointerCapture(e.pointerId);}catch{}
     }
