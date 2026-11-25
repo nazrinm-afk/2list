@@ -193,24 +193,24 @@ html:has(dialog[open]){overflow:hidden}
  #mobile-glass-nav .crisp-tab-slot{
   flex:1 1 0!important;
   min-width:0!important;
+  height:100%!important;
   display:flex!important;
   flex-direction:column!important;
   align-items:center!important;
   justify-content:center!important;
   gap:2px!important;
-  color:#ffffff!important;
+  color:#f4cc57!important;
   opacity:0;
-  transform:scale(0.98);
-  transition:opacity 0.16s ease,transform 0.2s cubic-bezier(0.16,1,0.3,1)!important;
+  transform:none!important;
+  transition:opacity 0.14s ease!important;
   user-select:none!important;
   pointer-events:none!important;
  }
  #mobile-glass-nav .crisp-tab-slot.is-visible{
   opacity:1;
-  transform:scale(1.03);
  }
  #mobile-glass-nav.is-light-backdrop .crisp-tab-slot{
-  color:#050508!important;
+  color:#b8860b!important;
  }
  #mobile-glass-nav .crisp-tab-slot .nav-icon-wrap{
   width:24px;
@@ -223,7 +223,8 @@ html:has(dialog[open]){overflow:hidden}
  #mobile-glass-nav .crisp-tab-slot .nav-svg-icon{
   width:20px;
   height:20px;
-  stroke:currentColor;
+  fill:none!important;
+  stroke:currentColor!important;
   stroke-width:2.2!important;
  }
  #mobile-glass-nav .crisp-tab-slot .mobile-label{
@@ -232,7 +233,8 @@ html:has(dialog[open]){overflow:hidden}
   font-size:10px!important;
   font-weight:700!important;
   letter-spacing:0.01em!important;
-  line-height:1.1!important;
+  line-height:12px!important;
+  margin-top:0!important;
   white-space:nowrap!important;
   color:currentColor!important;
  }
@@ -256,9 +258,12 @@ html:has(dialog[open]){overflow:hidden}
   box-shadow:none!important;
   position:relative!important;
   z-index:2!important;
-  transition:color 0.2s ease,transform 0.24s cubic-bezier(0.16,1,0.3,1)!important;
+  transition:color 0.2s ease,opacity 0.14s ease!important;
   -webkit-tap-highlight-color:transparent!important;
   cursor:pointer!important;
+ }
+ #mobile-glass-nav .nav-link.crisp-covered{
+  opacity:0!important;
  }
  #mobile-glass-nav .nav-link .nav-icon-wrap{
   width:24px;
@@ -295,16 +300,16 @@ html:has(dialog[open]){overflow:hidden}
  }
  #mobile-glass-nav .nav-link.active{
   flex:1 1 0!important;
-  color:#ffffff!important;
+  color:#f4cc57!important;
   background:transparent!important;
   box-shadow:none!important;
-  transform:translateY(-1px) scale(1.05)!important;
+  transform:none!important;
  }
- #mobile-glass-nav .nav-link.active .nav-svg-icon{stroke-width:2.25!important}
- #mobile-glass-nav .nav-link.active .mobile-label{font-weight:700!important;color:#ffffff!important}
+ #mobile-glass-nav .nav-link.active .nav-svg-icon{stroke-width:2.2!important}
+ #mobile-glass-nav .nav-link.active .mobile-label{font-weight:700!important;color:#f4cc57!important}
  #mobile-glass-nav.is-light-backdrop .nav-link{color:rgba(12,12,16,0.56)!important}
- #mobile-glass-nav.is-light-backdrop .nav-link.active{color:#0a0a0c!important}
- #mobile-glass-nav.is-light-backdrop .nav-link.active .mobile-label{color:#0a0a0c!important}
+ #mobile-glass-nav.is-light-backdrop .nav-link.active{color:#b8860b!important}
+ #mobile-glass-nav.is-light-backdrop .nav-link.active .mobile-label{color:#b8860b!important}
  .topbar{height:52px;padding:0 18px;background:var(--bg);border-bottom:0}
  .topbar>div:first-child{display:none}
  .save-tools{width:100%;justify-content:space-between}
@@ -4068,11 +4073,14 @@ document.addEventListener('focusin',e=>{
 
  function updateCrispOverlay(){
   const slots=document.querySelectorAll('#mobile-glass-nav .crisp-tab-slot');
+  const links=document.querySelectorAll('#mobile-glass-nav .nav-link');
   if(!slots.length)return;
   const snapIdx=Math.max(0,Math.min(navs.length-1,Math.round(target)));
   const settled=ACTIVE_PILL_FINAL.crispOnLand&&!dragging&&Math.abs(xPos-snapIdx)<0.07&&Math.abs(vx)<0.45;
   slots.forEach((slot,i)=>{
-   slot.classList.toggle('is-visible',settled&&i===snapIdx);
+   const show=settled&&i===snapIdx;
+   slot.classList.toggle('is-visible',show);
+   if(links[i])links[i].classList.toggle('crisp-covered',show);
   });
  }
 
