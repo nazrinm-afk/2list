@@ -78,13 +78,13 @@ html:has(dialog[open]){overflow:hidden}
   box-sizing:border-box!important;
   border-radius:9999px!important;
   border:none!important;
-  background:rgba(18,18,24,0.35)!important;
-  -webkit-backdrop-filter:blur(1.2px) saturate(165%) brightness(1.05)!important;
-  backdrop-filter:blur(0.8px) saturate(165%) brightness(1.05)!important;
-  box-shadow:0 14px 34px rgba(0,0,0,0.34),0 3px 10px rgba(0,0,0,0.16),inset 0 0.5px 0.5px rgba(255,255,255,0.07),inset 0 -0.5px 0.5px rgba(255,255,255,0.04)!important;
+  background:linear-gradient(180deg,rgba(42,42,54,0.34) 0%,rgba(18,18,24,0.35) 38%,rgba(14,14,20,0.38) 100%)!important;
+  -webkit-backdrop-filter:blur(0.8px) saturate(155%) brightness(1.06)!important;
+  backdrop-filter:blur(0.8px) saturate(155%) brightness(1.06)!important;
+  box-shadow:0 16px 38px rgba(0,0,0,0.46),0 4px 12px rgba(0,0,0,0.24),inset 0 1.5px 2.5px rgba(255,255,255,0.24),inset 0 -1px 2px rgba(255,255,255,0.10),inset 0 0 14px rgba(255,255,255,0.06)!important;
   -webkit-transform:translate3d(0,0,0)!important;
   transform:translate3d(0,0,0)!important;
-  transition:transform 0.44s cubic-bezier(0.16,1,0.3,1),opacity 0.36s cubic-bezier(0.16,1,0.3,1),background-color 0.28s ease,box-shadow 0.28s ease!important;
+  transition:transform 0.44s cubic-bezier(0.16,1,0.3,1),opacity 0.36s cubic-bezier(0.16,1,0.3,1),background 0.28s ease,box-shadow 0.28s ease!important;
   will-change:transform,opacity,-webkit-backdrop-filter;
   overflow:hidden;
   touch-action:pan-y;
@@ -92,7 +92,8 @@ html:has(dialog[open]){overflow:hidden}
   -webkit-user-select:none;
  }
  .sidebar nav.has-svg-lg{
-  backdrop-filter:var(--lg-svg-filter,blur(0.8px)) saturate(165%) brightness(1.05)!important;
+  -webkit-backdrop-filter:url(#lg-whole-pill-opt-a)!important;
+  backdrop-filter:url(#lg-whole-pill-opt-a)!important;
  }
  .sidebar nav .lg-webkit-bevel{
   display:block;
@@ -101,17 +102,33 @@ html:has(dialog[open]){overflow:hidden}
   border-radius:9999px;
   pointer-events:none;
   z-index:0;
-  -webkit-backdrop-filter:blur(6px) saturate(215%) contrast(1.22) brightness(1.12);
-  backdrop-filter:blur(6px) saturate(215%) contrast(1.22) brightness(1.12);
-  -webkit-mask-image:radial-gradient(closest-side,rgba(0,0,0,0) 58%,rgba(0,0,0,0.35) 76%,rgba(0,0,0,0.85) 92%,rgba(0,0,0,1) 100%);
-  mask-image:radial-gradient(closest-side,rgba(0,0,0,0) 58%,rgba(0,0,0,0.35) 76%,rgba(0,0,0,0.85) 92%,rgba(0,0,0,1) 100%);
+  overflow:hidden;
+ }
+ .sidebar nav .lg-webkit-bevel-mirror{
+  position:absolute;
+  top:0;
+  left:0;
+  transform-origin:0 0;
+  pointer-events:none;
+  will-change:transform;
+  filter:blur(0.8px) saturate(195%) contrast(1.16) brightness(1.15) drop-shadow(-2.5px -1.2px 0 rgba(255,55,88,0.58)) drop-shadow(2.5px 1.2px 0 rgba(45,200,255,0.58));
+  -webkit-filter:blur(0.8px) saturate(195%) contrast(1.16) brightness(1.15) drop-shadow(-2.5px -1.2px 0 rgba(255,55,88,0.58)) drop-shadow(2.5px 1.2px 0 rgba(45,200,255,0.58));
  }
  .sidebar nav.has-svg-lg .lg-webkit-bevel{
   display:none!important;
  }
+ .sidebar nav::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:9999px;
+  pointer-events:none;
+  z-index:3;
+  background:radial-gradient(130% 100% at 50% -18%,rgba(255,255,255,0.20) 0%,rgba(255,255,255,0.04) 36%,rgba(255,255,255,0) 60%),radial-gradient(120% 90% at 50% 118%,rgba(120,200,255,0.10) 0%,rgba(255,120,160,0.06) 28%,rgba(255,255,255,0) 56%);
+ }
  .sidebar nav.is-light-backdrop{
-  background:rgba(244,244,248,0.38)!important;
-  box-shadow:0 12px 30px rgba(0,0,0,0.16),0 2px 8px rgba(0,0,0,0.08),inset 0 0.5px 0.5px rgba(255,255,255,0.45),inset 0 -0.5px 0.5px rgba(0,0,0,0.06)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,0.48) 0%,rgba(238,238,245,0.36) 100%)!important;
+  box-shadow:0 14px 32px rgba(0,0,0,0.18),0 3px 10px rgba(0,0,0,0.09),inset 0 1.5px 2.5px rgba(255,255,255,0.68),inset 0 -1px 2px rgba(0,0,0,0.08)!important;
  }
  body.nav-scroll-hidden .sidebar nav,
  html.is-standalone-pwa body.nav-scroll-hidden .sidebar nav{
@@ -128,10 +145,10 @@ html:has(dialog[open]){overflow:hidden}
   width:calc((100% - 10px) / 5)!important;
   left:5px!important;
   border-radius:9999px!important;
-  background:linear-gradient(168deg,rgba(255,255,255,0.27) 0%,rgba(255,255,255,0.16) 44%,rgba(255,255,255,0.11) 74%,rgba(255,255,255,0.19) 100%)!important;
-  -webkit-backdrop-filter:blur(6px) saturate(145%)!important;
-  backdrop-filter:blur(6px) saturate(145%)!important;
-  box-shadow:inset 0 1px 1.5px rgba(255,255,255,0.44),inset 0 -0.5px 1px rgba(255,255,255,0.18),0 6px 16px rgba(0,0,0,0.30),0 1.5px 5px rgba(0,0,0,0.18)!important;
+  background:radial-gradient(125% 95% at 50% -10%,rgba(255,255,255,0.42) 0%,rgba(255,255,255,0.16) 46%,rgba(255,255,255,0.06) 72%,rgba(255,255,255,0.18) 100%)!important;
+  -webkit-backdrop-filter:blur(6px) saturate(155%) brightness(1.08)!important;
+  backdrop-filter:blur(6px) saturate(155%) brightness(1.08)!important;
+  box-shadow:inset 0 1.5px 2px rgba(255,255,255,0.65),inset 0 -1px 1.5px rgba(255,255,255,0.26),inset 0 0 10px rgba(255,255,255,0.12),0 8px 20px rgba(0,0,0,0.42),0 2px 6px rgba(0,0,0,0.24)!important;
   border:none!important;
   pointer-events:none!important;
   z-index:1!important;
@@ -140,15 +157,15 @@ html:has(dialog[open]){overflow:hidden}
   will-change:transform!important;
  }
  .nav-active-pill.is-lifted{
-  background:linear-gradient(168deg,rgba(255,255,255,0.34) 0%,rgba(255,255,255,0.20) 45%,rgba(255,255,255,0.14) 75%,rgba(255,255,255,0.24) 100%)!important;
-  box-shadow:inset 0 1.2px 2px rgba(255,255,255,0.58),inset 0 -0.5px 1.2px rgba(255,255,255,0.24),0 10px 22px rgba(0,0,0,0.36),0 3px 8px rgba(0,0,0,0.22)!important;
+  background:radial-gradient(125% 95% at 50% -8%,rgba(255,255,255,0.52) 0%,rgba(255,255,255,0.22) 46%,rgba(255,255,255,0.10) 74%,rgba(255,255,255,0.24) 100%)!important;
+  box-shadow:inset 0 1.8px 2.5px rgba(255,255,255,0.78),inset 0 -1px 1.8px rgba(255,255,255,0.32),inset 0 0 14px rgba(255,255,255,0.18),0 12px 26px rgba(0,0,0,0.48),0 3px 9px rgba(0,0,0,0.28)!important;
  }
  .sidebar nav.is-light-backdrop .nav-active-pill{
-  background:linear-gradient(168deg,rgba(24,24,32,0.18) 0%,rgba(24,24,32,0.13) 52%,rgba(24,24,32,0.17) 100%)!important;
-  box-shadow:inset 0 1px 1.5px rgba(255,255,255,0.55),inset 0 -0.5px 1px rgba(0,0,0,0.12),0 5px 14px rgba(0,0,0,0.14)!important;
+  background:radial-gradient(125% 95% at 50% -10%,rgba(255,255,255,0.55) 0%,rgba(24,24,34,0.14) 48%,rgba(24,24,34,0.18) 100%)!important;
+  box-shadow:inset 0 1.5px 2px rgba(255,255,255,0.75),inset 0 -1px 1.5px rgba(0,0,0,0.14),0 6px 16px rgba(0,0,0,0.16)!important;
  }
  .sidebar nav.is-light-backdrop .nav-active-pill.is-lifted{
-  background:linear-gradient(168deg,rgba(24,24,32,0.23) 0%,rgba(24,24,32,0.16) 52%,rgba(24,24,32,0.21) 100%)!important;
+  background:radial-gradient(125% 95% at 50% -10%,rgba(255,255,255,0.65) 0%,rgba(24,24,34,0.18) 48%,rgba(24,24,34,0.24) 100%)!important;
  }
  .nav-link{
   flex:1 1 0!important;
@@ -1580,9 +1597,11 @@ function render(){
  if(existingSidebar && existingWs && Boolean(existingSidebar.querySelector('nav'))===needsNav){
   updateSidebarNav(activeTab, logCount);
   existingWs.outerHTML=workspaceHtml;
+  window.__rebuildSafariMirror?.();
  }else{
   $('#app').innerHTML=`${header()}${workspaceHtml}`;
   window.__syncLiquidTabBar?.(true);
+  window.__rebuildSafariMirror?.();
  }
  if(busy)document.querySelectorAll('#app input,#app textarea,#app select,#app button').forEach(el=>el.disabled=true);
 }
@@ -3575,56 +3594,132 @@ document.addEventListener('focusin',e=>{
  const ua=navigator.userAgent||'';
  const isIOS=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
  const isWebKitOnly=/AppleWebKit/.test(ua)&&(isIOS||!/Chrome|Chromium|Edg/.test(ua));
- const canUseSvgBackdrop=!isWebKitOnly&&typeof CSS!=='undefined'&&CSS.supports?.('backdrop-filter','url(#lg-whole-pill-opt-a)');
- let svgHolder=null,lastW=0,lastH=0,ro=null;
+ const canUseSvgBackdrop=false;
+ let svgHolder=null,lastW=0,lastH=0,ro=null,mirrorEl=null;
  let pos=0,vel=0,target=0,lift=0,liftTarget=0,scrubbing=false,rafId=0,lastT=0;
  let ptrId=null,startX=0,startY=0,didScrub=false,suppressClickUntil=0;
 
- function ensureSvgLens(w,h){
-  if(!canUseSvgBackdrop||w<40||h<24)return;
-  if(Math.abs(w-lastW)<2&&Math.abs(h-lastH)<2&&svgHolder)return;
+ function ensureOpticalLens(w,h,nav){
+  if(w<40||h<24)return;
+  if(Math.abs(w-lastW)<2&&Math.abs(h-lastH)<2&&(canUseSvgBackdrop?svgHolder:nav?.dataset?.maskReady==='1'))return;
   lastW=w;lastH=h;
   const R=h/2;
-  const bevel=Math.max(4,R*0.42);
+  const bevel=Math.max(5,R*0.42);
   const K=2.00,rgbShift=2.5,blurPx=0.8;
-  const maxDisp=Math.min(48,bevel*K);
-  const cv=document.createElement('canvas');
-  cv.width=w;cv.height=h;
-  const ctx=cv.getContext('2d');
-  const img=ctx.createImageData(w,h);
-  const d=img.data;
-  for(let y=0;y<h;y++){
-   for(let x=0;x<w;x++){
-    const cx=Math.max(R,Math.min(w-R,x));
-    const vx=x-cx,vy=y-R;
-    const dist=Math.hypot(vx,vy);
-    const edgeDist=R-dist;
-    let rByte=128,gByte=128;
-    if(edgeDist>0&&edgeDist<bevel&&dist>1e-4){
-     const t=1-(edgeDist/bevel);
-     const mag=Math.pow(t,2.15)*maxDisp;
-     const dx=-(vx/dist)*mag;
-     const dy=-(vy/dist)*mag;
-     rByte=Math.max(0,Math.min(255,Math.round(128+(dx/maxDisp)*127)));
-     gByte=Math.max(0,Math.min(255,Math.round(128+(dy/maxDisp)*127)));
+  if(!canUseSvgBackdrop){
+   // iOS Safari / WebKit: Build exact capsule 42% bevel mask for live inverted rim mirror
+   const mcv=document.createElement('canvas');
+   mcv.width=w;mcv.height=h;
+   const mctx=mcv.getContext('2d');
+   const mimg=mctx.createImageData(w,h);
+   const md=mimg.data;
+   for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+     const cx=Math.max(R,Math.min(w-R,x));
+     const dist=Math.hypot(x-cx,y-R);
+     const edgeDist=R-dist;
+     let a=0;
+     if(edgeDist>0&&edgeDist<bevel){
+      const t=1-(edgeDist/bevel);
+      a=Math.round(Math.min(1,Math.pow(t,1.9)*0.94)*255);
+     }
+     const i=(y*w+x)*4;
+     md[i]=255;md[i+1]=255;md[i+2]=255;md[i+3]=a;
     }
-    const idx=(y*w+x)*4;
-    d[idx]=rByte;d[idx+1]=gByte;d[idx+2]=128;d[idx+3]=255;
    }
+   mctx.putImageData(mimg,0,0);
+   const maskUrl=`url(${mcv.toDataURL('image/png')})`;
+   const bevelBox=nav?.querySelector('.lg-webkit-bevel');
+   if(bevelBox){
+    bevelBox.style.webkitMaskImage=maskUrl;
+    bevelBox.style.maskImage=maskUrl;
+    bevelBox.style.webkitMaskSize='100% 100%';
+    bevelBox.style.maskSize='100% 100%';
+    nav.dataset.maskReady='1';
+   }
+   return;
   }
-  ctx.putImageData(img,0,0);
-  const url=cv.toDataURL('image/png');
-  const sBase=maxDisp*2;
-  const sR=(sBase+rgbShift*2).toFixed(2);
-  const sG=sBase.toFixed(2);
-  const sB=Math.max(0,sBase-rgbShift*2).toFixed(2);
+  // Chromium / Desktop / Android: Full mathematical Type A SVG displacement + inverted-rim-only RGB dispersion
+  const maxDisp=R*K+rgbShift+2;
+  const makeMap=(rgbSign)=>{
+   const cv=document.createElement('canvas');
+   cv.width=w;cv.height=h;
+   const ctx=cv.getContext('2d');
+   const img=ctx.createImageData(w,h);
+   const d=img.data;
+   for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+     const cx=Math.max(R,Math.min(w-R,x));
+     const vx=x-cx,vy=y-R;
+     const dist=Math.hypot(vx,vy);
+     const edgeDist=R-dist;
+     let rByte=128,gByte=128;
+     if(edgeDist>0&&edgeDist<bevel&&dist>1e-4){
+      const t=1-(edgeDist/bevel);
+      const baseDisp=Math.pow(t,2.0)*(R*K);
+      // RGB chromatic shift exclusively in the inverted border zone (where baseDisp > R)
+      const invZone=baseDisp>R?Math.min(1,(baseDisp-R)/R):0;
+      const mag=Math.max(0,baseDisp+rgbSign*rgbShift*invZone);
+      const dx=-(vx/dist)*mag;
+      const dy=-(vy/dist)*mag;
+      rByte=Math.max(0,Math.min(255,Math.round(128+(dx/maxDisp)*127)));
+      gByte=Math.max(0,Math.min(255,Math.round(128+(dy/maxDisp)*127)));
+     }
+     const idx=(y*w+x)*4;
+     d[idx]=rByte;d[idx+1]=gByte;d[idx+2]=128;d[idx+3]=255;
+    }
+   }
+   ctx.putImageData(img,0,0);
+   return cv.toDataURL('image/png');
+  };
+  const urlR=makeMap(1),urlG=makeMap(0),urlB=makeMap(-1);
+  const sc=(maxDisp*2).toFixed(2);
   if(!svgHolder){
    svgHolder=document.createElement('div');
-   svgHolder.style.cssText='position:fixed;width:0;height:0;overflow:hidden;pointer-events:none;z-index:-1;';
+   svgHolder.style.cssText='position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;z-index:-1;';
    svgHolder.setAttribute('aria-hidden','true');
    document.body.appendChild(svgHolder);
   }
-  svgHolder.innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0"><defs><filter id="lg-whole-pill-opt-a" x="0" y="0" width="${w}" height="${h}" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feImage href="${url}" x="0" y="0" width="${w}" height="${h}" result="map"/><feDisplacementMap in="SourceGraphic" in2="map" scale="${sR}" xChannelSelector="R" yChannelSelector="G" result="dR"/><feDisplacementMap in="SourceGraphic" in2="map" scale="${sG}" xChannelSelector="R" yChannelSelector="G" result="dG"/><feDisplacementMap in="SourceGraphic" in2="map" scale="${sB}" xChannelSelector="R" yChannelSelector="G" result="dB"/><feColorMatrix in="dR" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="cR"/><feColorMatrix in="dG" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="cG"/><feColorMatrix in="dB" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="cB"/><feBlend in="cR" in2="cG" mode="screen" result="cRG"/><feBlend in="cRG" in2="cB" mode="screen" result="cRGB"/><feGaussianBlur in="cRGB" stdDeviation="${blurPx}" edgeMode="duplicate" result="out"/></filter></defs></svg>`;
+  svgHolder.innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0" height="0" style="position:absolute"><defs><filter id="lg-whole-pill-opt-a" x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feImage href="${urlR}" xlink:href="${urlR}" x="0%" y="0%" width="100%" height="100%" preserveAspectRatio="none" result="mR"/><feImage href="${urlG}" xlink:href="${urlG}" x="0%" y="0%" width="100%" height="100%" preserveAspectRatio="none" result="mG"/><feImage href="${urlB}" xlink:href="${urlB}" x="0%" y="0%" width="100%" height="100%" preserveAspectRatio="none" result="mB"/><feDisplacementMap in="SourceGraphic" in2="mR" scale="${sc}" xChannelSelector="R" yChannelSelector="G" result="dR"/><feDisplacementMap in="SourceGraphic" in2="mG" scale="${sc}" xChannelSelector="R" yChannelSelector="G" result="dG"/><feDisplacementMap in="SourceGraphic" in2="mB" scale="${sc}" xChannelSelector="R" yChannelSelector="G" result="dB"/><feColorMatrix in="dR" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="cR"/><feColorMatrix in="dG" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="cG"/><feColorMatrix in="dB" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="cB"/><feBlend in="cR" in2="cG" mode="screen" result="cRG"/><feBlend in="cRG" in2="cB" mode="screen" result="cRGB"/><feGaussianBlur in="cRGB" stdDeviation="${blurPx}" edgeMode="duplicate" result="blurred"/><feColorMatrix in="blurred" type="saturate" values="1.45" result="out"/></filter></defs></svg>`;
+ }
+
+ function syncSafariMirrorScroll(){
+  if(canUseSvgBackdrop||!mirrorEl)return;
+  const nav=document.querySelector('.sidebar nav');
+  const ws=document.querySelector('#app > .workspace');
+  if(!nav||!ws||!window.matchMedia('(max-width: 760px)').matches)return;
+  const navRect=nav.getBoundingClientRect();
+  const wsRect=ws.getBoundingClientRect();
+  // Vertically flip ws around nav's vertical center (y_local' = H - y_local => K=2.00 inverted border reflection)
+  const tx=wsRect.left-navRect.left;
+  const ty=navRect.height-(wsRect.top-navRect.top);
+  mirrorEl.style.width=`${wsRect.width}px`;
+  mirrorEl.style.transform=`translate3d(${tx.toFixed(1)}px,${ty.toFixed(1)}px,0) scaleY(-1)`;
+ }
+
+ window.__rebuildSafariMirror=()=>{
+  if(canUseSvgBackdrop)return;
+  if(!window.matchMedia('(max-width: 760px)').matches)return;
+  const nav=document.querySelector('.sidebar nav');
+  const bevelBox=nav?.querySelector('.lg-webkit-bevel');
+  const ws=document.querySelector('#app > .workspace');
+  if(!bevelBox||!ws)return;
+  const clone=ws.cloneNode(true);
+  clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
+  clone.querySelectorAll('[data-action],[name]').forEach(el=>{el.removeAttribute('data-action');el.removeAttribute('name');});
+  clone.querySelectorAll('input,textarea,select,button,a,summary').forEach(el=>{el.tabIndex=-1;el.setAttribute('aria-hidden','true');});
+  mirrorEl=document.createElement('div');
+  mirrorEl.className='lg-webkit-bevel-mirror';
+  mirrorEl.setAttribute('aria-hidden','true');
+  mirrorEl.appendChild(clone);
+  bevelBox.innerHTML='';
+  bevelBox.appendChild(mirrorEl);
+  syncSafariMirrorScroll();
+ };
+
+ if(!canUseSvgBackdrop){
+  window.addEventListener('scroll',syncSafariMirrorScroll,{passive:true});
+  document.addEventListener('scroll',syncSafariMirrorScroll,{capture:true,passive:true});
  }
 
  function applyPillTransform(){
@@ -3677,13 +3772,13 @@ document.addEventListener('focusin',e=>{
   nav.dataset.lgBound='1';
   if(canUseSvgBackdrop){
    nav.classList.add('has-svg-lg');
-   nav.style.setProperty('--lg-svg-filter','url(#lg-whole-pill-opt-a)');
   }
   if(typeof ResizeObserver!=='undefined'){
    ro?.disconnect();
    ro=new ResizeObserver(()=>{
     const w=Math.round(nav.offsetWidth),h=Math.round(nav.offsetHeight);
-    if(w>0&&h>0)ensureSvgLens(w,h);
+    if(w>0&&h>0)ensureOpticalLens(w,h,nav);
+    syncSafariMirrorScroll();
    });
    ro.observe(nav);
   }
@@ -3771,7 +3866,7 @@ document.addEventListener('focusin',e=>{
   bindNav(nav);
   updateBackdropContrast(nav);
   const w=Math.round(nav.offsetWidth),h=Math.round(nav.offsetHeight);
-  if(w>0&&h>0)ensureSvgLens(w,h);
+  if(w>0&&h>0)ensureOpticalLens(w,h,nav);
   const activeTab=view==='preview'?'script':view==='conti-record'?'conti':view;
   const idx=navs.findIndex(([v])=>v===activeTab);
   if(idx!==-1){
@@ -3780,7 +3875,7 @@ document.addEventListener('focusin',e=>{
   }
  };
  window.addEventListener('resize',()=>window.__syncLiquidTabBar?.(),{passive:true});
- requestAnimationFrame(()=>window.__syncLiquidTabBar?.(true));
+ requestAnimationFrame(()=>{window.__syncLiquidTabBar?.(true);window.__rebuildSafariMirror?.();});
 })();
 (()=>{
  let lastWinY=window.scrollY||0;
