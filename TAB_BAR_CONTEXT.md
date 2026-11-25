@@ -47,7 +47,7 @@ Dokumen ini dicipta khas sebagai **jambatan memori (Context Bridge)** untuk meny
 - **Logik Pertukaran Tab**: `function doAction('nav', b)` di baris ~2524.
 
 ### Fail Service Worker: `sw.js`
-- Cache terkini: `2list-pwa-v20261126-05`. Sentiasa bump versi cache apabila mengemas kini `index.html`.
+- Cache terkini: `2list-pwa-v20261126-06`. Sentiasa bump versi cache apabila mengemas kini `index.html`.
 
 ### Artifak Berkaitan
 - **Atomization Deck**: `tabbar_atomization_deck.html` (Simulator 3D interaktif 6 atom & tuning sandbox).

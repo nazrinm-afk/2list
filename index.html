@@ -108,41 +108,16 @@ html:has(dialog[open]){overflow:hidden}
   -webkit-backdrop-filter:url(#whole-pill-type-a) saturate(135%) contrast(1.02)!important;
   backdrop-filter:url(#whole-pill-type-a) saturate(135%) contrast(1.02)!important;
  }
- #mobile-glass-nav .lg-webkit-bevel-zone{
+ #mobile-glass-nav .lg-webgl-canvas{
   position:absolute;
-  left:0;
-  right:0;
-  height:14px;
-  overflow:hidden;
+  inset:0;
+  width:100%;
+  height:100%;
+  border-radius:9999px;
   pointer-events:none;
-  transform-origin:center center;
-  -webkit-transform-origin:center center;
+  display:block;
  }
- #mobile-glass-nav .lg-webkit-bevel-zone.is-top{
-  top:0;
-  transform:scale(1.02,-1.22);
-  -webkit-transform:scale(1.02,-1.22);
-  -webkit-mask-image:linear-gradient(to top,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.45) 55%,rgba(0,0,0,0) 100%);
-  mask-image:linear-gradient(to top,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.45) 55%,rgba(0,0,0,0) 100%);
- }
- #mobile-glass-nav .lg-webkit-bevel-zone.is-bot{
-  bottom:0;
-  transform:scale(1.02,-1.22);
-  -webkit-transform:scale(1.02,-1.22);
-  -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.45) 55%,rgba(0,0,0,0) 100%);
-  mask-image:linear-gradient(to bottom,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.45) 55%,rgba(0,0,0,0) 100%);
- }
- #mobile-glass-nav .lg-webkit-bevel-mirror{
-  position:absolute;
-  top:0;
-  left:0;
-  pointer-events:none;
-  will-change:transform;
-  filter:blur(0.7px) saturate(145%) contrast(1.04) drop-shadow(0 -1.2px 0 rgba(255,75,110,0.34)) drop-shadow(0 1.2px 0 rgba(55,200,255,0.34));
-  -webkit-filter:blur(0.7px) saturate(145%) contrast(1.04) drop-shadow(0 -1.2px 0 rgba(255,75,110,0.34)) drop-shadow(0 1.2px 0 rgba(55,200,255,0.34));
- }
- #mobile-glass-nav.has-svg-lg .lg-webkit-bevel-zone,
- #mobile-glass-nav.has-svg-lg .lg-webkit-bevel-mirror{
+ #mobile-glass-nav.has-svg-lg .lg-webgl-canvas{
   display:none!important;
  }
  #mobile-glass-nav .glass-rim-layer{
@@ -3715,7 +3690,7 @@ document.addEventListener('focusin',e=>{
  const canUseSvgBackdrop=!isWebKitOnly;
  const WHOLE_PILL_TYPE_A={K:2.00,rgb:2.5,bevel:42,blur:0.8,tint:35,rim:7};
  const ACTIVE_PILL_FINAL={K:0.80,rgb:3.5,bevel:31,blur:1.4,tint:2,rim:74,stretch:40,crispOnLand:true};
- let lastSizeKey='',ro=null,mirrorTopEl=null,mirrorBotEl=null;
+ let lastSizeKey='',ro=null,glState=null;
  let xPos=2,vx=0,target=2,dragging=false,scaleBoost=0,rafId=0,lastT=0;
  let ptrId=null,startX=0,startY=0,didScrub=false,suppressClickUntil=0;
 
@@ -3791,7 +3766,8 @@ document.addEventListener('focusin',e=>{
   const start=1-bevelRatio;
 
   if(!canUseSvgBackdrop){
-   // Safari / iOS WebKit uses two 14px-tall flipped & stretched bezel strips (zero 64px drift!)
+   // Safari / iOS WebKit uses GPU WebGL GLSL Refraction Shader (exact Type A optical formula!)
+   initWebGLGlass(nav);
    return;
   }
 
@@ -3828,25 +3804,165 @@ document.addEventListener('focusin',e=>{
   }
  }
 
- function syncSafariMirrorScroll(){
-  if(canUseSvgBackdrop||(!mirrorTopEl&&!mirrorBotEl))return;
+ // WebGL1 GLSL Liquid Glass Refraction Engine for iOS Safari PWA (60fps GPU, exact Type A SDF!)
+ function initWebGLGlass(nav){
+  if(canUseSvgBackdrop||!nav)return null;
+  const bd=nav.querySelector('.glass-backdrop-layer');
+  if(!bd)return null;
+  let canvas=bd.querySelector('.lg-webgl-canvas');
+  if(glState&&glState.canvas===canvas&&glState.gl&&!glState.gl.isContextLost()){
+   resizeWebGLCanvas(nav);
+   return glState;
+  }
+  bd.innerHTML='';
+  canvas=document.createElement('canvas');
+  canvas.className='lg-webgl-canvas';
+  canvas.setAttribute('aria-hidden','true');
+  bd.appendChild(canvas);
+  const gl=canvas.getContext('webgl',{alpha:true,antialias:false,premultipliedAlpha:true,preserveDrawingBuffer:false});
+  if(!gl)return null;
+
+  const vsSrc=`attribute vec2 a_pos;varying vec2 v_uv;void main(){v_uv=vec2(a_pos.x*0.5+0.5,0.5-a_pos.y*0.5);gl_Position=vec4(a_pos,0.0,1.0);}`;
+  const fsSrc=`precision highp float;
+   uniform sampler2D u_tex;
+   uniform vec2 u_texSize;
+   uniform vec2 u_pillSize;
+   uniform vec2 u_navOffset;
+   uniform float u_K;
+   uniform float u_bevel;
+   uniform float u_rgbPx;
+   uniform float u_blurPx;
+   uniform vec4 u_tint;
+   varying vec2 v_uv;
+   vec4 sBlur(vec2 px,float r){
+    vec2 uv=clamp(px/u_texSize,vec2(0.0005),vec2(0.9995));
+    if(r<=0.1)return texture2D(u_tex,uv);
+    vec2 d=vec2(r)/u_texSize;
+    return texture2D(u_tex,uv)*0.40
+     +texture2D(u_tex,clamp(uv+vec2(d.x,0.0),vec2(0.0005),vec2(0.9995)))*0.15
+     +texture2D(u_tex,clamp(uv-vec2(d.x,0.0),vec2(0.0005),vec2(0.9995)))*0.15
+     +texture2D(u_tex,clamp(uv+vec2(0.0,d.y),vec2(0.0005),vec2(0.9995)))*0.15
+     +texture2D(u_tex,clamp(uv-vec2(0.0,d.y),vec2(0.0005),vec2(0.9995)))*0.15;
+   }
+   void main(){
+    vec2 p=v_uv*u_pillSize;
+    float R=u_pillSize.y*0.5;
+    float cx=clamp(p.x,R,max(R,u_pillSize.x-R));
+    vec2 delta=p-vec2(cx,R);
+    float dist=length(delta);
+    float t=clamp(dist/R,0.0,1.0);
+    float start=1.0-u_bevel;
+    vec2 n=dist>0.0001?(delta/dist):vec2(0.0);
+    float L=u_bevel*R;
+    float baseDisp=0.0;
+    float prismDisp=0.0;
+    if(t>start){
+     float u=(t-start)/u_bevel;
+     baseDisp=u_K*L*(u*u);
+     float uFold=clamp(1.0/(2.0*max(0.01,u_K)),0.0,1.0);
+     if(u>uFold&&uFold<0.999){
+      float v=(u-uFold)/(1.0-uFold);
+      prismDisp=u_rgbPx*(v*v);
+     }
+    }
+    vec2 baseSample=u_navOffset+p;
+    float r=sBlur(baseSample-n*(baseDisp+prismDisp),u_blurPx).r;
+    float g=sBlur(baseSample-n*baseDisp,u_blurPx).g;
+    float b=sBlur(baseSample-n*max(0.0,baseDisp-prismDisp),u_blurPx).b;
+    vec3 col=vec3(r,g,b);
+    float lum=dot(col,vec3(0.299,0.587,0.114));
+    col=mix(vec3(lum),col,1.35);
+    col=(col-0.5)*1.02+0.5;
+    col=mix(col,u_tint.rgb,u_tint.a);
+    gl_FragColor=vec4(clamp(col,0.0,1.0),1.0);
+   }`;
+
+  const compile=(type,src)=>{const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;};
+  const prog=gl.createProgram();
+  gl.attachShader(prog,compile(gl.VERTEX_SHADER,vsSrc));
+  gl.attachShader(prog,compile(gl.FRAGMENT_SHADER,fsSrc));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+
+  const buf=gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1, 1,-1, -1,1, 1,1]),gl.STATIC_DRAW);
+  const aPos=gl.getAttribLocation(prog,'a_pos');
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
+
+  const tex=gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D,tex);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+
+  glState={
+   canvas,gl,prog,tex,hasTex:false,texW:1,texH:1,
+   uTexSize:gl.getUniformLocation(prog,'u_texSize'),
+   uPillSize:gl.getUniformLocation(prog,'u_pillSize'),
+   uNavOffset:gl.getUniformLocation(prog,'u_navOffset'),
+   uK:gl.getUniformLocation(prog,'u_K'),
+   uBevel:gl.getUniformLocation(prog,'u_bevel'),
+   uRgbPx:gl.getUniformLocation(prog,'u_rgbPx'),
+   uBlurPx:gl.getUniformLocation(prog,'u_blurPx'),
+   uTint:gl.getUniformLocation(prog,'u_tint')
+  };
+  resizeWebGLCanvas(nav);
+  return glState;
+ }
+
+ function resizeWebGLCanvas(nav){
+  if(!glState||!nav)return;
+  const dpr=Math.min(2,window.devicePixelRatio||1);
+  const w=Math.max(1,Math.round(nav.offsetWidth*dpr));
+  const h=Math.max(1,Math.round(nav.offsetHeight*dpr));
+  if(glState.canvas.width!==w||glState.canvas.height!==h){
+   glState.canvas.width=w;
+   glState.canvas.height=h;
+   glState.gl.viewport(0,0,w,h);
+  }
+ }
+
+ function drawRoundRect(ctx,x,y,w,h,r){
+  const rr=Math.max(0,Math.min(r,w/2,h/2));
+  ctx.beginPath();
+  ctx.moveTo(x+rr,y);
+  ctx.arcTo(x+w,y,x+w,y+h,rr);
+  ctx.arcTo(x+w,y+h,x,y+h,rr);
+  ctx.arcTo(x,y+h,x,y,rr);
+  ctx.arcTo(x,y,x+w,y,rr);
+  ctx.closePath();
+ }
+
+ function renderWebGLFrame(){
+  if(canUseSvgBackdrop||!glState||!glState.hasTex)return;
   const nav=document.getElementById('mobile-glass-nav');
   const mainEl=document.getElementById('main');
   if(!nav||!mainEl||!window.matchMedia('(max-width: 760px)').matches)return;
+  resizeWebGLCanvas(nav);
   const navRect=nav.getBoundingClientRect();
   const mainRect=mainEl.getBoundingClientRect();
-  const tx=mainRect.left-navRect.left;
-  const relTop=mainRect.top-navRect.top;
-  // Each 14px bezel zone flips itself with scale(1.02,-1.22); inner clone uses pure upright translate3d!
-  // Top strip samples y_nav = 10..24px; Bottom strip samples y_nav = (H-24)..(H-10)px — strictly local!
-  if(mirrorTopEl){
-   mirrorTopEl.style.width=`${mainRect.width}px`;
-   mirrorTopEl.style.transform=`translate3d(${tx.toFixed(1)}px,${(relTop-10).toFixed(1)}px,0)`;
-  }
-  if(mirrorBotEl){
-   mirrorBotEl.style.width=`${mainRect.width}px`;
-   mirrorBotEl.style.transform=`translate3d(${tx.toFixed(1)}px,${(relTop-(navRect.height-24)).toFixed(1)}px,0)`;
-  }
+  const {gl}=glState;
+  const isLight=nav.classList.contains('is-light-backdrop');
+  gl.useProgram(glState.prog);
+  gl.bindTexture(gl.TEXTURE_2D,glState.tex);
+  gl.uniform2f(glState.uTexSize,glState.texW,glState.texH);
+  gl.uniform2f(glState.uPillSize,navRect.width,navRect.height);
+  gl.uniform2f(glState.uNavOffset,navRect.left-mainRect.left,navRect.top-mainRect.top);
+  gl.uniform1f(glState.uK,WHOLE_PILL_TYPE_A.K);
+  gl.uniform1f(glState.uBevel,WHOLE_PILL_TYPE_A.bevel/100);
+  gl.uniform1f(glState.uRgbPx,WHOLE_PILL_TYPE_A.rgb);
+  gl.uniform1f(glState.uBlurPx,WHOLE_PILL_TYPE_A.blur);
+  if(isLight)gl.uniform4f(glState.uTint,1.0,1.0,1.0,0.22);
+  else gl.uniform4f(glState.uTint,22/255,24/255,30/255,0.24);
+  gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+ }
+
+ function syncSafariMirrorScroll(){
+  renderWebGLFrame();
  }
 
  let mirrorRebuildTimer=0;
@@ -3856,47 +3972,109 @@ document.addEventListener('focusin',e=>{
   clearTimeout(mirrorRebuildTimer);
   mirrorRebuildTimer=setTimeout(()=>{
    const nav=document.getElementById('mobile-glass-nav');
-   const bd=nav?.querySelector('.glass-backdrop-layer');
    const mainEl=document.getElementById('main');
-   if(!bd||!mainEl)return;
-   const cs=getComputedStyle(mainEl);
-   const cleanClone=()=>{
-    const clone=mainEl.cloneNode(true);
-    clone.removeAttribute('id');
-    clone.style.padding=cs.padding;
-    clone.style.margin='0';
-    clone.style.width='100%';
-    clone.style.maxWidth='none';
-    clone.style.boxSizing='border-box';
-    clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
-    clone.querySelectorAll('[data-action],[name]').forEach(el=>{el.removeAttribute('data-action');el.removeAttribute('name');});
-    clone.querySelectorAll('input,textarea,select,button,a,summary').forEach(el=>{el.tabIndex=-1;el.setAttribute('aria-hidden','true');});
-    return clone;
-   };
-   const makeZone=(cls)=>{
-    const z=document.createElement('div');
-    z.className=`lg-webkit-bevel-zone ${cls}`;
-    z.setAttribute('aria-hidden','true');
-    const m=document.createElement('div');
-    m.className='lg-webkit-bevel-mirror';
-    m.appendChild(cleanClone());
-    z.appendChild(m);
-    return {z,m};
-   };
-   const topZ=makeZone('is-top');
-   const botZ=makeZone('is-bot');
-   mirrorTopEl=topZ.m;
-   mirrorBotEl=botZ.m;
-   bd.innerHTML='';
-   bd.appendChild(topZ.z);
-   bd.appendChild(botZ.z);
-   syncSafariMirrorScroll();
-  },160);
+   if(!nav||!mainEl)return;
+   const st=initWebGLGlass(nav);
+   if(!st)return;
+   const mainRect=mainEl.getBoundingClientRect();
+   const texW=Math.max(1,Math.ceil(mainRect.width));
+   const texH=Math.max(1,Math.min(3800,Math.ceil(Math.max(mainEl.scrollHeight,mainRect.height))));
+   const c=document.createElement('canvas');
+   c.width=texW;
+   c.height=texH;
+   const ctx=c.getContext('2d');
+   const isLight=nav.classList.contains('is-light-backdrop');
+   ctx.fillStyle=isLight?'#ffffff':'#101011';
+   ctx.fillRect(0,0,texW,texH);
+
+   // 1) Paint visible card/badge/button boxes inside #main pixel-for-pixel
+   const els=mainEl.querySelectorAll('*');
+   for(let i=0;i<els.length;i++){
+    const el=els[i];
+    if(el.tagName==='SVG'||el.closest('svg'))continue;
+    const r=el.getBoundingClientRect();
+    if(r.width<2||r.height<2)continue;
+    const y=r.top-mainRect.top;
+    if(y>texH||y+r.height<0)continue;
+    const x=r.left-mainRect.left;
+    const cs=getComputedStyle(el);
+    if(cs.display==='none'||cs.visibility==='hidden'||parseFloat(cs.opacity)===0)continue;
+    const bg=cs.backgroundColor;
+    const bw=parseFloat(cs.borderTopWidth)||0;
+    const bc=cs.borderTopColor;
+    const rad=parseFloat(cs.borderTopLeftRadius)||0;
+    const hasBg=bg&&bg!=='rgba(0, 0, 0, 0)'&&bg!=='transparent';
+    const hasBorder=bw>0&&bc&&bc!=='rgba(0, 0, 0, 0)'&&bc!=='transparent';
+    if(hasBg||hasBorder){
+     drawRoundRect(ctx,x,y,r.width,r.height,rad);
+     if(hasBg){ctx.fillStyle=bg;ctx.fill();}
+     if(hasBorder){ctx.strokeStyle=bc;ctx.lineWidth=bw;ctx.stroke();}
+    }
+   }
+
+   // 2) Paint all visible text lines at their exact Range.getClientRects() coordinates
+   const walker=document.createTreeWalker(mainEl,NodeFilter.SHOW_TEXT);
+   const range=document.createRange();
+   ctx.textBaseline='top';
+   let node;
+   while((node=walker.nextNode())){
+    const txt=node.nodeValue;
+    if(!txt||!txt.trim())continue;
+    const parent=node.parentElement;
+    if(!parent||parent.closest('svg'))continue;
+    const cs=getComputedStyle(parent);
+    if(cs.display==='none'||cs.visibility==='hidden'||parseFloat(cs.opacity)===0)continue;
+    range.selectNodeContents(node);
+    const rects=range.getClientRects();
+    if(!rects.length)continue;
+    const firstY=rects[0].top-mainRect.top;
+    if(firstY>texH||firstY+120<0)continue;
+    const fSize=cs.fontSize||'14px';
+    const fWeight=cs.fontWeight||'400';
+    const fFam=cs.fontFamily||'-apple-system,sans-serif';
+    ctx.font=`${fWeight} ${fSize} ${fFam}`;
+    ctx.fillStyle=cs.color||'#ffffff';
+    const clean=txt.replace(/\s+/g,' ').trim();
+    if(rects.length===1){
+     const rr=rects[0];
+     ctx.fillText(clean,rr.left-mainRect.left,rr.top-mainRect.top+1,rr.width+4);
+    }else{
+     // Multi-line text: draw per visual line rect cleanly
+     const words=clean.split(' ');
+     let wi=0;
+     for(let ri=0;ri<rects.length&&wi<words.length;ri++){
+      const rr=rects[ri];
+      let line=words[wi++];
+      while(wi<words.length&&ctx.measureText(line+' '+words[wi]).width<=rr.width+6){
+       line+=' '+words[wi++];
+      }
+      ctx.fillText(line,rr.left-mainRect.left,rr.top-mainRect.top+1,rr.width+6);
+     }
+    }
+   }
+
+   const {gl}=st;
+   gl.bindTexture(gl.TEXTURE_2D,st.tex);
+   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,c);
+   st.texW=texW;
+   st.texH=texH;
+   st.hasTex=true;
+   renderWebGLFrame();
+  },140);
  };
 
  if(!canUseSvgBackdrop){
-  window.addEventListener('scroll',syncSafariMirrorScroll,{passive:true});
-  document.addEventListener('scroll',syncSafariMirrorScroll,{capture:true,passive:true});
+  let scrollRaf=0;
+  const onSafariScroll=()=>{
+   if(!scrollRaf){
+    scrollRaf=requestAnimationFrame(()=>{
+     scrollRaf=0;
+     renderWebGLFrame();
+    });
+   }
+  };
+  window.addEventListener('scroll',onSafariScroll,{passive:true});
+  document.addEventListener('scroll',onSafariScroll,{capture:true,passive:true});
  }
 
  function updateCrispOverlay(){
