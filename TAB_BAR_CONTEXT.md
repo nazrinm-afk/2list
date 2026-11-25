@@ -47,7 +47,7 @@ Dokumen ini dicipta khas sebagai **jambatan memori (Context Bridge)** untuk meny
 - **Logik Pertukaran Tab**: `function doAction('nav', b)` di baris ~2524.
 
 ### Fail Service Worker: `sw.js`
-- Cache terkini: `2list-pwa-v20261126-08`. Sentiasa bump versi cache apabila mengemas kini `index.html`.
+- Cache terkini: `2list-pwa-v20261126-09`. Sentiasa bump versi cache apabila mengemas kini `index.html`.
 
 ### Artifak Berkaitan
 - **Atomization Deck**: `tabbar_atomization_deck.html` (Simulator 3D interaktif 6 atom & tuning sandbox).
@@ -63,7 +63,7 @@ Status: **Telah diimplementasikan ke `index.html` (Type A + kedudukan direndahka
 ## 5. Fasa 2: Active Pill (Optical Glass Lens Overlay) — LIVE DALAM `index.html`
 Status: **Telah diimplementasikan ke `index.html` (Optical Lens Overlay + Crisp Icon On Land + Spring Wobble)**
 - **Active Pill Final**:
-  `AP_K=2.40 | AP_RGB=1.5px | AP_Bevel=43% | AP_Blur=1.4px | AP_Tint=0% | AP_Rim=34% | Stretch=40% | CrispOnLand=ON`
+  `AP_K=1.00 | AP_RGB=1.5px | AP_Bevel=26% | AP_Blur=1.4px | AP_Tint=0% | AP_Rim=11% | Stretch=40% | CrispOnLand=ON` *(ikon & label aktif kekal kuning aksen `#f4cc57`)*
 - **Seni Bina & Fizik Interaksi**:
   - Active Pill berada di **atas** ikon menu (`z-index: 5`) dengan penapis biasan optik `#active-pill-glass-rgb` (sama sifat optik seperti Whole Pill), jadi ikon & label menu di bawahnya membias dengan kesan kaca & RGB pinggir semasa dilintasi/diseret.
   - **Crisp Icon On Land (`z-index: 6`)**: Sebaik sahaja Active Pill mendarat & berhenti pada tab pilihan, lapisan ikon aktif yang tajam muncul lembut di atas Active Pill (bebas kabur `1.4px`), dan hilang serta-merta apabila mula meluncur/diseret.

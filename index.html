@@ -154,7 +154,7 @@ html:has(dialog[open]){overflow:hidden}
   background:transparent!important;
   -webkit-backdrop-filter:blur(1.4px) saturate(140%) contrast(1.04)!important;
   backdrop-filter:blur(1.4px) saturate(140%) contrast(1.04)!important;
-  box-shadow:0 4px 14px rgba(0,0,0,0.14)!important;
+  box-shadow:0 4px 14px rgba(0,0,0,0.046)!important;
   border:none!important;
   pointer-events:none!important;
   z-index:5!important;
@@ -171,14 +171,14 @@ html:has(dialog[open]){overflow:hidden}
   inset:0;
   border-radius:9999px;
   pointer-events:none;
-  box-shadow:inset 0 1.2px 1.6px rgba(255,255,255,0.255),inset 0 -1px 1.4px rgba(255,255,255,0.075);
+  box-shadow:inset 0 1.2px 1.6px rgba(255,255,255,0.083),inset 0 -1px 1.4px rgba(255,255,255,0.024);
  }
  #mobile-glass-nav.is-light-backdrop .nav-active-pill{
   background:transparent!important;
-  box-shadow:0 4px 12px rgba(0,0,0,0.05)!important;
+  box-shadow:0 4px 12px rgba(0,0,0,0.017)!important;
  }
  #mobile-glass-nav.is-light-backdrop .nav-active-pill .active-pill-rim{
-  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.32),inset 0 -1.2px 1.6px rgba(0,0,0,0.06);
+  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.105),inset 0 -1.2px 1.6px rgba(0,0,0,0.020);
  }
  #mobile-glass-nav .crisp-overlay-layer{
   position:absolute!important;
@@ -3682,7 +3682,7 @@ document.addEventListener('focusin',e=>{
  const isWebKitOnly=/AppleWebKit/.test(ua)&&(isIOS||!/Chrome|Chromium|Edg/.test(ua));
  const canUseSvgBackdrop=!isWebKitOnly;
  const WHOLE_PILL_TYPE_A={K:2.00,rgb:2.5,bevel:42,blur:0.8,tint:35,rim:7};
- const ACTIVE_PILL_FINAL={K:2.40,rgb:1.5,bevel:43,blur:1.4,tint:0,rim:34,stretch:40,crispOnLand:true};
+ const ACTIVE_PILL_FINAL={K:1.00,rgb:1.5,bevel:26,blur:1.4,tint:0,rim:11,stretch:40,crispOnLand:true};
  let lastSizeKey='',ro=null,glState=null;
  let xPos=2,vx=0,target=2,dragging=false,scaleBoost=0,rafId=0,lastT=0;
  let ptrId=null,startX=0,startY=0,didScrub=false,suppressClickUntil=0;
