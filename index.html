@@ -101,12 +101,49 @@ html:has(dialog[open]){overflow:hidden}
   pointer-events:none;
   z-index:0;
   overflow:hidden;
-  -webkit-backdrop-filter:blur(1.4px) saturate(165%) contrast(1.06) brightness(1.04);
-  backdrop-filter:blur(1.4px) saturate(165%) contrast(1.06) brightness(1.04);
+  -webkit-backdrop-filter:blur(1.2px) saturate(165%) contrast(1.05) brightness(1.03);
+  backdrop-filter:blur(1.2px) saturate(165%) contrast(1.05) brightness(1.03);
  }
  #mobile-glass-nav.has-svg-lg .glass-backdrop-layer{
   -webkit-backdrop-filter:url(#whole-pill-type-a) saturate(135%) contrast(1.02)!important;
   backdrop-filter:url(#whole-pill-type-a) saturate(135%) contrast(1.02)!important;
+ }
+ #mobile-glass-nav .lg-webkit-bevel-zone{
+  position:absolute;
+  left:0;
+  right:0;
+  height:14px;
+  overflow:hidden;
+  pointer-events:none;
+  transform-origin:center center;
+  -webkit-transform-origin:center center;
+ }
+ #mobile-glass-nav .lg-webkit-bevel-zone.is-top{
+  top:0;
+  transform:scale(1.02,-1.22);
+  -webkit-transform:scale(1.02,-1.22);
+  -webkit-mask-image:linear-gradient(to top,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.45) 55%,rgba(0,0,0,0) 100%);
+  mask-image:linear-gradient(to top,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.45) 55%,rgba(0,0,0,0) 100%);
+ }
+ #mobile-glass-nav .lg-webkit-bevel-zone.is-bot{
+  bottom:0;
+  transform:scale(1.02,-1.22);
+  -webkit-transform:scale(1.02,-1.22);
+  -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.45) 55%,rgba(0,0,0,0) 100%);
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.45) 55%,rgba(0,0,0,0) 100%);
+ }
+ #mobile-glass-nav .lg-webkit-bevel-mirror{
+  position:absolute;
+  top:0;
+  left:0;
+  pointer-events:none;
+  will-change:transform;
+  filter:blur(0.7px) saturate(145%) contrast(1.04) drop-shadow(0 -1.2px 0 rgba(255,75,110,0.34)) drop-shadow(0 1.2px 0 rgba(55,200,255,0.34));
+  -webkit-filter:blur(0.7px) saturate(145%) contrast(1.04) drop-shadow(0 -1.2px 0 rgba(255,75,110,0.34)) drop-shadow(0 1.2px 0 rgba(55,200,255,0.34));
+ }
+ #mobile-glass-nav.has-svg-lg .lg-webkit-bevel-zone,
+ #mobile-glass-nav.has-svg-lg .lg-webkit-bevel-mirror{
+  display:none!important;
  }
  #mobile-glass-nav .glass-rim-layer{
   display:block;
@@ -3678,7 +3715,7 @@ document.addEventListener('focusin',e=>{
  const canUseSvgBackdrop=!isWebKitOnly;
  const WHOLE_PILL_TYPE_A={K:2.00,rgb:2.5,bevel:42,blur:0.8,tint:35,rim:7};
  const ACTIVE_PILL_FINAL={K:0.80,rgb:3.5,bevel:31,blur:1.4,tint:2,rim:74,stretch:40,crispOnLand:true};
- let lastSizeKey='',ro=null;
+ let lastSizeKey='',ro=null,mirrorTopEl=null,mirrorBotEl=null;
  let xPos=2,vx=0,target=2,dragging=false,scaleBoost=0,rafId=0,lastT=0;
  let ptrId=null,startX=0,startY=0,didScrub=false,suppressClickUntil=0;
 
@@ -3754,13 +3791,7 @@ document.addEventListener('focusin',e=>{
   const start=1-bevelRatio;
 
   if(!canUseSvgBackdrop){
-   // Safari / iOS WebKit uses clean clear glass + prismatic rim CSS (no DOM-clone mirror drift)
-   const bd=nav?.querySelector('.glass-backdrop-layer');
-   if(bd){
-    bd.style.webkitMaskImage='';
-    bd.style.maskImage='';
-    bd.innerHTML='';
-   }
+   // Safari / iOS WebKit uses two 14px-tall flipped & stretched bezel strips (zero 64px drift!)
    return;
   }
 
@@ -3797,8 +3828,76 @@ document.addEventListener('focusin',e=>{
   }
  }
 
- function syncSafariMirrorScroll(){}
- window.__rebuildSafariMirror=()=>{};
+ function syncSafariMirrorScroll(){
+  if(canUseSvgBackdrop||(!mirrorTopEl&&!mirrorBotEl))return;
+  const nav=document.getElementById('mobile-glass-nav');
+  const mainEl=document.getElementById('main');
+  if(!nav||!mainEl||!window.matchMedia('(max-width: 760px)').matches)return;
+  const navRect=nav.getBoundingClientRect();
+  const mainRect=mainEl.getBoundingClientRect();
+  const tx=mainRect.left-navRect.left;
+  const relTop=mainRect.top-navRect.top;
+  // Each 14px bezel zone flips itself with scale(1.02,-1.22); inner clone uses pure upright translate3d!
+  // Top strip samples y_nav = 10..24px; Bottom strip samples y_nav = (H-24)..(H-10)px — strictly local!
+  if(mirrorTopEl){
+   mirrorTopEl.style.width=`${mainRect.width}px`;
+   mirrorTopEl.style.transform=`translate3d(${tx.toFixed(1)}px,${(relTop-10).toFixed(1)}px,0)`;
+  }
+  if(mirrorBotEl){
+   mirrorBotEl.style.width=`${mainRect.width}px`;
+   mirrorBotEl.style.transform=`translate3d(${tx.toFixed(1)}px,${(relTop-(navRect.height-24)).toFixed(1)}px,0)`;
+  }
+ }
+
+ let mirrorRebuildTimer=0;
+ window.__rebuildSafariMirror=()=>{
+  if(canUseSvgBackdrop)return;
+  if(!window.matchMedia('(max-width: 760px)').matches)return;
+  clearTimeout(mirrorRebuildTimer);
+  mirrorRebuildTimer=setTimeout(()=>{
+   const nav=document.getElementById('mobile-glass-nav');
+   const bd=nav?.querySelector('.glass-backdrop-layer');
+   const mainEl=document.getElementById('main');
+   if(!bd||!mainEl)return;
+   const cs=getComputedStyle(mainEl);
+   const cleanClone=()=>{
+    const clone=mainEl.cloneNode(true);
+    clone.removeAttribute('id');
+    clone.style.padding=cs.padding;
+    clone.style.margin='0';
+    clone.style.width='100%';
+    clone.style.maxWidth='none';
+    clone.style.boxSizing='border-box';
+    clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
+    clone.querySelectorAll('[data-action],[name]').forEach(el=>{el.removeAttribute('data-action');el.removeAttribute('name');});
+    clone.querySelectorAll('input,textarea,select,button,a,summary').forEach(el=>{el.tabIndex=-1;el.setAttribute('aria-hidden','true');});
+    return clone;
+   };
+   const makeZone=(cls)=>{
+    const z=document.createElement('div');
+    z.className=`lg-webkit-bevel-zone ${cls}`;
+    z.setAttribute('aria-hidden','true');
+    const m=document.createElement('div');
+    m.className='lg-webkit-bevel-mirror';
+    m.appendChild(cleanClone());
+    z.appendChild(m);
+    return {z,m};
+   };
+   const topZ=makeZone('is-top');
+   const botZ=makeZone('is-bot');
+   mirrorTopEl=topZ.m;
+   mirrorBotEl=botZ.m;
+   bd.innerHTML='';
+   bd.appendChild(topZ.z);
+   bd.appendChild(botZ.z);
+   syncSafariMirrorScroll();
+  },160);
+ };
+
+ if(!canUseSvgBackdrop){
+  window.addEventListener('scroll',syncSafariMirrorScroll,{passive:true});
+  document.addEventListener('scroll',syncSafariMirrorScroll,{capture:true,passive:true});
+ }
 
  function updateCrispOverlay(){
   const slots=document.querySelectorAll('#mobile-glass-nav .crisp-tab-slot');
