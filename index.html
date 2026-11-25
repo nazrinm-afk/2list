@@ -22,6 +22,7 @@
  .desktop-badge{display:inline-flex;margin-left:auto;background:#383121;color:#ffda69;border-radius:10px;padding:2px 8px;font-size:11px;font-weight:600}
  .mobile-badge{display:none!important}
  .nav-link .nav-icon-wrap{width:22px;height:22px}
+ #mobile-glass-nav{display:none!important}
 }
 @media(max-width:760px){
  .mobile-badge{position:absolute;top:-5px;right:-11px;min-width:19px;height:19px;padding:0 5px;box-sizing:border-box;border-radius:999px;background:#f4cc57;color:#141416;font-size:11px;font-weight:750;line-height:19px;display:inline-flex;align-items:center;justify-content:center;letter-spacing:-.2px;box-shadow:0 2px 6px rgba(0,0,0,0.35);pointer-events:none}
@@ -52,6 +53,8 @@ html:has(dialog[open]){overflow:hidden}
  html.is-standalone-pwa{--phone-header-height:calc(56px + max(env(safe-area-inset-top,0px),52px) + 12px)}
  .sidebar{position:fixed!important;top:0!important;left:0!important;right:0!important;width:100%!important;height:var(--phone-header-height)!important;min-height:var(--phone-header-height)!important;padding:calc(env(safe-area-inset-top,0px) + 12px) 18px 12px!important;box-sizing:border-box!important;z-index:1000!important;gap:14px;background:#18181a!important;border-bottom:1px solid var(--line)!important;border-right:0!important;display:flex!important;align-items:center!important}
  html.is-standalone-pwa .sidebar{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 12px)!important;min-height:var(--phone-header-height)!important;height:var(--phone-header-height)!important}
+ #app:has(> .workspace){position:relative!important;height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
+ #app:has(> .workspace) > .workspace{height:100dvh!important;max-height:100dvh!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important}
  .workspace{margin:0!important;padding-top:var(--phone-header-height)!important}
  .brand>span:last-child{display:none}
  .brand-mark{width:37px;height:37px;font-size:33px}
@@ -59,14 +62,15 @@ html:has(dialog[open]){overflow:hidden}
  .project-picker select{flex:1;width:0;min-height:40px;font-size:15px;font-weight:600;border:0;background:transparent;padding:7px 22px 7px 4px}
  .dots-btn.mobile-dots{display:inline-flex}
  .topbar .dots-btn{display:none}
- .sidebar nav{
-  height:62px!important;
-  min-height:62px!important;
+ .sidebar nav{display:none!important}
+ #mobile-glass-nav{
+  height:64px!important;
+  min-height:64px!important;
   padding:5px!important;
-  position:fixed!important;
+  position:absolute!important;
   bottom:max(calc(env(safe-area-inset-bottom,0px) - 14px),6px)!important;
-  left:18px!important;
-  right:18px!important;
+  left:16px!important;
+  right:16px!important;
   max-width:440px!important;
   margin:0 auto!important;
   z-index:9999!important;
@@ -78,24 +82,18 @@ html:has(dialog[open]){overflow:hidden}
   box-sizing:border-box!important;
   border-radius:9999px!important;
   border:none!important;
-  background:linear-gradient(180deg,rgba(42,42,54,0.34) 0%,rgba(18,18,24,0.35) 38%,rgba(14,14,20,0.38) 100%)!important;
-  -webkit-backdrop-filter:blur(0.8px) saturate(155%) brightness(1.06)!important;
-  backdrop-filter:blur(0.8px) saturate(155%) brightness(1.06)!important;
-  box-shadow:0 16px 38px rgba(0,0,0,0.46),0 4px 12px rgba(0,0,0,0.24),inset 0 1.5px 2.5px rgba(255,255,255,0.24),inset 0 -1px 2px rgba(255,255,255,0.10),inset 0 0 14px rgba(255,255,255,0.06)!important;
-  -webkit-transform:translate3d(0,0,0)!important;
-  transform:translate3d(0,0,0)!important;
-  transition:transform 0.44s cubic-bezier(0.16,1,0.3,1),opacity 0.36s cubic-bezier(0.16,1,0.3,1),background 0.28s ease,box-shadow 0.28s ease!important;
-  will-change:transform,opacity,-webkit-backdrop-filter;
-  overflow:hidden;
-  touch-action:pan-y;
+  background:rgba(22,24,30,0.35)!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  box-shadow:0 14px 34px rgba(0,0,0,0.45),0 2px 8px rgba(0,0,0,0.22)!important;
+  isolation:isolate!important;
+  transition:transform 0.44s cubic-bezier(0.16,1,0.3,1),opacity 0.36s cubic-bezier(0.16,1,0.3,1),background 0.2s ease,box-shadow 0.2s ease!important;
+  overflow:hidden!important;
+  touch-action:none;
   user-select:none;
   -webkit-user-select:none;
  }
- .sidebar nav.has-svg-lg{
-  -webkit-backdrop-filter:url(#lg-whole-pill-opt-a)!important;
-  backdrop-filter:url(#lg-whole-pill-opt-a)!important;
- }
- .sidebar nav .lg-webkit-bevel{
+ #mobile-glass-nav .glass-backdrop-layer{
   display:block;
   position:absolute;
   inset:0;
@@ -103,41 +101,50 @@ html:has(dialog[open]){overflow:hidden}
   pointer-events:none;
   z-index:0;
   overflow:hidden;
+  -webkit-backdrop-filter:blur(0.8px) saturate(135%) contrast(1.02);
+  backdrop-filter:blur(0.8px) saturate(135%) contrast(1.02);
  }
- .sidebar nav .lg-webkit-bevel-mirror{
+ #mobile-glass-nav.has-svg-lg .glass-backdrop-layer{
+  -webkit-backdrop-filter:url(#whole-pill-type-a) saturate(135%) contrast(1.02)!important;
+  backdrop-filter:url(#whole-pill-type-a) saturate(135%) contrast(1.02)!important;
+ }
+ #mobile-glass-nav .lg-webkit-bevel-mirror{
   position:absolute;
   top:0;
   left:0;
   transform-origin:0 0;
   pointer-events:none;
   will-change:transform;
-  filter:blur(0.8px) saturate(195%) contrast(1.16) brightness(1.15) drop-shadow(-2.5px -1.2px 0 rgba(255,55,88,0.58)) drop-shadow(2.5px 1.2px 0 rgba(45,200,255,0.58));
-  -webkit-filter:blur(0.8px) saturate(195%) contrast(1.16) brightness(1.15) drop-shadow(-2.5px -1.2px 0 rgba(255,55,88,0.58)) drop-shadow(2.5px 1.2px 0 rgba(45,200,255,0.58));
+  filter:blur(0.8px) saturate(135%) contrast(1.02) drop-shadow(-2.5px -1px 0 rgba(255,60,90,0.52)) drop-shadow(2.5px 1px 0 rgba(50,195,255,0.52));
+  -webkit-filter:blur(0.8px) saturate(135%) contrast(1.02) drop-shadow(-2.5px -1px 0 rgba(255,60,90,0.52)) drop-shadow(2.5px 1px 0 rgba(50,195,255,0.52));
  }
- .sidebar nav.has-svg-lg .lg-webkit-bevel{
+ #mobile-glass-nav.has-svg-lg .lg-webkit-bevel-mirror{
   display:none!important;
  }
- .sidebar nav::after{
-  content:'';
+ #mobile-glass-nav .glass-rim-layer{
+  display:block;
   position:absolute;
   inset:0;
   border-radius:9999px;
   pointer-events:none;
-  z-index:3;
-  background:radial-gradient(130% 100% at 50% -18%,rgba(255,255,255,0.20) 0%,rgba(255,255,255,0.04) 36%,rgba(255,255,255,0) 60%),radial-gradient(120% 90% at 50% 118%,rgba(120,200,255,0.10) 0%,rgba(255,120,160,0.06) 28%,rgba(255,255,255,0) 56%);
+  z-index:1;
+  box-shadow:inset 0 1.2px 1.5px rgba(255,255,255,0.035),inset 0 -1px 1.5px rgba(255,255,255,0.013);
  }
- .sidebar nav.is-light-backdrop{
-  background:linear-gradient(180deg,rgba(255,255,255,0.48) 0%,rgba(238,238,245,0.36) 100%)!important;
-  box-shadow:0 14px 32px rgba(0,0,0,0.18),0 3px 10px rgba(0,0,0,0.09),inset 0 1.5px 2.5px rgba(255,255,255,0.68),inset 0 -1px 2px rgba(0,0,0,0.08)!important;
+ #mobile-glass-nav.is-light-backdrop{
+  background:rgba(255,255,255,0.35)!important;
+  box-shadow:0 12px 30px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06)!important;
  }
- body.nav-scroll-hidden .sidebar nav,
- html.is-standalone-pwa body.nav-scroll-hidden .sidebar nav{
+ #mobile-glass-nav.is-light-backdrop .glass-rim-layer{
+  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.067),inset 0 -1.2px 1.6px rgba(0,0,0,0.011),0 0 0 0.75px rgba(0,0,0,0.008);
+ }
+ body.nav-scroll-hidden #mobile-glass-nav,
+ html.is-standalone-pwa body.nav-scroll-hidden #mobile-glass-nav{
   -webkit-transform:translate3d(0,calc(100% + 48px),0)!important;
   transform:translate3d(0,calc(100% + 48px),0)!important;
   opacity:0!important;
   pointer-events:none!important;
  }
- .nav-active-pill{
+ #mobile-glass-nav .nav-active-pill{
   display:block!important;
   position:absolute!important;
   top:5px!important;
@@ -145,36 +152,41 @@ html:has(dialog[open]){overflow:hidden}
   width:calc((100% - 10px) / 5)!important;
   left:5px!important;
   border-radius:9999px!important;
-  background:radial-gradient(125% 95% at 50% -10%,rgba(255,255,255,0.42) 0%,rgba(255,255,255,0.16) 46%,rgba(255,255,255,0.06) 72%,rgba(255,255,255,0.18) 100%)!important;
-  -webkit-backdrop-filter:blur(6px) saturate(155%) brightness(1.08)!important;
-  backdrop-filter:blur(6px) saturate(155%) brightness(1.08)!important;
-  box-shadow:inset 0 1.5px 2px rgba(255,255,255,0.65),inset 0 -1px 1.5px rgba(255,255,255,0.26),inset 0 0 10px rgba(255,255,255,0.12),0 8px 20px rgba(0,0,0,0.42),0 2px 6px rgba(0,0,0,0.24)!important;
+  background:rgba(255,255,255,0.184)!important;
+  -webkit-backdrop-filter:blur(6px) saturate(150%) brightness(1.10)!important;
+  backdrop-filter:blur(6px) saturate(150%) brightness(1.10)!important;
+  box-shadow:inset 0 1px 1.2px rgba(255,255,255,0.42),inset 0 -1px 1.2px rgba(255,255,255,0.12),0 0 0 0.75px rgba(255,255,255,0.14),0 4px 14px rgba(0,0,0,0.25)!important;
   border:none!important;
   pointer-events:none!important;
-  z-index:1!important;
+  z-index:2!important;
   transform-origin:center center!important;
-  transition:background 0.25s ease,box-shadow 0.25s ease!important;
+  overflow:hidden!important;
   will-change:transform!important;
  }
- .nav-active-pill.is-lifted{
-  background:radial-gradient(125% 95% at 50% -8%,rgba(255,255,255,0.52) 0%,rgba(255,255,255,0.22) 46%,rgba(255,255,255,0.10) 74%,rgba(255,255,255,0.24) 100%)!important;
-  box-shadow:inset 0 1.8px 2.5px rgba(255,255,255,0.78),inset 0 -1px 1.8px rgba(255,255,255,0.32),inset 0 0 14px rgba(255,255,255,0.18),0 12px 26px rgba(0,0,0,0.48),0 3px 9px rgba(0,0,0,0.28)!important;
+ #mobile-glass-nav .nav-active-pill .active-pill-sheen{
+  position:absolute;
+  inset:0;
+  border-radius:9999px;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,0.22) 0%,rgba(255,255,255,0.04) 45%,rgba(255,255,255,0) 100%);
  }
- .sidebar nav.is-light-backdrop .nav-active-pill{
-  background:radial-gradient(125% 95% at 50% -10%,rgba(255,255,255,0.55) 0%,rgba(24,24,34,0.14) 48%,rgba(24,24,34,0.18) 100%)!important;
-  box-shadow:inset 0 1.5px 2px rgba(255,255,255,0.75),inset 0 -1px 1.5px rgba(0,0,0,0.14),0 6px 16px rgba(0,0,0,0.16)!important;
+ #mobile-glass-nav.is-light-backdrop .nav-active-pill{
+  background:rgba(15,23,42,0.115)!important;
+  -webkit-backdrop-filter:blur(6px) saturate(150%) brightness(1.02)!important;
+  backdrop-filter:blur(6px) saturate(150%) brightness(1.02)!important;
+  box-shadow:inset 0 1.2px 1.5px rgba(255,255,255,0.59),inset 0 -1px 1.4px rgba(0,0,0,0.09),0 0 0 0.75px rgba(0,0,0,0.08),0 4px 12px rgba(0,0,0,0.09)!important;
  }
- .sidebar nav.is-light-backdrop .nav-active-pill.is-lifted{
-  background:radial-gradient(125% 95% at 50% -10%,rgba(255,255,255,0.65) 0%,rgba(24,24,34,0.18) 48%,rgba(24,24,34,0.24) 100%)!important;
+ #mobile-glass-nav.is-light-backdrop .nav-active-pill .active-pill-sheen{
+  background:linear-gradient(180deg,rgba(255,255,255,0.46) 0%,rgba(255,255,255,0.10) 46%,rgba(255,255,255,0) 100%);
  }
- .nav-link{
+ #mobile-glass-nav .nav-link{
   flex:1 1 0!important;
   min-width:0!important;
   height:100%!important;
   min-height:0!important;
   max-height:none!important;
   margin:0!important;
-  padding:4px 2px!important;
+  padding:0!important;
   border:0!important;
   border-radius:9999px!important;
   background:transparent!important;
@@ -186,58 +198,56 @@ html:has(dialog[open]){overflow:hidden}
   gap:2px!important;
   box-shadow:none!important;
   position:relative!important;
-  z-index:2!important;
-  transition:color .18s ease,transform .12s cubic-bezier(0.2,0.8,0.2,1)!important;
+  z-index:3!important;
+  transition:color 0.2s ease,transform 0.24s cubic-bezier(0.16,1,0.3,1)!important;
   -webkit-tap-highlight-color:transparent!important;
   cursor:pointer!important;
  }
- .nav-link:active{transform:scale(0.92)!important}
- .nav-link .nav-icon-wrap{
-  width:28px;
-  height:24px;
+ #mobile-glass-nav .nav-link .nav-icon-wrap{
+  width:24px;
+  height:22px;
   position:relative;
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  transition:transform .25s cubic-bezier(0.16,1,0.3,1);
  }
- .nav-link .nav-svg-icon{
-  width:22px;
-  height:22px;
-  stroke:currentColor;
-  transition:stroke-width .18s ease,stroke .18s ease,fill .18s ease;
+ #mobile-glass-nav .nav-link .nav-svg-icon{
+  width:20px;
+  height:20px;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.8!important;
+  transition:stroke-width 0.18s ease,transform 0.24s cubic-bezier(0.16,1,0.3,1);
  }
- .nav-link .desktop-label{display:none!important}
- .nav-link .mobile-label{
+ #mobile-glass-nav .nav-link .nav-svg-icon *{
+  fill:none!important;
+  stroke:currentColor!important;
+ }
+ #mobile-glass-nav .nav-link .desktop-label{display:none!important}
+ #mobile-glass-nav .nav-link .mobile-label{
   display:block!important;
   font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',var(--font-sans)!important;
   font-size:10px!important;
   font-weight:500!important;
   line-height:12px!important;
-  letter-spacing:-.2px!important;
-  margin-top:1px!important;
+  letter-spacing:0.01em!important;
+  margin-top:0!important;
   white-space:nowrap!important;
   color:inherit!important;
-  transition:font-weight .18s ease,color .18s ease;
+  transition:font-weight 0.18s ease,color 0.18s ease;
  }
- .nav-link.active{
+ #mobile-glass-nav .nav-link.active{
   flex:1 1 0!important;
   color:#ffffff!important;
   background:transparent!important;
   box-shadow:none!important;
+  transform:translateY(-1px) scale(1.05)!important;
  }
- .nav-link.active .nav-icon-wrap{
-  transform:scale(1.06)!important;
- }
- .nav-link.active .nav-svg-icon{stroke-width:1.95!important}
- .nav-link.active .nav-svg-icon .svg-fill-body{fill:#ffffff!important;stroke:#ffffff!important}
- .nav-link.active .nav-svg-icon .svg-cutout{stroke:#1a1a20!important}
- .nav-link.active .mobile-label{font-weight:650!important;color:#ffffff!important;letter-spacing:-.1px!important}
- .sidebar nav.is-light-backdrop .nav-link{color:rgba(20,20,28,0.56)!important}
- .sidebar nav.is-light-backdrop .nav-link.active{color:#121218!important}
- .sidebar nav.is-light-backdrop .nav-link.active .mobile-label{color:#121218!important}
- .sidebar nav.is-light-backdrop .nav-link.active .nav-svg-icon .svg-fill-body{fill:#121218!important;stroke:#121218!important}
- .sidebar nav.is-light-backdrop .nav-link.active .nav-svg-icon .svg-cutout{stroke:#f2f2f7!important}
+ #mobile-glass-nav .nav-link.active .nav-svg-icon{stroke-width:2.25!important}
+ #mobile-glass-nav .nav-link.active .mobile-label{font-weight:700!important;color:#ffffff!important}
+ #mobile-glass-nav.is-light-backdrop .nav-link{color:rgba(12,12,16,0.56)!important}
+ #mobile-glass-nav.is-light-backdrop .nav-link.active{color:#0a0a0c!important}
+ #mobile-glass-nav.is-light-backdrop .nav-link.active .mobile-label{color:#0a0a0c!important}
  .topbar{height:52px;padding:0 18px;background:var(--bg);border-bottom:0}
  .topbar>div:first-child{display:none}
  .save-tools{width:100%;justify-content:space-between}
@@ -562,7 +572,7 @@ h1,.page-heading h1,.hero h2,.dialog-heading h2,.section-title h2,.panel h2,.pil
 .upload-box{display:flex;align-items:center;gap:14px;padding:12px;border:1px dashed var(--line);border-radius:10px;background:var(--bg)}
 .upload-controls{display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}
 .upload-controls input[type="file"]{padding:6px;font-size:12px}
-body[data-project-type="conti"] .sidebar nav{display:none!important}
+body[data-project-type="conti"] .sidebar nav,body[data-project-type="conti"] #mobile-glass-nav{display:none!important}
 .conti-setup-group{display:flex;flex-direction:column;gap:10px;margin-top:18px}
 .conti-setup-group>span{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--green)}
 .conti-option-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
@@ -1041,18 +1051,18 @@ dialog#slot-warning-dialog[open] {
 @media all and (display-mode: standalone), (display-mode: fullscreen){
  @media(max-width:760px){
   .sidebar{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 12px)!important;min-height:calc(56px + max(env(safe-area-inset-top,0px),52px) + 12px)!important}
-  .sidebar nav{bottom:max(calc(env(safe-area-inset-bottom,0px) - 14px),6px)!important;position:fixed!important;padding:5px!important}
+  #mobile-glass-nav{bottom:max(calc(env(safe-area-inset-bottom,0px) - 14px),6px)!important;position:absolute!important;padding:5px!important}
   dialog{margin-top:max(env(safe-area-inset-top,0px),52px)!important;max-height:calc(var(--visual-height,100dvh) - max(env(safe-area-inset-top,0px),52px) - 30px)!important}
   .welcome-signout-btn{top:calc(max(env(safe-area-inset-top,0px),52px) + 16px)!important;right:18px!important}
   .welcome{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 30px)!important}
  }
 }
 html.is-standalone-pwa .sidebar{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 12px)!important;min-height:calc(56px + max(env(safe-area-inset-top,0px),52px) + 12px)!important}
-@media(max-width:760px){html.is-standalone-pwa .sidebar nav{bottom:max(calc(env(safe-area-inset-bottom,0px) - 14px),6px)!important;position:fixed!important;padding:5px!important}}
+@media(max-width:760px){html.is-standalone-pwa #mobile-glass-nav{bottom:max(calc(env(safe-area-inset-bottom,0px) - 14px),6px)!important;position:absolute!important;padding:5px!important}}
 html.is-standalone-pwa dialog{margin-top:max(env(safe-area-inset-top,0px),52px)!important;max-height:calc(var(--visual-height,100dvh) - max(env(safe-area-inset-top,0px),52px) - 30px)!important}
 html.is-standalone-pwa .welcome-signout-btn{top:calc(max(env(safe-area-inset-top,0px),52px) + 16px)!important;right:18px!important}
 html.is-standalone-pwa .welcome{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 30px)!important}
-</style></head><body><div id="app"><p class="loading">Opening your writing workspace…</p></div><div id="toast" role="status" aria-live="polite"></div><dialog id="dialog"></dialog><dialog id="slot-warning-dialog" class="slot-warning-dialog"></dialog><script type="module">
+</style></head><body><svg width="0" height="0" style="position:fixed;left:-9999px;top:-9999px;pointer-events:none" aria-hidden="true"><defs><filter id="whole-pill-type-a" filterUnits="userSpaceOnUse" x="0" y="0" width="358" height="64" color-interpolation-filters="sRGB"><feImage id="wp-img-r" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapR"/><feImage id="wp-img-g" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapG"/><feImage id="wp-img-b" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapB"/><feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="blurred"/><feDisplacementMap id="wp-disp-r" in="blurred" in2="dispMapR" scale="56" xChannelSelector="R" yChannelSelector="G" result="rDisp"/><feColorMatrix in="rDisp" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="redOnly"/><feDisplacementMap id="wp-disp-g" in="blurred" in2="dispMapG" scale="56" xChannelSelector="R" yChannelSelector="G" result="gDisp"/><feColorMatrix in="gDisp" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="greenOnly"/><feDisplacementMap id="wp-disp-b" in="blurred" in2="dispMapB" scale="56" xChannelSelector="R" yChannelSelector="G" result="bDisp"/><feColorMatrix in="bDisp" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blueOnly"/><feBlend in="redOnly" in2="greenOnly" mode="screen" result="rg"/><feBlend in="rg" in2="blueOnly" mode="screen" result="rgb"/></filter></defs></svg><div id="app"><p class="loading">Opening your writing workspace…</p></div><div id="toast" role="status" aria-live="polite"></div><dialog id="dialog"></dialog><dialog id="slot-warning-dialog" class="slot-warning-dialog"></dialog><script type="module">
 if(window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches){document.documentElement.classList.add('is-standalone-pwa');}
 const statuses = ['PREPRO','FILMED','EDITED','TX','CANCELLED','POST'];
 const uid = () => globalThis.crypto?.randomUUID?.() || `id-${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -1488,6 +1498,13 @@ const icons={
  log:`<svg class="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect class="svg-fill-body" x="3" y="3" width="18" height="18" rx="3.5"/><line class="svg-cutout" x1="7" y1="8" x2="17" y2="8"/><line class="svg-cutout" x1="7" y1="12" x2="17" y2="12"/><line class="svg-cutout" x1="7" y1="16" x2="13" y2="16"/></svg>`,
  overview:`<svg class="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect class="svg-fill-body" x="3" y="3" width="7.5" height="7.5" rx="2"/><rect class="svg-fill-body" x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect class="svg-fill-body" x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/><rect class="svg-fill-body" x="3" y="13.5" width="7.5" height="7.5" rx="2"/></svg>`
 };
+const mobileIcons={
+ conti:`<svg class="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>`,
+ script:`<svg class="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg>`,
+ home:`<svg class="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>`,
+ log:`<svg class="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>`,
+ overview:`<svg class="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v16M17 4v16M2 12h20"/></svg>`
+};
 const navs=[['conti','Conti'],['script','Script'],['home','Home'],['log','Item'],['overview','Episode']];
 const pageTitles={home:'Home',overview:'Episode',log:'Item',conti:'Conti Sheet',script:'Script Editor',preview:'Script Preview',settings:'Settings',account:'Account'};
 let writerName=safeStorage.getItem('rs:writer_name')||'';
@@ -1505,7 +1522,11 @@ function field(label,name,value='',type='text',extra=''){return `<label>${label}
 function area(label,name,value='',extra=''){return `<label>${label}<textarea name="${name}" ${extra}>${esc(value)}</textarea></label>`;}
 function options(values,selected){return values.map(v=>`<option value="${esc(v)}" ${String(v)===String(selected)?'selected':''}>${esc(v)}</option>`).join('');}
 function stat(n,label,sub=''){return `<div class="stat"><strong>${n}</strong><span>${label}</span><small>${sub}</small></div>`;}
-function header(){const activeTab=view==='preview'?'script':view==='conti-record'?'conti':view;const isContiOnly=p?.settings?.projectType==='conti';const logCount=(p?.records?.length||0)+((p?.throws||[]).length||0);const activeIdx=Math.max(0,navs.findIndex(([v])=>v===activeTab));return `<aside class="sidebar"><a class="brand" href="#" data-action="all-projects"><span class="brand-mark" aria-label="2list">${brandEmblemSvg}</span><span>2list<small>WRITING STUDIO</small></span></a><div class="project-picker"><label>ACTIVE PROJECT</label><div class="project-picker-row"><details class="project-menu"><summary aria-label="Active project"><span>${esc(p?.name||'Select project')}</span><span aria-hidden="true">▾</span></summary><div class="project-menu-list">${projects.map(x=>`<button type="button" class="project-menu-item ${x.id===p?.id?'active':''}" data-action="open-project" data-id="${esc(x.id)}"><span>${esc(x.name)}</span>${x.id===p?.id?'<span>✓</span>':''}</button>`).join('')}<div class="project-menu-divider"></div><button type="button" class="project-menu-item" data-action="new-project"><span>＋ Create new project</span></button><button type="button" class="project-menu-item" data-action="all-projects"><span>← All projects</span></button></div></details><details class="dots-menu ${view==='settings'||view==='account'?'active':''}"><summary aria-label="Menu" title="Menu">⋮</summary><div class="dots-menu-list"><button type="button" class="project-menu-item ${view==='account'?'active':''}" data-action="nav" data-view="account"><span>Account</span></button><button type="button" class="project-menu-item ${view==='settings'?'active':''}" data-action="nav" data-view="settings"><span>Settings</span></button></div></details></div></div>${isContiOnly?'':`<nav aria-label="Main navigation"><div class="lg-webkit-bevel" aria-hidden="true"></div><div class="nav-active-pill" id="nav-active-pill" style="transform:translate3d(${activeIdx * 100}%,0,0);"></div>${navs.map(([v,l])=>{const isActive=activeTab===v;const hasBadge=v==='log'&&logCount>0;return `<button data-action="nav" data-view="${v}" class="nav-link ${isActive?'active':''}" aria-label="${l}" ${isActive?'aria-current="page"':''}><div class="nav-icon-wrap"><span class="nav-icon" aria-hidden="true">${icons[v]}</span>${hasBadge?`<span class="nav-badge mobile-badge">${logCount}</span>`:''}</div><span class="nav-label desktop-label">${l}</span><span class="nav-label mobile-label" aria-hidden="true">${tabLabels[v]}</span>${hasBadge?`<span class="nav-badge desktop-badge">${logCount}</span>`:''}</button>`;}).join('')}</nav>`}<div class="sidebar-note"><span class="dot"></span> ${esc(userEmail||(adapter.mode==='local'?'Local preview':'Google Sheets'))}<p>${adapter.mode==='local'?'Connected to Google Sheets (R&D preview).':'Synced to your Google Sheets.'}</p><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="text-button" data-action="help">Quick guide ↗</button><button class="text-button" data-action="sign-out">Sign out</button></div>${adapter.mode==='local'?'<a class="phone-preview-link" href="/?phone-preview=1" target="_blank" rel="noopener">Phone preview ↗</a>':''}</div></aside>`;}
+function header(){const activeTab=view==='preview'?'script':view==='conti-record'?'conti':view;const isContiOnly=p?.settings?.projectType==='conti';const logCount=(p?.records?.length||0)+((p?.throws||[]).length||0);return `<aside class="sidebar"><a class="brand" href="#" data-action="all-projects"><span class="brand-mark" aria-label="2list">${brandEmblemSvg}</span><span>2list<small>WRITING STUDIO</small></span></a><div class="project-picker"><label>ACTIVE PROJECT</label><div class="project-picker-row"><details class="project-menu"><summary aria-label="Active project"><span>${esc(p?.name||'Select project')}</span><span aria-hidden="true">▾</span></summary><div class="project-menu-list">${projects.map(x=>`<button type="button" class="project-menu-item ${x.id===p?.id?'active':''}" data-action="open-project" data-id="${esc(x.id)}"><span>${esc(x.name)}</span>${x.id===p?.id?'<span>✓</span>':''}</button>`).join('')}<div class="project-menu-divider"></div><button type="button" class="project-menu-item" data-action="new-project"><span>＋ Create new project</span></button><button type="button" class="project-menu-item" data-action="all-projects"><span>← All projects</span></button></div></details><details class="dots-menu ${view==='settings'||view==='account'?'active':''}"><summary aria-label="Menu" title="Menu">⋮</summary><div class="dots-menu-list"><button type="button" class="project-menu-item ${view==='account'?'active':''}" data-action="nav" data-view="account"><span>Account</span></button><button type="button" class="project-menu-item ${view==='settings'?'active':''}" data-action="nav" data-view="settings"><span>Settings</span></button></div></details></div></div>${isContiOnly?'':`<nav aria-label="Main navigation">${navs.map(([v,l])=>{const isActive=activeTab===v;const hasBadge=v==='log'&&logCount>0;return `<button data-action="nav" data-view="${v}" class="nav-link ${isActive?'active':''}" aria-label="${l}" ${isActive?'aria-current="page"':''}><div class="nav-icon-wrap"><span class="nav-icon" aria-hidden="true">${icons[v]}</span></div><span class="nav-label desktop-label">${l}</span>${hasBadge?`<span class="nav-badge desktop-badge">${logCount}</span>`:''}</button>`;}).join('')}</nav>`}<div class="sidebar-note"><span class="dot"></span> ${esc(userEmail||(adapter.mode==='local'?'Local preview':'Google Sheets'))}<p>${adapter.mode==='local'?'Connected to Google Sheets (R&D preview).':'Synced to your Google Sheets.'}</p><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="text-button" data-action="help">Quick guide ↗</button><button class="text-button" data-action="sign-out">Sign out</button></div>${adapter.mode==='local'?'<a class="phone-preview-link" href="/?phone-preview=1" target="_blank" rel="noopener">Phone preview ↗</a>':''}</div></aside>`;}
+function mobileGlassNavHtml(activeTab){
+ const activeIdx=Math.max(0,navs.findIndex(([v])=>v===activeTab));
+ return `<nav id="mobile-glass-nav" aria-label="Mobile navigation"><div class="glass-backdrop-layer" id="glass-backdrop-layer" aria-hidden="true"></div><div class="glass-rim-layer" id="glass-rim-layer" aria-hidden="true"></div><div class="nav-active-pill" id="nav-active-pill" style="transform:translate3d(${activeIdx * 100}%,0,0);"><div class="active-pill-sheen" id="active-pill-sheen" aria-hidden="true"></div></div>${navs.map(([v,l])=>{const isActive=activeTab===v;return `<button data-action="nav" data-view="${v}" class="nav-link ${isActive?'active':''}" aria-label="${l}" ${isActive?'aria-current="page"':''}><div class="nav-icon-wrap"><span class="nav-icon" aria-hidden="true">${mobileIcons[v]}</span></div><span class="nav-label mobile-label" aria-hidden="true">${tabLabels[v]}</span></button>`;}).join('')}</nav>`;
+}
 function updateSidebarNav(activeTab, logCount){
  const activeIdx = navs.findIndex(([v]) => v === activeTab);
  if (activeIdx !== -1) {
@@ -1515,13 +1536,13 @@ function updateSidebarNav(activeTab, logCount){
    if (pill) pill.style.transform = `translate3d(${activeIdx * 100}%,0,0)`;
   }
  }
- document.querySelectorAll('.sidebar .nav-link').forEach(btn => {
+ document.querySelectorAll('.sidebar .nav-link, #mobile-glass-nav .nav-link').forEach(btn => {
   const isActive = btn.dataset.view === activeTab;
   btn.classList.toggle('active', isActive);
   if (isActive) btn.setAttribute('aria-current', 'page');
   else btn.removeAttribute('aria-current');
  });
- document.querySelectorAll('.sidebar .mobile-badge, .sidebar .desktop-badge').forEach(b => {
+ document.querySelectorAll('.sidebar .desktop-badge').forEach(b => {
   b.textContent = logCount > 0 ? logCount : '';
   b.style.display = logCount > 0 ? '' : 'none';
  });
@@ -1594,12 +1615,12 @@ function render(){
  const existingSidebar=document.querySelector('#app > .sidebar');
  const existingWs=document.querySelector('#app > .workspace');
  const needsNav=p?.settings?.projectType!=='conti';
- if(existingSidebar && existingWs && Boolean(existingSidebar.querySelector('nav'))===needsNav){
+ if(existingSidebar && existingWs && Boolean(document.getElementById('mobile-glass-nav'))===needsNav){
   updateSidebarNav(activeTab, logCount);
   existingWs.outerHTML=workspaceHtml;
   window.__rebuildSafariMirror?.();
  }else{
-  $('#app').innerHTML=`${header()}${workspaceHtml}`;
+  $('#app').innerHTML=`${header()}${workspaceHtml}${needsNav?mobileGlassNavHtml(activeTab):''}`;
   window.__syncLiquidTabBar?.(true);
   window.__rebuildSafariMirror?.();
  }
@@ -2596,7 +2617,7 @@ async function doAction(a,b){
    if(window.__setLiquidTabTarget)window.__setLiquidTabTarget(targetIdx,false);
    else{const pill=document.getElementById('nav-active-pill');if(pill)pill.style.transform=`translate3d(${targetIdx*100}%,0,0)`;}
   }
-  document.querySelectorAll('.sidebar .nav-link').forEach(btn=>{
+  document.querySelectorAll('.sidebar .nav-link, #mobile-glass-nav .nav-link').forEach(btn=>{
    const isActive=btn.dataset.view===targetView;
    btn.classList.toggle('active',isActive);
    if(isActive)btn.setAttribute('aria-current','page');
@@ -3588,123 +3609,148 @@ document.addEventListener('focusin',e=>{
   },280);
  }
 });
-/* Liquid Glass Tab Bar: Phase 1 (Optical Type A: K=2.00, RGB=2.5px, Bevel=42%, Blur=0.8px, Tint=35%, Rim=7%, Shadow=ON)
-   & Phase 2 (iOS Liquid Pill + Spring Wobble: stiffness 210/340, damping 21/26, Stretch=20%, Lift=ON, Scrubbing & Adaptive Contrast) */
+/* Exact Port from tab_active_pill_atomization.html:
+   Phase 1 Whole Pill Type A (K=2.00, RGB=2.5px, Bevel=42%, Blur=0.8px, Tint=35%, Rim=7%, Shadow=ON)
+   & Phase 2 Active Pill (iOS Liquid Pill: Fill=16%, Sheen=70%, Edge=65%, Blur=6.0px, Stretch=20%, Shadow=55%, Lift=ON) */
 (()=>{
  const ua=navigator.userAgent||'';
  const isIOS=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
  const isWebKitOnly=/AppleWebKit/.test(ua)&&(isIOS||!/Chrome|Chromium|Edg/.test(ua));
- const canUseSvgBackdrop=false;
- let svgHolder=null,lastW=0,lastH=0,ro=null,mirrorEl=null;
- let pos=0,vel=0,target=0,lift=0,liftTarget=0,scrubbing=false,rafId=0,lastT=0;
+ const canUseSvgBackdrop=!isWebKitOnly;
+ const WHOLE_PILL_TYPE_A={K:2.00,rgb:2.5,bevel:42,blur:0.8,tint:35,rim:7};
+ const ACTIVE_PILL_FINAL={fill:16,sheen:70,edge:65,pblur:6.0,stretch:20,pshadow:55};
+ let lastSizeKey='',ro=null,mirrorEl=null;
+ let xPos=2,vx=0,target=2,dragging=false,scaleBoost=0,rafId=0,lastT=0;
  let ptrId=null,startX=0,startY=0,didScrub=false,suppressClickUntil=0;
 
- function ensureOpticalLens(w,h,nav){
-  if(w<40||h<24)return;
-  if(Math.abs(w-lastW)<2&&Math.abs(h-lastH)<2&&(canUseSvgBackdrop?svgHolder:nav?.dataset?.maskReady==='1'))return;
-  lastW=w;lastH=h;
-  const R=h/2;
-  const bevel=Math.max(5,R*0.42);
-  const K=2.00,rgbShift=2.5,blurPx=0.8;
+ function ensureSvgDefs(){
+  return document.getElementById('whole-pill-type-a');
+ }
+
+ function buildOpticalMaps(W,H,nav){
+  if(W<40||H<24)return;
+  const sizeKey=`${W}x${H}:${canUseSvgBackdrop?1:0}`;
+  if(sizeKey===lastSizeKey)return;
+  lastSizeKey=sizeKey;
+  const R=H/2;
+  const bevelRatio=WHOLE_PILL_TYPE_A.bevel/100;
+  const start=1-bevelRatio;
+
   if(!canUseSvgBackdrop){
-   // iOS Safari / WebKit: Build exact capsule 42% bevel mask for live inverted rim mirror
+   // Safari / iOS WebKit fallback: exact u*u 42% capsule bevel mask for inverted rim mirror
    const mcv=document.createElement('canvas');
-   mcv.width=w;mcv.height=h;
+   mcv.width=W;mcv.height=H;
    const mctx=mcv.getContext('2d');
-   const mimg=mctx.createImageData(w,h);
+   const mimg=mctx.createImageData(W,H);
    const md=mimg.data;
-   for(let y=0;y<h;y++){
-    for(let x=0;x<w;x++){
-     const cx=Math.max(R,Math.min(w-R,x));
+   for(let y=0;y<H;y++){
+    for(let x=0;x<W;x++){
+     const cx=Math.max(R,Math.min(W-R,x));
      const dist=Math.hypot(x-cx,y-R);
-     const edgeDist=R-dist;
+     const t=Math.min(1,dist/R);
      let a=0;
-     if(edgeDist>0&&edgeDist<bevel){
-      const t=1-(edgeDist/bevel);
-      a=Math.round(Math.min(1,Math.pow(t,1.9)*0.94)*255);
+     if(t>start&&dist<=R){
+      const u=(t-start)/bevelRatio;
+      a=Math.round(Math.min(1,u*u*0.95)*255);
      }
-     const i=(y*w+x)*4;
-     md[i]=255;md[i+1]=255;md[i+2]=255;md[i+3]=a;
+     const idx=(y*W+x)*4;
+     md[idx]=255;md[idx+1]=255;md[idx+2]=255;md[idx+3]=a;
     }
    }
    mctx.putImageData(mimg,0,0);
    const maskUrl=`url(${mcv.toDataURL('image/png')})`;
-   const bevelBox=nav?.querySelector('.lg-webkit-bevel');
-   if(bevelBox){
-    bevelBox.style.webkitMaskImage=maskUrl;
-    bevelBox.style.maskImage=maskUrl;
-    bevelBox.style.webkitMaskSize='100% 100%';
-    bevelBox.style.maskSize='100% 100%';
-    nav.dataset.maskReady='1';
+   const bd=nav?.querySelector('.glass-backdrop-layer');
+   if(bd){
+    bd.style.webkitMaskImage=maskUrl;
+    bd.style.maskImage=maskUrl;
+    bd.style.webkitMaskSize='100% 100%';
+    bd.style.maskSize='100% 100%';
    }
    return;
   }
-  // Chromium / Desktop / Android: Full mathematical Type A SVG displacement + inverted-rim-only RGB dispersion
-  const maxDisp=R*K+rgbShift+2;
-  const makeMap=(rgbSign)=>{
-   const cv=document.createElement('canvas');
-   cv.width=w;cv.height=h;
-   const ctx=cv.getContext('2d');
-   const img=ctx.createImageData(w,h);
-   const d=img.data;
-   for(let y=0;y<h;y++){
-    for(let x=0;x<w;x++){
-     const cx=Math.max(R,Math.min(w-R,x));
-     const vx=x-cx,vy=y-R;
-     const dist=Math.hypot(vx,vy);
-     const edgeDist=R-dist;
-     let rByte=128,gByte=128;
-     if(edgeDist>0&&edgeDist<bevel&&dist>1e-4){
-      const t=1-(edgeDist/bevel);
-      const baseDisp=Math.pow(t,2.0)*(R*K);
-      // RGB chromatic shift exclusively in the inverted border zone (where baseDisp > R)
-      const invZone=baseDisp>R?Math.min(1,(baseDisp-R)/R):0;
-      const mag=Math.max(0,baseDisp+rgbSign*rgbShift*invZone);
-      const dx=-(vx/dist)*mag;
-      const dy=-(vy/dist)*mag;
-      rByte=Math.max(0,Math.min(255,Math.round(128+(dx/maxDisp)*127)));
-      gByte=Math.max(0,Math.min(255,Math.round(128+(dy/maxDisp)*127)));
+
+  ensureSvgDefs();
+  const wpFilter=document.getElementById('whole-pill-type-a');
+  wpFilter.setAttribute('width',W);
+  wpFilter.setAttribute('height',H);
+  ['wp-img-r','wp-img-g','wp-img-b'].forEach(id=>{
+   const el=document.getElementById(id);
+   el.setAttribute('width',W);
+   el.setAttribute('height',H);
+  });
+
+  const L=bevelRatio*R;
+  const baseScalePx=2*WHOLE_PILL_TYPE_A.K*L;
+  const prismRatio=WHOLE_PILL_TYPE_A.rgb/(baseScalePx*0.5);
+  const maxNorm=1+prismRatio;
+  const uFold=1/(2*WHOLE_PILL_TYPE_A.K);
+  const mk=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');return {c,ctx,img:ctx.createImageData(w,h)};};
+  const mR=mk(W,H),mG=mk(W,H),mB=mk(W,H);
+  const cy=H/2,leftX=R,rightX=W-R;
+
+  for(let y=0;y<H;y++){
+   for(let x=0;x<W;x++){
+    const cx=Math.max(leftX,Math.min(rightX,x));
+    const dx=x-cx,dy=y-cy;
+    const dist=Math.hypot(dx,dy);
+    const t=Math.min(1,dist/R);
+    let base=0,prism=0,nx=0,ny=0;
+    if(t>start&&dist>0.0001){
+     const u=(t-start)/bevelRatio;
+     base=u*u;
+     nx=dx/dist;
+     ny=dy/dist;
+     if(u>uFold){
+      const v=(u-uFold)/(1-uFold);
+      prism=v*v;
      }
-     const idx=(y*w+x)*4;
-     d[idx]=rByte;d[idx+1]=gByte;d[idx+2]=128;d[idx+3]=255;
     }
+    const sR=(base+prismRatio*prism)/maxNorm;
+    const sG=base/maxNorm;
+    const sB=Math.max(0,base-prismRatio*prism)/maxNorm;
+    const idx=(y*W+x)*4;
+    mR.img.data[idx]=Math.max(0,Math.min(255,Math.round(128-nx*sR*127)));
+    mR.img.data[idx+1]=Math.max(0,Math.min(255,Math.round(128-ny*sR*127)));
+    mR.img.data[idx+2]=128;mR.img.data[idx+3]=255;
+    mG.img.data[idx]=Math.max(0,Math.min(255,Math.round(128-nx*sG*127)));
+    mG.img.data[idx+1]=Math.max(0,Math.min(255,Math.round(128-ny*sG*127)));
+    mG.img.data[idx+2]=128;mG.img.data[idx+3]=255;
+    mB.img.data[idx]=Math.max(0,Math.min(255,Math.round(128-nx*sB*127)));
+    mB.img.data[idx+1]=Math.max(0,Math.min(255,Math.round(128-ny*sB*127)));
+    mB.img.data[idx+2]=128;mB.img.data[idx+3]=255;
    }
-   ctx.putImageData(img,0,0);
-   return cv.toDataURL('image/png');
-  };
-  const urlR=makeMap(1),urlG=makeMap(0),urlB=makeMap(-1);
-  const sc=(maxDisp*2).toFixed(2);
-  if(!svgHolder){
-   svgHolder=document.createElement('div');
-   svgHolder.style.cssText='position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;z-index:-1;';
-   svgHolder.setAttribute('aria-hidden','true');
-   document.body.appendChild(svgHolder);
   }
-  svgHolder.innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0" height="0" style="position:absolute"><defs><filter id="lg-whole-pill-opt-a" x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feImage href="${urlR}" xlink:href="${urlR}" x="0%" y="0%" width="100%" height="100%" preserveAspectRatio="none" result="mR"/><feImage href="${urlG}" xlink:href="${urlG}" x="0%" y="0%" width="100%" height="100%" preserveAspectRatio="none" result="mG"/><feImage href="${urlB}" xlink:href="${urlB}" x="0%" y="0%" width="100%" height="100%" preserveAspectRatio="none" result="mB"/><feDisplacementMap in="SourceGraphic" in2="mR" scale="${sc}" xChannelSelector="R" yChannelSelector="G" result="dR"/><feDisplacementMap in="SourceGraphic" in2="mG" scale="${sc}" xChannelSelector="R" yChannelSelector="G" result="dG"/><feDisplacementMap in="SourceGraphic" in2="mB" scale="${sc}" xChannelSelector="R" yChannelSelector="G" result="dB"/><feColorMatrix in="dR" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="cR"/><feColorMatrix in="dG" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="cG"/><feColorMatrix in="dB" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="cB"/><feBlend in="cR" in2="cG" mode="screen" result="cRG"/><feBlend in="cRG" in2="cB" mode="screen" result="cRGB"/><feGaussianBlur in="cRGB" stdDeviation="${blurPx}" edgeMode="duplicate" result="blurred"/><feColorMatrix in="blurred" type="saturate" values="1.45" result="out"/></filter></defs></svg>`;
+  mR.ctx.putImageData(mR.img,0,0);
+  mG.ctx.putImageData(mG.img,0,0);
+  mB.ctx.putImageData(mB.img,0,0);
+  document.getElementById('wp-img-r').setAttribute('href',mR.c.toDataURL('image/png'));
+  document.getElementById('wp-img-g').setAttribute('href',mG.c.toDataURL('image/png'));
+  document.getElementById('wp-img-b').setAttribute('href',mB.c.toDataURL('image/png'));
+  const effScale=(baseScalePx*maxNorm).toFixed(1);
+  ['wp-disp-r','wp-disp-g','wp-disp-b'].forEach(id=>document.getElementById(id).setAttribute('scale',effScale));
  }
 
  function syncSafariMirrorScroll(){
   if(canUseSvgBackdrop||!mirrorEl)return;
-  const nav=document.querySelector('.sidebar nav');
-  const ws=document.querySelector('#app > .workspace');
-  if(!nav||!ws||!window.matchMedia('(max-width: 760px)').matches)return;
+  const nav=document.getElementById('mobile-glass-nav');
+  const mainEl=document.getElementById('main');
+  if(!nav||!mainEl||!window.matchMedia('(max-width: 760px)').matches)return;
   const navRect=nav.getBoundingClientRect();
-  const wsRect=ws.getBoundingClientRect();
-  // Vertically flip ws around nav's vertical center (y_local' = H - y_local => K=2.00 inverted border reflection)
-  const tx=wsRect.left-navRect.left;
-  const ty=navRect.height-(wsRect.top-navRect.top);
-  mirrorEl.style.width=`${wsRect.width}px`;
+  const mainRect=mainEl.getBoundingClientRect();
+  const tx=mainRect.left-navRect.left;
+  const ty=navRect.height-(mainRect.top-navRect.top);
+  mirrorEl.style.width=`${mainRect.width}px`;
   mirrorEl.style.transform=`translate3d(${tx.toFixed(1)}px,${ty.toFixed(1)}px,0) scaleY(-1)`;
  }
 
  window.__rebuildSafariMirror=()=>{
   if(canUseSvgBackdrop)return;
   if(!window.matchMedia('(max-width: 760px)').matches)return;
-  const nav=document.querySelector('.sidebar nav');
-  const bevelBox=nav?.querySelector('.lg-webkit-bevel');
-  const ws=document.querySelector('#app > .workspace');
-  if(!bevelBox||!ws)return;
-  const clone=ws.cloneNode(true);
+  const nav=document.getElementById('mobile-glass-nav');
+  const bd=nav?.querySelector('.glass-backdrop-layer');
+  const mainEl=document.getElementById('main');
+  if(!bd||!mainEl)return;
+  const clone=mainEl.cloneNode(true);
   clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
   clone.querySelectorAll('[data-action],[name]').forEach(el=>{el.removeAttribute('data-action');el.removeAttribute('name');});
   clone.querySelectorAll('input,textarea,select,button,a,summary').forEach(el=>{el.tabIndex=-1;el.setAttribute('aria-hidden','true');});
@@ -3712,8 +3758,8 @@ document.addEventListener('focusin',e=>{
   mirrorEl.className='lg-webkit-bevel-mirror';
   mirrorEl.setAttribute('aria-hidden','true');
   mirrorEl.appendChild(clone);
-  bevelBox.innerHTML='';
-  bevelBox.appendChild(mirrorEl);
+  bd.innerHTML='';
+  bd.appendChild(mirrorEl);
   syncSafariMirrorScroll();
  };
 
@@ -3723,61 +3769,62 @@ document.addEventListener('focusin',e=>{
  }
 
  function applyPillTransform(){
-  const pill=document.getElementById('nav-active-pill');
-  if(!pill)return;
+  const apEl=document.getElementById('nav-active-pill');
+  if(!apEl)return;
   if(!window.matchMedia('(max-width: 760px)').matches){
-   pill.style.transform='';
+   apEl.style.transform='';
    return;
   }
-  const stretch=Math.min(0.20,Math.abs(vel)*0.038);
-  const inflate=1+0.065*lift;
-  const sx=(1+stretch)*inflate;
-  const sy=(1-stretch*0.50)*(1+0.08*lift);
-  const ly=-1.5*lift;
-  pill.style.transform=`translate3d(${(pos*100).toFixed(3)}%,${ly.toFixed(2)}px,0) scale(${sx.toFixed(4)},${sy.toFixed(4)})`;
-  pill.classList.toggle('is-lifted',lift>0.22);
+  const speed=Math.abs(vx);
+  const stretchFactor=ACTIVE_PILL_FINAL.stretch/100;
+  const velStretch=Math.min(0.28,speed*0.018*(stretchFactor/0.18));
+  const inflate=scaleBoost*0.08;
+  const sx=1+velStretch+inflate;
+  const sy=1-velStretch*0.35+inflate*0.85;
+  apEl.style.transform=`translate3d(${(xPos*100).toFixed(3)}%,0,0) scale(${sx.toFixed(4)},${sy.toFixed(4)})`;
  }
 
  function tick(now){
-  const dt=Math.min(0.032,Math.max(0.001,(now-(lastT||now))/1000));
+  const dt=lastT?Math.min(0.032,Math.max(0.001,(now-lastT)/1000)):0.016;
   lastT=now;
-  const k=scrubbing?340:210;
-  const c=scrubbing?26:21;
-  const acc=k*(target-pos)-c*vel;
-  vel+=acc*dt;
-  pos+=vel*dt;
-  lift+=(liftTarget-lift)*Math.min(1,dt*18);
+  const stiffness=dragging?340:210;
+  const damping=dragging?26:21;
+  const force=(target-xPos)*stiffness;
+  vx+=(force-vx*damping)*dt;
+  xPos+=vx*dt;
+  const targetBoost=dragging?1:0;
+  scaleBoost+=(targetBoost-scaleBoost)*Math.min(1,dt*16);
   applyPillTransform();
-  if(Math.abs(target-pos)>0.0007||Math.abs(vel)>0.002||Math.abs(liftTarget-lift)>0.004||scrubbing){
+  if(Math.abs(target-xPos)>0.0006||Math.abs(vx)>0.002||Math.abs(targetBoost-scaleBoost)>0.004||dragging){
    rafId=requestAnimationFrame(tick);
   }else{
-   pos=target;vel=0;lift=liftTarget;
+   xPos=target;vx=0;scaleBoost=targetBoost;
    applyPillTransform();
    rafId=0;lastT=0;
   }
  }
 
  function startSpring(){
-  if(!rafId){lastT=performance.now();rafId=requestAnimationFrame(tick);}
+  if(!rafId){lastT=0;rafId=requestAnimationFrame(tick);}
  }
 
  function updateBackdropContrast(nav){
   if(!nav)return;
-  const isLight=view==='preview';
-  nav.classList.toggle('is-light-backdrop',isLight);
+  nav.classList.toggle('is-light-backdrop',view==='preview');
  }
 
  function bindNav(nav){
   if(!nav||nav.dataset.lgBound==='1')return;
   nav.dataset.lgBound='1';
   if(canUseSvgBackdrop){
+   ensureSvgDefs();
    nav.classList.add('has-svg-lg');
   }
   if(typeof ResizeObserver!=='undefined'){
    ro?.disconnect();
    ro=new ResizeObserver(()=>{
     const w=Math.round(nav.offsetWidth),h=Math.round(nav.offsetHeight);
-    if(w>0&&h>0)ensureOpticalLens(w,h,nav);
+    if(w>0&&h>0)buildOpticalMaps(w,h,nav);
     syncSafariMirrorScroll();
    });
    ro.observe(nav);
@@ -3795,7 +3842,7 @@ document.addEventListener('focusin',e=>{
    startX=e.clientX;
    startY=e.clientY;
    didScrub=false;
-   liftTarget=1;
+   dragging=true;
    startSpring();
   },{passive:true});
   nav.addEventListener('pointermove',e=>{
@@ -3803,20 +3850,18 @@ document.addEventListener('focusin',e=>{
    const dx=e.clientX-startX,dy=e.clientY-startY;
    if(!didScrub){
     if(Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx)){
-     ptrId=null;liftTarget=0;startSpring();return;
+     ptrId=null;dragging=false;startSpring();return;
     }
-    if(Math.abs(dx)>7&&Math.abs(dx)>=Math.abs(dy)){
+    if(Math.abs(dx)>5&&Math.abs(dx)>=Math.abs(dy)){
      didScrub=true;
-     scrubbing=true;
      try{nav.setPointerCapture(e.pointerId);}catch{}
     }
    }
    if(didScrub){
     const rect=nav.getBoundingClientRect();
     const innerW=Math.max(1,rect.width-10);
-    const slotW=innerW/navs.length;
-    const raw=((e.clientX-rect.left-5)/slotW)-0.5;
-    target=Math.max(0,Math.min(navs.length-1,raw));
+    const rel=(e.clientX-rect.left-5)/innerW;
+    target=Math.max(0,Math.min(navs.length-1,rel*navs.length-0.5));
     const nearIdx=Math.max(0,Math.min(navs.length-1,Math.round(target)));
     const nearView=navs[nearIdx]?.[0];
     nav.querySelectorAll('.nav-link').forEach(btn=>{
@@ -3828,7 +3873,7 @@ document.addEventListener('focusin',e=>{
   const finishPointer=e=>{
    if(ptrId===null||e.pointerId!==ptrId)return;
    const wasScrub=didScrub;
-   ptrId=null;didScrub=false;scrubbing=false;liftTarget=0;
+   ptrId=null;didScrub=false;dragging=false;
    try{if(nav.hasPointerCapture?.(e.pointerId))nav.releasePointerCapture(e.pointerId);}catch{}
    if(wasScrub){
     suppressClickUntil=performance.now()+360;
@@ -3853,7 +3898,7 @@ document.addEventListener('focusin',e=>{
   if(typeof idx!=='number'||idx<0||idx>=navs.length)return;
   target=idx;
   if(instant){
-   pos=idx;vel=0;
+   xPos=idx;vx=0;
    applyPillTransform();
   }else{
    startSpring();
@@ -3861,16 +3906,16 @@ document.addEventListener('focusin',e=>{
  };
 
  window.__syncLiquidTabBar=(freshMount=false)=>{
-  const nav=document.querySelector('.sidebar nav');
+  const nav=document.getElementById('mobile-glass-nav');
   if(!nav)return;
   bindNav(nav);
   updateBackdropContrast(nav);
   const w=Math.round(nav.offsetWidth),h=Math.round(nav.offsetHeight);
-  if(w>0&&h>0)ensureOpticalLens(w,h,nav);
+  if(w>0&&h>0)buildOpticalMaps(w,h,nav);
   const activeTab=view==='preview'?'script':view==='conti-record'?'conti':view;
   const idx=navs.findIndex(([v])=>v===activeTab);
   if(idx!==-1){
-   if(freshMount){pos=idx;target=idx;vel=0;applyPillTransform();}
+   if(freshMount){xPos=idx;target=idx;vx=0;applyPillTransform();}
    else{target=idx;startSpring();}
   }
  };
@@ -3878,6 +3923,11 @@ document.addEventListener('focusin',e=>{
  requestAnimationFrame(()=>{window.__syncLiquidTabBar?.(true);window.__rebuildSafariMirror?.();});
 })();
 (()=>{
+ const origScrollTo=window.scrollTo.bind(window);
+ window.scrollTo=(...args)=>{
+  origScrollTo(...args);
+  if(args[0]===0&&args[1]===0)document.querySelector('#app > .workspace')?.scrollTo(0,0);
+ };
  let lastWinY=window.scrollY||0;
  let winDownAcc=0;
  let winUpAcc=0;
@@ -3921,7 +3971,7 @@ document.addEventListener('focusin',e=>{
  document.addEventListener('scroll',e=>{
   const el=e.target;
   if(!el||el===document||el===document.documentElement||el===document.body)return;
-  if(!(el instanceof Element)||!el.closest('#main'))return;
+  if(!(el instanceof Element)||(!el.classList.contains('workspace')&&!el.closest('#main')))return;
   if(el.scrollHeight<=el.clientHeight+20)return;
   const y=Math.max(0,el.scrollTop||0);
   const prevData=scrollMap.get(el)||{y,down:0,up:0};
