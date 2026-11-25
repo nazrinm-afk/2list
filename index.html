@@ -101,32 +101,12 @@ html:has(dialog[open]){overflow:hidden}
   pointer-events:none;
   z-index:0;
   overflow:hidden;
-  -webkit-backdrop-filter:blur(0.8px) saturate(135%) contrast(1.02);
-  backdrop-filter:blur(0.8px) saturate(135%) contrast(1.02);
+  -webkit-backdrop-filter:blur(1.4px) saturate(165%) contrast(1.06) brightness(1.04);
+  backdrop-filter:blur(1.4px) saturate(165%) contrast(1.06) brightness(1.04);
  }
  #mobile-glass-nav.has-svg-lg .glass-backdrop-layer{
   -webkit-backdrop-filter:url(#whole-pill-type-a) saturate(135%) contrast(1.02)!important;
   backdrop-filter:url(#whole-pill-type-a) saturate(135%) contrast(1.02)!important;
- }
- #mobile-glass-nav .lg-webkit-bevel-zone{
-  position:absolute;
-  inset:0;
-  overflow:hidden;
-  pointer-events:none;
- }
- #mobile-glass-nav .lg-webkit-bevel-mirror{
-  position:absolute;
-  top:0;
-  left:0;
-  transform-origin:0 0;
-  pointer-events:none;
-  will-change:transform;
-  filter:blur(0.9px) saturate(138%) contrast(1.03) drop-shadow(0 -1.2px 0 rgba(255,75,105,0.30)) drop-shadow(0 1.2px 0 rgba(55,195,255,0.30));
-  -webkit-filter:blur(0.9px) saturate(138%) contrast(1.03) drop-shadow(0 -1.2px 0 rgba(255,75,105,0.30)) drop-shadow(0 1.2px 0 rgba(55,195,255,0.30));
- }
- #mobile-glass-nav.has-svg-lg .lg-webkit-bevel-zone,
- #mobile-glass-nav.has-svg-lg .lg-webkit-bevel-mirror{
-  display:none!important;
  }
  #mobile-glass-nav .glass-rim-layer{
   display:block;
@@ -137,12 +117,18 @@ html:has(dialog[open]){overflow:hidden}
   z-index:1;
   box-shadow:inset 0 1.2px 1.5px rgba(255,255,255,0.035),inset 0 -1px 1.5px rgba(255,255,255,0.013);
  }
+ #mobile-glass-nav:not(.has-svg-lg) .glass-rim-layer{
+  box-shadow:inset 0 1.2px 1.6px rgba(255,255,255,0.28),inset 0 -1px 1.5px rgba(255,255,255,0.10),inset 1.4px 0.8px 2px rgba(255,95,125,0.20),inset -1.4px -0.8px 2px rgba(65,205,255,0.24);
+ }
  #mobile-glass-nav.is-light-backdrop{
   background:rgba(255,255,255,0.35)!important;
   box-shadow:0 12px 30px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06)!important;
  }
  #mobile-glass-nav.is-light-backdrop .glass-rim-layer{
   box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.067),inset 0 -1.2px 1.6px rgba(0,0,0,0.011),0 0 0 0.75px rgba(0,0,0,0.008);
+ }
+ #mobile-glass-nav.is-light-backdrop:not(.has-svg-lg) .glass-rim-layer{
+  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.72),inset 0 -1.2px 1.6px rgba(0,0,0,0.10),inset 1.4px 0.8px 2px rgba(255,80,110,0.18),inset -1.4px -0.8px 2px rgba(40,185,255,0.22),0 0 0 0.75px rgba(0,0,0,0.08);
  }
  body.nav-scroll-hidden #mobile-glass-nav,
  html.is-standalone-pwa body.nav-scroll-hidden #mobile-glass-nav{
@@ -3692,7 +3678,7 @@ document.addEventListener('focusin',e=>{
  const canUseSvgBackdrop=!isWebKitOnly;
  const WHOLE_PILL_TYPE_A={K:2.00,rgb:2.5,bevel:42,blur:0.8,tint:35,rim:7};
  const ACTIVE_PILL_FINAL={K:0.80,rgb:3.5,bevel:31,blur:1.4,tint:2,rim:74,stretch:40,crispOnLand:true};
- let lastSizeKey='',ro=null,mirrorTopEl=null,mirrorBotEl=null,safariTopMask='',safariBotMask='';
+ let lastSizeKey='',ro=null;
  let xPos=2,vx=0,target=2,dragging=false,scaleBoost=0,rafId=0,lastT=0;
  let ptrId=null,startX=0,startY=0,didScrub=false,suppressClickUntil=0;
 
@@ -3768,44 +3754,12 @@ document.addEventListener('focusin',e=>{
   const start=1-bevelRatio;
 
   if(!canUseSvgBackdrop){
-   // Safari / iOS WebKit fallback: separate top & bottom rim bevel masks (outer ~13px only)
-   // so each rim reflects ONLY nearby content right at its own border, never 64px away!
-   const mkHalfMask=(isTop)=>{
-    const mcv=document.createElement('canvas');
-    mcv.width=W;mcv.height=H;
-    const mctx=mcv.getContext('2d');
-    const mimg=mctx.createImageData(W,H);
-    const md=mimg.data;
-    const rimStart=0.60; // outer 40% of radius (~12.8px)
-    for(let y=0;y<H;y++){
-     if(isTop&&y>=R)continue;
-     if(!isTop&&y<R)continue;
-     for(let x=0;x<W;x++){
-      const cx=Math.max(R,Math.min(W-R,x));
-      const dist=Math.hypot(x-cx,y-R);
-      const t=Math.min(1,dist/R);
-      let a=0;
-      if(t>rimStart&&dist<=R){
-       const u=(t-rimStart)/(1-rimStart);
-       a=Math.round(Math.min(1,u*u*0.88)*255);
-      }
-      const idx=(y*W+x)*4;
-      md[idx]=255;md[idx+1]=255;md[idx+2]=255;md[idx+3]=a;
-     }
-    }
-    mctx.putImageData(mimg,0,0);
-    return `url(${mcv.toDataURL('image/png')})`;
-   };
-   safariTopMask=mkHalfMask(true);
-   safariBotMask=mkHalfMask(false);
+   // Safari / iOS WebKit uses clean clear glass + prismatic rim CSS (no DOM-clone mirror drift)
    const bd=nav?.querySelector('.glass-backdrop-layer');
    if(bd){
     bd.style.webkitMaskImage='';
     bd.style.maskImage='';
-    const tz=bd.querySelector('.lg-webkit-bevel-zone.is-top');
-    const bz=bd.querySelector('.lg-webkit-bevel-zone.is-bot');
-    if(tz){tz.style.webkitMaskImage=safariTopMask;tz.style.maskImage=safariTopMask;tz.style.webkitMaskSize='100% 100%';tz.style.maskSize='100% 100%';}
-    if(bz){bz.style.webkitMaskImage=safariBotMask;bz.style.maskImage=safariBotMask;bz.style.webkitMaskSize='100% 100%';bz.style.maskSize='100% 100%';}
+    bd.innerHTML='';
    }
    return;
   }
@@ -3843,77 +3797,8 @@ document.addEventListener('focusin',e=>{
   }
  }
 
- function syncSafariMirrorScroll(){
-  if(canUseSvgBackdrop||(!mirrorTopEl&&!mirrorBotEl))return;
-  const nav=document.getElementById('mobile-glass-nav');
-  const mainEl=document.getElementById('main');
-  if(!nav||!mainEl||!window.matchMedia('(max-width: 760px)').matches)return;
-  const navRect=nav.getBoundingClientRect();
-  const mainRect=mainEl.getBoundingClientRect();
-  const tx=mainRect.left-navRect.left;
-  const relTop=mainRect.top-navRect.top;
-  const foldTop=12;
-  const foldBot=navRect.height-12;
-  const tyTop=2*foldTop-relTop;
-  const tyBot=2*foldBot-relTop;
-  if(mirrorTopEl){
-   mirrorTopEl.style.width=`${mainRect.width}px`;
-   mirrorTopEl.style.transform=`translate3d(${tx.toFixed(1)}px,${tyTop.toFixed(1)}px,0) scaleY(-1)`;
-  }
-  if(mirrorBotEl){
-   mirrorBotEl.style.width=`${mainRect.width}px`;
-   mirrorBotEl.style.transform=`translate3d(${tx.toFixed(1)}px,${tyBot.toFixed(1)}px,0) scaleY(-1)`;
-  }
- }
-
- let mirrorRebuildTimer=0;
- window.__rebuildSafariMirror=()=>{
-  if(canUseSvgBackdrop)return;
-  if(!window.matchMedia('(max-width: 760px)').matches)return;
-  clearTimeout(mirrorRebuildTimer);
-  mirrorRebuildTimer=setTimeout(()=>{
-   const nav=document.getElementById('mobile-glass-nav');
-   const bd=nav?.querySelector('.glass-backdrop-layer');
-   const mainEl=document.getElementById('main');
-   if(!bd||!mainEl)return;
-   const cleanClone=()=>{
-    const clone=mainEl.cloneNode(true);
-    clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
-    clone.querySelectorAll('[data-action],[name]').forEach(el=>{el.removeAttribute('data-action');el.removeAttribute('name');});
-    clone.querySelectorAll('input,textarea,select,button,a,summary').forEach(el=>{el.tabIndex=-1;el.setAttribute('aria-hidden','true');});
-    return clone;
-   };
-   const makeZone=(cls,maskUrl)=>{
-    const z=document.createElement('div');
-    z.className=`lg-webkit-bevel-zone ${cls}`;
-    z.setAttribute('aria-hidden','true');
-    if(maskUrl){
-     z.style.webkitMaskImage=maskUrl;
-     z.style.maskImage=maskUrl;
-     z.style.webkitMaskSize='100% 100%';
-     z.style.maskSize='100% 100%';
-    }
-    const m=document.createElement('div');
-    m.className='lg-webkit-bevel-mirror';
-    m.appendChild(cleanClone());
-    z.appendChild(m);
-    return {z,m};
-   };
-   const topZ=makeZone('is-top',safariTopMask);
-   const botZ=makeZone('is-bot',safariBotMask);
-   mirrorTopEl=topZ.m;
-   mirrorBotEl=botZ.m;
-   bd.innerHTML='';
-   bd.appendChild(topZ.z);
-   bd.appendChild(botZ.z);
-   syncSafariMirrorScroll();
-  },180);
- };
-
- if(!canUseSvgBackdrop){
-  window.addEventListener('scroll',syncSafariMirrorScroll,{passive:true});
-  document.addEventListener('scroll',syncSafariMirrorScroll,{capture:true,passive:true});
- }
+ function syncSafariMirrorScroll(){}
+ window.__rebuildSafariMirror=()=>{};
 
  function updateCrispOverlay(){
   const slots=document.querySelectorAll('#mobile-glass-nav .crisp-tab-slot');
