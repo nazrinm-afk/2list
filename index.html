@@ -129,18 +129,12 @@ html:has(dialog[open]){overflow:hidden}
   z-index:1;
   box-shadow:inset 0 1.2px 1.5px rgba(255,255,255,0.035),inset 0 -1px 1.5px rgba(255,255,255,0.013);
  }
- #mobile-glass-nav:not(.has-svg-lg) .glass-rim-layer{
-  box-shadow:inset 0 1.2px 1.6px rgba(255,255,255,0.28),inset 0 -1px 1.5px rgba(255,255,255,0.10),inset 1.4px 0.8px 2px rgba(255,95,125,0.20),inset -1.4px -0.8px 2px rgba(65,205,255,0.24);
- }
  #mobile-glass-nav.is-light-backdrop{
   background:rgba(255,255,255,0.35)!important;
   box-shadow:0 12px 30px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06)!important;
  }
  #mobile-glass-nav.is-light-backdrop .glass-rim-layer{
-  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.067),inset 0 -1.2px 1.6px rgba(0,0,0,0.011),0 0 0 0.75px rgba(0,0,0,0.008);
- }
- #mobile-glass-nav.is-light-backdrop:not(.has-svg-lg) .glass-rim-layer{
-  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.72),inset 0 -1.2px 1.6px rgba(0,0,0,0.10),inset 1.4px 0.8px 2px rgba(255,80,110,0.18),inset -1.4px -0.8px 2px rgba(40,185,255,0.22),0 0 0 0.75px rgba(0,0,0,0.08);
+  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.067),inset 0 -1.2px 1.6px rgba(0,0,0,0.011);
  }
  body.nav-scroll-hidden #mobile-glass-nav,
  html.is-standalone-pwa body.nav-scroll-hidden #mobile-glass-nav{
@@ -157,10 +151,10 @@ html:has(dialog[open]){overflow:hidden}
   width:calc((100% - 10px) / 5)!important;
   left:5px!important;
   border-radius:9999px!important;
-  background:rgba(255,255,255,0.015)!important;
+  background:transparent!important;
   -webkit-backdrop-filter:blur(1.4px) saturate(140%) contrast(1.04)!important;
   backdrop-filter:blur(1.4px) saturate(140%) contrast(1.04)!important;
-  box-shadow:0 4px 14px rgba(0,0,0,0.31)!important;
+  box-shadow:0 4px 14px rgba(0,0,0,0.14)!important;
   border:none!important;
   pointer-events:none!important;
   z-index:5!important;
@@ -177,20 +171,14 @@ html:has(dialog[open]){overflow:hidden}
   inset:0;
   border-radius:9999px;
   pointer-events:none;
-  box-shadow:inset 0 1.2px 1.6px rgba(255,255,255,0.56),inset 0 -1px 1.4px rgba(255,255,255,0.16),0 0 0 0.75px rgba(255,255,255,0.16);
- }
- #mobile-glass-nav:not(.has-svg-lg) .nav-active-pill .active-pill-rim{
-  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.62),inset 0 -1.2px 1.6px rgba(255,255,255,0.18),inset 1.8px 1px 2.2px rgba(255,95,125,0.34),inset -1.8px -1px 2.2px rgba(65,205,255,0.38),0 0 0 0.75px rgba(255,255,255,0.18);
+  box-shadow:inset 0 1.2px 1.6px rgba(255,255,255,0.255),inset 0 -1px 1.4px rgba(255,255,255,0.075);
  }
  #mobile-glass-nav.is-light-backdrop .nav-active-pill{
-  background:rgba(15,23,42,0.009)!important;
-  box-shadow:0 4px 12px rgba(0,0,0,0.11)!important;
+  background:transparent!important;
+  box-shadow:0 4px 12px rgba(0,0,0,0.05)!important;
  }
  #mobile-glass-nav.is-light-backdrop .nav-active-pill .active-pill-rim{
-  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.70),inset 0 -1.2px 1.6px rgba(0,0,0,0.13),0 0 0 0.75px rgba(0,0,0,0.10);
- }
- #mobile-glass-nav.is-light-backdrop:not(.has-svg-lg) .nav-active-pill .active-pill-rim{
-  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.74),inset 0 -1.2px 1.6px rgba(0,0,0,0.13),inset 1.8px 1px 2px rgba(255,80,110,0.30),inset -1.8px -1px 2px rgba(40,185,255,0.34),0 0 0 0.75px rgba(0,0,0,0.11);
+  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.32),inset 0 -1.2px 1.6px rgba(0,0,0,0.06);
  }
  #mobile-glass-nav .crisp-overlay-layer{
   position:absolute!important;
@@ -3689,7 +3677,7 @@ document.addEventListener('focusin',e=>{
  const isWebKitOnly=/AppleWebKit/.test(ua)&&(isIOS||!/Chrome|Chromium|Edg/.test(ua));
  const canUseSvgBackdrop=!isWebKitOnly;
  const WHOLE_PILL_TYPE_A={K:2.00,rgb:2.5,bevel:42,blur:0.8,tint:35,rim:7};
- const ACTIVE_PILL_FINAL={K:0.80,rgb:3.5,bevel:31,blur:1.4,tint:2,rim:74,stretch:40,crispOnLand:true};
+ const ACTIVE_PILL_FINAL={K:2.40,rgb:1.5,bevel:43,blur:1.4,tint:0,rim:34,stretch:40,crispOnLand:true};
  let lastSizeKey='',ro=null,glState=null;
  let xPos=2,vx=0,target=2,dragging=false,scaleBoost=0,rafId=0,lastT=0;
  let ptrId=null,startX=0,startY=0,didScrub=false,suppressClickUntil=0;
@@ -3956,8 +3944,9 @@ document.addEventListener('focusin',e=>{
   gl.uniform1f(glState.uBevel,WHOLE_PILL_TYPE_A.bevel/100);
   gl.uniform1f(glState.uRgbPx,WHOLE_PILL_TYPE_A.rgb);
   gl.uniform1f(glState.uBlurPx,WHOLE_PILL_TYPE_A.blur);
-  if(isLight)gl.uniform4f(glState.uTint,1.0,1.0,1.0,0.22);
-  else gl.uniform4f(glState.uTint,22/255,24/255,30/255,0.24);
+  const tintAlpha=WHOLE_PILL_TYPE_A.tint/100;
+  if(isLight)gl.uniform4f(glState.uTint,1.0,1.0,1.0,tintAlpha);
+  else gl.uniform4f(glState.uTint,22/255,24/255,30/255,tintAlpha);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
  }
 
