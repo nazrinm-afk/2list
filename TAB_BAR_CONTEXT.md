@@ -25,12 +25,8 @@ Dokumen ini dicipta khas sebagai **jambatan memori (Context Bridge)** untuk meny
 - **Tiada garisan sempadan (borderless)**: Menggunakan `border: none!important;`.
 - Permukaan kaca berpadu secara *seamless* dengan latar belakang melalui *backdrop blur* 22px, sedikit *saturate (190%)*, dan bayang ambien lembut (`box-shadow: 0 14px 34px rgba(0,0,0,0.26), 0 2px 8px rgba(0,0,0,0.12)`). Tiada garisan keras (*stroke*) di sekelilingnya.
 
-### C. Tingkah Laku Skrol (Auto-Hide & Reveal)
-- **Scroll Down Delay (~2 Skrol)**: Bar tidak bersembunyi secara mendadak. Ia memerlukan jarak skrol kumulatif (~85px, bersamaan ~2 gerakan skrol) sebelum meluncur keluar dengan lembut (`transform: translate3d(0, calc(100% + 48px), 0)`).
-- **Swipe Up Smooth Reveal**: Apabila pengguna meleret ke atas (*swipe up*), bar muncul semula secara lembut menggunakan fizik spring Apple:
-  ```css
-  transition: transform 0.44s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.36s cubic-bezier(0.16, 1, 0.3, 1)!important;
-  ```
+### C. Tingkah Laku Skrol
+- **Kekal Di Posisi (Always Visible)**: Fungsi *auto-hide* semasa skrol telah **dibuang** buat masa ini — tab bar kekal di kedudukannya sepanjang masa semasa pengguna menatal halaman.
 
 ---
 
@@ -47,7 +43,7 @@ Dokumen ini dicipta khas sebagai **jambatan memori (Context Bridge)** untuk meny
 - **Logik Pertukaran Tab**: `function doAction('nav', b)` di baris ~2524.
 
 ### Fail Service Worker: `sw.js`
-- Cache terkini: `2list-pwa-v20261126-09`. Sentiasa bump versi cache apabila mengemas kini `index.html`.
+- Cache terkini: `2list-pwa-v20261127-02`. Sentiasa bump versi cache apabila mengemas kini `index.html`.
 
 ### Artifak Berkaitan
 - **Atomization Deck**: `tabbar_atomization_deck.html` (Simulator 3D interaktif 6 atom & tuning sandbox).
