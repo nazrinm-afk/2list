@@ -1201,20 +1201,21 @@ html.is-standalone-pwa .welcome{padding-top:calc(max(env(safe-area-inset-top,0px
 .cc-option-card small{font-size:11.5px;font-weight:450;color:var(--muted);line-height:1.35}
 .cc-option-card:has(input:checked){border-color:var(--green,#f4cc57);background:rgba(244,204,87,0.12)}
 .cc-option-card:has(input:checked) strong{color:var(--green,#f4cc57)}
-.cc-read-overlay{position:fixed;top:0;right:0;bottom:0;left:240px;z-index:900;background:var(--bg,#141416);display:flex;flex-direction:column}
+.cc-read-overlay{position:fixed;inset:0;z-index:10050;background:var(--bg,#141416);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body:has(#cc-read-overlay) #mobile-glass-nav,body:has(#cc-read-overlay) .sidebar{opacity:0!important;pointer-events:none!important;visibility:hidden!important}
 .cc-read-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--paper)}
-.cc-read-body{flex:1;overflow-y:auto;padding:20px 18px 28px;max-width:680px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:16px;-webkit-overflow-scrolling:touch}
+.cc-read-close-btn{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;padding:0!important;border-radius:999px!important;display:inline-flex;align-items:center;justify-content:center;font-size:18px!important;line-height:1;flex-shrink:0}
+.cc-read-body{flex:1;overflow-y:auto;padding:20px 18px 32px;max-width:680px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:16px;-webkit-overflow-scrolling:touch}
 .cc-read-block{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px}
 .cc-read-text{color:var(--ink);line-height:1.65;white-space:pre-wrap;margin:8px 0 0}
 .cc-read-body.sz-normal .cc-read-text{font-size:17px}
 .cc-read-body.sz-large .cc-read-text{font-size:22px}
 .cc-read-body.sz-xl .cc-read-text{font-size:28px;line-height:1.5}
 .cc-read-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;border-top:1px solid var(--line);background:var(--paper)}
-@media(max-width:1150px){.cc-read-overlay{left:210px}}
 @media(max-width:760px){
  .cc-stack{padding-bottom:96px}
  .cc-style-btn{font-size:11px!important;padding:8px 4px!important}
- .cc-read-overlay{left:0;top:var(--phone-header-height,56px);padding-bottom:calc(82px + env(safe-area-inset-bottom,0px))}
+ .cc-read-overlay{padding-top:max(env(safe-area-inset-top,0px),12px)}
  .cc-onboard-grid{grid-template-columns:1fr 1fr;gap:8px}
  .cc-option-card{padding:12px}
 }
@@ -2201,7 +2202,7 @@ function ccReadOverlayHtml(){
     <span class="cc-card-label">MOD BACAAN SOLO</span>
     <div style="font-size:14px;font-weight:750;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(v.title)}</div>
    </div>
-   <button type="button" data-action="cc-toggle-read">Tutup ✕</button>
+   <button type="button" class="cc-read-close-btn" data-action="cc-toggle-read" aria-label="Tutup Mod Bacaan">✕</button>
   </div>
   <div class="cc-read-body ${szClass}">
    <div class="cc-read-block">
