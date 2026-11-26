@@ -1188,23 +1188,35 @@ html.is-standalone-pwa .welcome{padding-top:calc(max(env(safe-area-inset-top,0px
 .cc-mini-btn:hover{background:rgba(255,255,255,0.08)!important;color:var(--ink)!important}
 .cc-pro-lock-card{background:var(--paper);border:1px dashed rgba(244,204,87,0.45);border-radius:16px;padding:28px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
 .cc-pro-lock-icon{width:46px;height:46px;border-radius:14px;background:rgba(244,204,87,0.14);border:1px solid rgba(244,204,87,0.35);color:var(--green,#f4cc57);display:flex;align-items:center;justify-content:center;font-size:20px}
-.cc-onboard-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.cc-chip-choice{display:inline-flex;align-items:center;cursor:pointer;margin:0!important;flex-direction:row!important}
-.cc-chip-choice input{position:absolute;opacity:0;width:1px;height:1px}
-.cc-chip-choice span{display:inline-flex;align-items:center;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:12.5px;font-weight:600;transition:all .15s}
-.cc-chip-choice input:checked + span{background:var(--green,#f4cc57);color:#141416;border-color:transparent;font-weight:750}
-.cc-read-overlay{position:fixed;inset:0;z-index:10050;background:var(--bg,#141416);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.cc-onboard-steps{display:flex;gap:6px;margin-bottom:18px}
+.cc-onboard-bar{flex:1;height:4px;border-radius:999px;background:var(--line);transition:background .2s}
+.cc-onboard-bar.is-done{background:var(--green,#f4cc57)}
+.cc-onboard-q{font-size:19px;font-weight:750;color:var(--ink);margin:0 0 6px;line-height:1.3}
+.cc-onboard-hint{font-size:12.5px;color:var(--muted);margin:0 0 18px;line-height:1.5}
+.cc-onboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cc-onboard-list{display:flex;flex-direction:column;gap:10px}
+.cc-option-card{position:relative;display:flex!important;flex-direction:column!important;gap:3px!important;padding:14px 15px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s,transform .1s;margin:0!important}
+.cc-option-card input{position:absolute;opacity:0;width:1px;height:1px}
+.cc-option-card strong{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.3}
+.cc-option-card small{font-size:11.5px;font-weight:450;color:var(--muted);line-height:1.35}
+.cc-option-card:has(input:checked){border-color:var(--green,#f4cc57);background:rgba(244,204,87,0.12)}
+.cc-option-card:has(input:checked) strong{color:var(--green,#f4cc57)}
+.cc-read-overlay{position:fixed;top:0;right:0;bottom:0;left:240px;z-index:900;background:var(--bg,#141416);display:flex;flex-direction:column}
 .cc-read-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--paper)}
-.cc-read-body{flex:1;overflow-y:auto;padding:20px 18px 32px;max-width:680px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:16px;-webkit-overflow-scrolling:touch}
+.cc-read-body{flex:1;overflow-y:auto;padding:20px 18px 28px;max-width:680px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:16px;-webkit-overflow-scrolling:touch}
 .cc-read-block{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px}
 .cc-read-text{color:var(--ink);line-height:1.65;white-space:pre-wrap;margin:8px 0 0}
 .cc-read-body.sz-normal .cc-read-text{font-size:17px}
 .cc-read-body.sz-large .cc-read-text{font-size:22px}
 .cc-read-body.sz-xl .cc-read-text{font-size:28px;line-height:1.5}
 .cc-read-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;border-top:1px solid var(--line);background:var(--paper)}
+@media(max-width:1150px){.cc-read-overlay{left:210px}}
 @media(max-width:760px){
  .cc-stack{padding-bottom:96px}
  .cc-style-btn{font-size:11px!important;padding:8px 4px!important}
+ .cc-read-overlay{left:0;top:var(--phone-header-height,56px);padding-bottom:calc(82px + env(safe-area-inset-bottom,0px))}
+ .cc-onboard-grid{grid-template-columns:1fr 1fr;gap:8px}
+ .cc-option-card{padding:12px}
 }
 </style></head><body><svg width="0" height="0" style="position:fixed;left:-9999px;top:-9999px;pointer-events:none" aria-hidden="true"><defs><filter id="whole-pill-type-a" filterUnits="userSpaceOnUse" x="0" y="0" width="358" height="64" color-interpolation-filters="sRGB"><feImage id="wp-img-r" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapR"/><feImage id="wp-img-g" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapG"/><feImage id="wp-img-b" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapB"/><feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="blurred"/><feDisplacementMap id="wp-disp-r" in="blurred" in2="dispMapR" scale="56" xChannelSelector="R" yChannelSelector="G" result="rDisp"/><feColorMatrix in="rDisp" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="redOnly"/><feDisplacementMap id="wp-disp-g" in="blurred" in2="dispMapG" scale="56" xChannelSelector="R" yChannelSelector="G" result="gDisp"/><feColorMatrix in="gDisp" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="greenOnly"/><feDisplacementMap id="wp-disp-b" in="blurred" in2="dispMapB" scale="56" xChannelSelector="R" yChannelSelector="G" result="bDisp"/><feColorMatrix in="bDisp" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blueOnly"/><feBlend in="redOnly" in2="greenOnly" mode="screen" result="rg"/><feBlend in="rg" in2="blueOnly" mode="screen" result="rgb"/></filter><filter id="active-pill-glass-rgb" filterUnits="userSpaceOnUse" x="0" y="0" width="70" height="56" color-interpolation-filters="sRGB"><feImage id="ap-img-r" x="0" y="0" width="70" height="56" preserveAspectRatio="none" result="apMapR"/><feImage id="ap-img-g" x="0" y="0" width="70" height="56" preserveAspectRatio="none" result="apMapG"/><feImage id="ap-img-b" x="0" y="0" width="70" height="56" preserveAspectRatio="none" result="apMapB"/><feGaussianBlur id="ap-blur-rgb" in="SourceGraphic" stdDeviation="1.4" result="apBlur"/><feDisplacementMap id="ap-disp-r" in="apBlur" in2="apMapR" scale="21" xChannelSelector="R" yChannelSelector="G" result="apRDisp"/><feColorMatrix in="apRDisp" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="apRedOnly"/><feDisplacementMap id="ap-disp-g" in="apBlur" in2="apMapG" scale="21" xChannelSelector="R" yChannelSelector="G" result="apGDisp"/><feColorMatrix in="apGDisp" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="apGreenOnly"/><feDisplacementMap id="ap-disp-b" in="apBlur" in2="apMapB" scale="21" xChannelSelector="R" yChannelSelector="G" result="apBDisp"/><feColorMatrix in="apBDisp" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="apBlueOnly"/><feBlend in="apRedOnly" in2="apGreenOnly" mode="screen" result="apRG"/><feBlend in="apRG" in2="apBlueOnly" mode="screen" result="apRGB"/></filter></defs></svg><div id="app"><p class="loading">Opening your writing workspace…</p></div><div id="toast" role="status" aria-live="polite"></div><dialog id="dialog"></dialog><dialog id="slot-warning-dialog" class="slot-warning-dialog"></dialog><script type="module">
 if(window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches){document.documentElement.classList.add('is-standalone-pwa');}
@@ -1872,45 +1884,80 @@ function ccStatusClass(st){
  if(st==='DAH POST')return 'st-posted';
  return '';
 }
-function ccOnboardingDialog(){
+let ccOnboardStep=1,ccOnboardDraft=null;
+function ccOnboardingDialog(step=1,reset=true){
  ensureCreatorData(p);
  const c=p.settings.creator;
- const curRole=c.role||'';
- const curTone=c.tone||'santai';
- const curStyle=c.defaultStyle||'visual';
+ if(reset||!ccOnboardDraft){
+  ccOnboardDraft={role:c.role||'',niche:c.niche||'',tone:c.tone||'santai',defaultStyle:c.defaultStyle||'visual'};
+ }
+ ccOnboardStep=Math.min(3,Math.max(1,Number(step)||1));
+ const bars=[1,2,3].map(n=>`<div class="cc-onboard-bar ${n<=ccOnboardStep?'is-done':''}"></div>`).join('');
+ let bodyHtml='';
+ if(ccOnboardStep===1){
+  bodyHtml=`
+   <h3 class="cc-onboard-q">Anda buat content sebagai apa?</h3>
+   <p class="cc-onboard-hint">Pilih satu yang paling dekat dengan anda.</p>
+   <div class="cc-onboard-grid">
+    ${CC_ROLES.map(r=>`<label class="cc-option-card"><input type="radio" name="role" value="${esc(r)}" ${ccOnboardDraft.role===r?'checked':''}><strong>${esc(r)}</strong></label>`).join('')}
+   </div>
+   <div style="margin-top:14px">${field('Produk / servis spesifik (pilihan)','niche',ccOnboardDraft.niche||'','text','placeholder="Contoh: kek batik, takaful keluarga, barang dapur" maxlength="120"')}</div>
+  `;
+ }else if(ccOnboardStep===2){
+  const toneHints={
+   santai:'Mesra, sopan & mudah didekati',
+   kasual:'Macam borak dengan kawan rapat',
+   profesional:'Yakin, kemas & beri kepercayaan',
+   story:'Santai bercerita pengalaman harian'
+  };
+  bodyHtml=`
+   <h3 class="cc-onboard-q">Cara anda suka bercakap?</h3>
+   <p class="cc-onboard-hint">AI akan ikut gaya bahasa ini supaya tak bunyi robot.</p>
+   <div class="cc-onboard-list">
+    ${CC_TONES.map(t=>`<label class="cc-option-card"><input type="radio" name="tone" value="${esc(t.id)}" ${ccOnboardDraft.tone===t.id?'checked':''}><strong>${esc(t.label)}</strong><small>${esc(toneHints[t.id]||'')}</small></label>`).join('')}
+   </div>
+  `;
+ }else{
+  const styleHints={
+   visual:'Rakam video cantik + muzik + teks atas skrin',
+   faceless:'Tak perlu tunjuk muka, masuk suara latar sahaja',
+   camera:'Bercakap terus depan kamera guna 3–4 poin'
+  };
+  bodyHtml=`
+   <h3 class="cc-onboard-q">Gaya video kegemaran anda?</h3>
+   <p class="cc-onboard-hint">Boleh tukar bila-bila masa dalam skrip nanti.</p>
+   <div class="cc-onboard-list">
+    ${Object.entries(CC_STYLES).map(([k,info])=>`<label class="cc-option-card"><input type="radio" name="defaultStyle" value="${esc(k)}" ${ccOnboardDraft.defaultStyle===k?'checked':''}><strong>${esc(info.label)}</strong><small>${esc(styleHints[k]||'')}</small></label>`).join('')}
+   </div>
+  `;
+ }
+ const actionsHtml=ccOnboardStep<3
+  ?`${ccOnboardStep>1?'<button type="button" data-action="cc-onboard-prev">← Balik</button>':'<button type="button" data-action="close">Nanti dulu</button>'}<button type="button" class="primary" data-action="cc-onboard-next">Seterusnya →</button>`
+  :`<button type="button" data-action="cc-onboard-prev">← Balik</button><button type="submit" class="primary">Siap &amp; Mula →</button>`;
  dialog(`<form id="cc-onboarding-form">
-  <div class="dialog-heading">
+  <div class="dialog-heading" style="margin-bottom:14px">
    <div>
-    <p class="eyebrow">${esc(p.name)} / PERSONALIZE</p>
-    <h2>Kenali gaya anda dulu</h2>
+    <p class="eyebrow">LANGKAH ${ccOnboardStep} / 3 · PERSONALIZE</p>
    </div>
    <button type="button" data-action="close" aria-label="Close">✕</button>
   </div>
-  <p>Supaya cadangan skrip &amp; AI kedengaran betul-betul macam diri anda sendiri (bukan bunyi robot).</p>
-  <div style="margin-top:16px">
-   <span class="cc-card-label">1. Siapa anda / Peranan utama?</span>
-   <div class="cc-onboard-chips">
-    ${CC_ROLES.map(r=>`<label class="cc-chip-choice"><input type="radio" name="role" value="${esc(r)}" ${curRole===r?'checked':''}><span>${esc(r)}</span></label>`).join('')}
-   </div>
-   <div style="margin-top:12px">${field('Bidang / Produk / Servis spesifik anda (pilihan)','niche',c.niche||'','text','placeholder="Contoh: Ejen Takaful keluarga, jual kek batik, affiliate barang dapur" maxlength="140"')}</div>
-  </div>
-  <div style="margin-top:18px">
-   <span class="cc-card-label">2. Gaya bahasa &amp; cara bercakap</span>
-   <div class="cc-onboard-chips">
-    ${CC_TONES.map(t=>`<label class="cc-chip-choice"><input type="radio" name="tone" value="${esc(t.id)}" ${curTone===t.id?'checked':''}><span>${esc(t.label)}</span></label>`).join('')}
-   </div>
-  </div>
-  <div style="margin-top:18px">
-   <span class="cc-card-label">3. Gaya video kegemaran anda</span>
-   <div class="cc-onboard-chips">
-    ${Object.entries(CC_STYLES).map(([k,info])=>`<label class="cc-chip-choice"><input type="radio" name="defaultStyle" value="${esc(k)}" ${curStyle===k?'checked':''}><span>${esc(info.label)}</span></label>`).join('')}
-   </div>
-  </div>
-  <div class="dialog-actions">
-   <button type="button" data-action="close">Nanti dulu</button>
-   <button type="submit" class="primary">Simpan &amp; Mula →</button>
-  </div>
+  <div class="cc-onboard-steps">${bars}</div>
+  ${bodyHtml}
+  <div class="dialog-actions">${actionsHtml}</div>
  </form>`);
+}
+function captureOnboardStep(){
+ const f=document.getElementById('cc-onboarding-form');
+ if(!f||!ccOnboardDraft)return;
+ const fd=new FormData(f);
+ if(ccOnboardStep===1){
+  if(fd.has('role'))ccOnboardDraft.role=String(fd.get('role')||'').trim();
+  if(fd.has('niche'))ccOnboardDraft.niche=String(fd.get('niche')||'').trim();
+ }else if(ccOnboardStep===2){
+  if(fd.has('tone'))ccOnboardDraft.tone=String(fd.get('tone')||'santai');
+ }else if(ccOnboardStep===3){
+  if(fd.has('defaultStyle'))ccOnboardDraft.defaultStyle=String(fd.get('defaultStyle')||'visual');
+ }
 }
 function ccHomeView(){
  const c=p.settings.creator||defaultCreatorSettings();
@@ -3305,6 +3352,7 @@ async function doAction(a,b){
   if(targetView==='script')scriptActiveEp=null;
   if(targetView==='log')itemActiveTab='split';
   if(targetView==='home')homeSubPage='identity';
+  ccReadMode=false;
   overviewEpPickerOpen=false;
   view=targetView;
   render();
@@ -3349,7 +3397,9 @@ async function doAction(a,b){
   projectTypeDialog(pendingProjectName||'Untitled Project');
   return;
  }
- if(a==='cc-open-onboarding'){ccOnboardingDialog();return;}
+ if(a==='cc-open-onboarding'){ccOnboardingDialog(1,true);return;}
+ if(a==='cc-onboard-next'){captureOnboardStep();ccOnboardingDialog(ccOnboardStep+1,false);return;}
+ if(a==='cc-onboard-prev'){captureOnboardStep();ccOnboardingDialog(ccOnboardStep-1,false);return;}
  if(a==='cc-filter-ideas'){ccIdeaFilter=b.dataset.status||'ALL';render();return;}
  if(a==='cc-open-script'){ccActiveId=b.dataset.id||ccActiveId;view='script';render();window.scrollTo(0,0);return;}
  if(a==='cc-open-shoot'){ccActiveId=b.dataset.id||ccActiveId;ccShootTab='checklist';view='conti';render();window.scrollTo(0,0);return;}
@@ -4059,13 +4109,16 @@ document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target
   return;
  }
  if(f.id==='cc-onboarding-form'){
+  captureOnboardStep();
   ensureCreatorData(p);
   const c=p.settings.creator;
-  c.role=String(data.role||c.role||'').trim();
-  c.niche=String(data.niche||'').trim();
-  c.tone=String(data.tone||'santai');
-  c.defaultStyle=CC_STYLES[data.defaultStyle]?data.defaultStyle:'visual';
+  const d=ccOnboardDraft||{};
+  c.role=String(d.role||data.role||c.role||'').trim();
+  c.niche=String(d.niche!==undefined?d.niche:(data.niche||'')).trim();
+  c.tone=String(d.tone||data.tone||'santai');
+  c.defaultStyle=CC_STYLES[d.defaultStyle||data.defaultStyle]?(d.defaultStyle||data.defaultStyle):'visual';
   c.onboarded=true;
+  ccOnboardDraft=null;
   if(!p.contents.length){
    const topicHint=c.niche||c.role||p.name;
    const starter=newCreatorVideo(`3 perkara ramai tak tahu tentang ${topicHint}`,c.defaultStyle,'Minggu Ini');
