@@ -1249,9 +1249,9 @@ const CC_TONES=[
  {id:'story',label:'Tenang & Bercerita (Storytelling)'}
 ];
 const CC_STYLES={
- visual:{label:'Visual + Teks Skrin',short:'Visual + Teks',hookLabel:'Teks Pembuka (3 Saat Pertama)',bodyLabel:'3–4 Baris Teks Skrin (Ikut Babak)',bodyHint:'Tulis sebaris pendek untuk setiap klip visual.'},
- faceless:{label:'Faceless + Suara Latar',short:'Faceless + VO',hookLabel:'Ayat Pancing Suara (3 Saat)',bodyLabel:'3–4 Poin Suara Latar (Spontan)',bodyHint:'Poin ringkas untuk dibaca santai masa rakam suara latar.'},
- camera:{label:'Cakap Depan Kamera',short:'Depan Kamera',hookLabel:'Ayat Mula Depan Kamera (3 Saat)',bodyLabel:'3–4 Poin Bercakap (Tak Perlu Hafal)',bodyHint:'Cakap ikut gaya sendiri berpandukan 3–4 poin ini.'}
+ visual:{label:'Visual + Teks Skrin',short:'Visual + Teks',hookLabel:'Teks Pembuka (3 Saat Pertama)',bodyLabel:'Isi Utama & Teks Skrin (Ikut Babak)',bodyHint:'Susun babak visual dan teks skrin yang padat & menarik.'},
+ faceless:{label:'Faceless + Suara Latar',short:'Faceless + VO',hookLabel:'Ayat Pancing Suara (3 Saat)',bodyLabel:'Isi Utama & Skrip Suara Latar',bodyHint:'Skrip atau poin bernas untuk suara latar (voiceover).'},
+ camera:{label:'Cakap Depan Kamera',short:'Depan Kamera',hookLabel:'Ayat Mula Depan Kamera (3 Saat)',bodyLabel:'Isi Utama & Jalan Cerita',bodyHint:'Skrip penuh atau poin mendalam untuk bercakap depan kamera.'}
 };
 function isCreatorMode(proj=p){ return proj?.settings?.projectType==='script' && proj?.settings?.scriptFormat==='content-creation'; }
 function defaultCreatorSettings(){ return {onboarded:false,role:'',niche:'',tone:'santai',defaultStyle:'visual',weeklyGoal:1,isPro:false}; }
@@ -1260,12 +1260,15 @@ function newCreatorVideo(title='',style='visual',week='Minggu Ini'){
   id:uid(),
   title:String(title||'').trim()||'Idea Video Baru',
   style:CC_STYLES[style]?style:'visual',
+  depth:'detailed',
+  notes:'',
   status:'IDEA',
   week:CC_WEEKS.includes(week)?week:'Minggu Ini',
   hook:'',
   points:'',
   cta:'',
   caption:'',
+  aiSources:[],
   shots:[
    {id:uid(),text:'Klip pembuka 3 saat (Close-up aksi / produk terus)',done:false},
    {id:uid(),text:'Klip proses kerja / sudut POV tangan',done:false},
@@ -1281,6 +1284,9 @@ function ensureCreatorData(proj){
  proj.contents.forEach(v=>{
   if(!v.id)v.id=uid();
   if(!CC_STYLES[v.style])v.style='visual';
+  if(v.depth!=='bullets'&&v.depth!=='detailed')v.depth='detailed';
+  if(typeof v.notes!=='string')v.notes='';
+  if(!Array.isArray(v.aiSources))v.aiSources=[];
   if(!CC_STATUSES.includes(v.status))v.status='IDEA';
   if(!CC_WEEKS.includes(v.week))v.week='Minggu Ini';
   if(Array.isArray(v.points))v.points=v.points.join('\n');
@@ -2056,6 +2062,13 @@ function ccScriptView(){
    ${Object.entries(CC_STYLES).map(([k,info])=>`<button type="button" class="cc-style-btn ${v.style===k?'is-active':''}" data-action="cc-set-style" data-style="${esc(k)}">${esc(info.short)}</button>`).join('')}
   </div>
 
+  <div class="cc-card" style="padding:12px 14px">
+   <div class="cc-card-head" style="margin-bottom:6px">
+    <span class="cc-card-title">🧠 Arah / Produk / Isu Khusus (pilihan untuk kajian AI)</span>
+   </div>
+   <input type="text" data-cc-field="notes" value="${esc(v.notes||'')}" placeholder="Contoh: Retinol serum + moisturizer, atau isu Nvidia &amp; peluang tambah emas" maxlength="240">
+  </div>
+
   <div class="cc-card">
    <div class="cc-card-head">
     <span class="cc-card-label">1. ${esc(meta.hookLabel)}</span>
@@ -2065,9 +2078,15 @@ function ccScriptView(){
   </div>
 
   <div class="cc-card">
-   <div class="cc-card-head"><span class="cc-card-title">2. ${esc(meta.bodyLabel)}</span></div>
+   <div class="cc-card-head">
+    <span class="cc-card-title">2. ${esc(meta.bodyLabel)}</span>
+    <div class="cc-row" style="gap:4px">
+     <button type="button" class="cc-pill ${v.depth==='bullets'?'is-active':''}" style="min-height:28px!important;padding:3px 10px!important;font-size:11px!important" data-action="cc-set-depth" data-depth="bullets">Poin</button>
+     <button type="button" class="cc-pill ${v.depth!=='bullets'?'is-active':''}" style="min-height:28px!important;padding:3px 10px!important;font-size:11px!important" data-action="cc-set-depth" data-depth="detailed">Skrip Penuh</button>
+    </div>
+   </div>
    <p class="cc-sub" style="margin-bottom:8px">${esc(meta.bodyHint)}</p>
-   <textarea class="cc-textarea is-tall" data-cc-field="points" placeholder="1. Poin pertama&#10;2. Poin kedua&#10;3. Poin ketiga">${esc(v.points)}</textarea>
+   <textarea class="cc-textarea is-tall" style="min-height:190px" data-cc-field="points" placeholder="Tulis skrip penuh atau poin mendalam di sini — atau tekan ✨ Bantu AI untuk kajian mendalam...">${esc(v.points)}</textarea>
   </div>
 
   <div class="cc-card">
@@ -2081,6 +2100,13 @@ function ccScriptView(){
     <textarea class="cc-textarea" data-cc-field="caption" placeholder="Caption sedia untuk ditampal ke TikTok / Reels / YouTube...">${esc(v.caption)}</textarea>
    </div>
   </div>
+
+  ${(v.aiSources&&v.aiSources.length)?`<details class="cc-card" style="padding:12px 14px">
+   <summary style="cursor:pointer;font-size:12px;font-weight:700;color:var(--green,#f4cc57)">🔍 Rujukan Kajian Web AI (${v.aiSources.length} sumber)</summary>
+   <ul style="margin:10px 0 0;padding-left:18px;font-size:12px;line-height:1.7;color:var(--muted)">
+    ${v.aiSources.map(s=>`<li><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" style="color:var(--ink)">${esc(s.title||s.url)} ↗</a></li>`).join('')}
+   </ul>
+  </details>`:''}
 
   <div class="cc-row-between" style="padding:0 4px">
    <button type="button" class="text-button" data-action="cc-open-onboarding">👤 Ubah personaliti AI</button>
@@ -2228,56 +2254,108 @@ function ccReadOverlayHtml(){
   </div>
  </div>`;
 }
+function buildCreatorMemory(proj, currentId){
+ const others=(proj?.contents||[]).filter(x=>x&&x.id!==currentId).slice(0,12);
+ if(!others.length)return 'Tiada sejarah konten terdahulu lagi dalam projek ini.';
+ return others.map((x,i)=>{
+  const snippet=[x.title,x.notes?`Nota: ${x.notes}`:'',x.hook?`Hook: ${x.hook}`:'',x.points?`Isi: ${String(x.points).slice(0,180)}`:''].filter(Boolean).join(' | ');
+  return `${i+1}. [${CC_STYLES[x.style]?.short||x.style}] ${snippet}`;
+ }).join('\n');
+}
 async function requestCreatorAI(proj, video){
  const apiKey=String(proj.settings?.geminiApiKey||safeStorage.getItem('rs:gemini_api_key')||DEFAULT_GEMINI_KEY).trim();
  if(!apiKey)throw new Error('Gemini API Key diperlukan. Semak Settings.');
  const c=proj.settings?.creator||defaultCreatorSettings();
  const toneObj=CC_TONES.find(t=>t.id===c.tone)||CC_TONES[0];
  const styleObj=CC_STYLES[video.style]||CC_STYLES.visual;
- const prompt=`Anda ialah jurulatih kandungan digital Malaysia yang sangat memahami rakyat marhaen dan pencipta kandungan solo.
+ const isDetailed=video.depth!=='bullets';
+ const historyText=buildCreatorMemory(proj,video.id);
+ const prompt=`Anda ialah penyelidik kandungan & penulis skrip kreatif Malaysia yang sangat teliti. Anda BUKAN sekadar menulis ayat umum—anda mengkaji fakta sebenar dan memahami perangai, minat, serta gaya hidup pencipta kandungan ini.
+
 PROFIL KREATOR:
 - Peranan: ${c.role||'Pencipta kandungan solo'}
 - Bidang / Produk / Servis: ${c.niche||proj.name}
 - Gaya bahasa & cara bercakap: ${toneObj.label}
 - Format video dipilih: ${styleObj.label}
 
-TOPIK VIDEO: "${video.title}"
+SEJARAH KONTEN & PERANGAI KREATOR DALAM PROJEK INI (KAJI CORAK MINAT, HOBI, GAYA HIDUP & SUARA MEREKA):
+${historyText}
 
-TUGAS:
-Hasilkan draf skrip & senarai klip yang SANGAT NATURAL, ringkas, tidak berbunyi skema/robot, dan sesuai dengan gaya bahasa kreator di atas (Bahasa Melayu santai Malaysia).
-Balas DALAM FORMAT JSON SAHAJA (tiada teks luar JSON) mengikut struktur tepat ini:
+TOPIK VIDEO SEKARANG: "${video.title}"
+${video.notes?`ARAH / PRODUK / ISU KHUSUS DARI PENGGUNA: "${video.notes}"`:''}
+
+ARAHAN KRITIKAL (WAJIB IKUT):
+1. KAJIAN MENDALAM (ELAKKAN JAWAPAN CETEK / SURFACE LEVEL):
+   - Jika topik menyentuh PRODUK atau JENAMA (cth: Retinol, serum, pencuci muka, produk makanan/kesihatan), guna Google Search untuk semak fungsi sebenar, urutan penggunaan yang betul (cth: langkah 1 → langkah 2 → langkah 3), bahan aktif, atau tip praktikal sebenar.
+   - Jika topik menyentuh BERITA SEMASA / EKONOMI / ISU TERKINI (cth: Nvidia, sekatan cip, harga emas, pasaran), guna Google Search untuk cari fakta & konteks berita sebenar, jelaskan hubungan sebab-akibatnya secara bernas, dan kaitkan dengan sudut pandang yang memberi nilai tinggi kepada penonton (cth: jika harga emas turun disebabkan ketidaktentuan pasaran, jelaskan kenapa ia jadi peluang strategik untuk tambah simpanan—bukan sekadar cakap "jangan risau" tanpa isi!).
+2. KAJI PERANGAI & SEJARAH KREATOR:
+   - Jika topik agak umum / harian (cth: "Get ready with me Sunday morning"), WAJIB rujuk SEJARAH KONTEN di atas. Contohnya, jika sebelum ini pengguna banyak kongsi tentang berbasikal, brisk walk, kopi, atau servis tertentu, kaitkan rutin video ini secara semula jadi dengan identiti & minat mereka supaya terasa peribadi dan tulen!
+3. KEDALAMAN PENULISAN (${isDetailed?'SKRIP PENUH MENDALAM':'POIN BERNAS BERSTRUKTUR'}):
+   - ${isDetailed
+     ?'Tulis medan "body" sebagai SKRIP PENUH yang cukup daging, bernas, mengalir secara semula jadi (4–6 perenggan/babak pendek yang mudah dibaca, sesuai untuk video 45–90 saat). Jangan terhad kepada 3–4 ayat pendek yang kosong.'
+     :'Tulis medan "body" sebagai poin-poin berstruktur yang BERNAS dan SPESIFIK (boleh 4–7 poin ikut keperluan topik, setiap poin ada huraian fakta/contoh praktikal, bukan poin generik satu baris).'}
+   - Gunakan Bahasa Melayu Malaysia yang sangat natural mengikut gaya "${toneObj.label}".
+
+Balas DALAM FORMAT JSON SAHAJA (tiada teks pengenalan sebelum atau selepas JSON) mengikut struktur tepat ini:
 {
-  "hook": "1 ayat atau teks pembuka 3 saat pertama yang kuat dan buat orang berhenti scroll",
-  "points": ["1. Poin ringkas pertama", "2. Poin ringkas kedua", "3. Poin ringkas ketiga", "4. Poin ringkas keempat (jika perlu)"],
-  "cta": "1 ayat penutup / ajakan yang santai",
-  "caption": "Caption ringkas sedia post + 4-5 hashtag relevan",
-  "shots": ["Klip 1: cadangan sudut/aksi visual spesifik", "Klip 2: ...", "Klip 3: ...", "Klip 4: ..."]
+  "hook": "Ayat atau teks pembuka 3 saat pertama yang tajam, berfakta atau mencetus rasa ingin tahu",
+  "body": "Kandungan utama lengkap mengikut arahan kedalaman di atas (gunakan \\n\\n untuk pisahkan perenggan/babak supaya selesa dibaca dalam Mod Bacaan)",
+  "cta": "Penutup & ajakan yang natural dan relevan dengan topik",
+  "caption": "Caption lengkap, menarik & 5 hashtag relevan",
+  "shots": ["Klip 1: cadangan sudut/aksi visual spesifik ikut urutan cerita", "Klip 2: ...", "Klip 3: ...", "Klip 4: ...", "Klip 5: ..."]
 }`;
+
  const endpoint=`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${encodeURIComponent(apiKey)}`;
- const res=await fetch(endpoint,{
-  method:'POST',
-  headers:{'Content-Type':'application/json'},
-  body:JSON.stringify({
+ const callGemini=async(useSearch)=>{
+  const payload={
    contents:[{parts:[{text:prompt}]}],
-   generationConfig:{temperature:0.75,maxOutputTokens:1500,responseMimeType:'application/json'}
-  })
- });
- const data=await res.json().catch(()=>null);
- if(!res.ok){
-  const msg=data?.error?.message||`Gemini API status ${res.status}`;
+   generationConfig:{temperature:0.75,maxOutputTokens:2800}
+  };
+  if(useSearch)payload.tools=[{google_search:{}}];
+  else payload.generationConfig.responseMimeType='application/json';
+  const res=await fetch(endpoint,{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify(payload)
+  });
+  const data=await res.json().catch(()=>null);
+  return {ok:res.ok,status:res.status,data};
+ };
+
+ let resp=await callGemini(true);
+ if(!resp.ok){
+  // Fallback cleanly if search grounding tool isn't enabled on this key/endpoint
+  resp=await callGemini(false);
+ }
+ if(!resp.ok){
+  const msg=resp.data?.error?.message||`Gemini API status ${resp.status}`;
   throw new Error(msg);
  }
- let raw=String(data?.candidates?.[0]?.content?.parts?.[0]?.text||'').trim();
+ const cand=resp.data?.candidates?.[0];
+ let raw=String(cand?.content?.parts?.map(pt=>pt.text||'').join('')||'').trim();
  raw=raw.replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/```\s*$/i,'').trim();
  const match=raw.match(/\{[\s\S]*\}/);
  if(!match)throw new Error('AI tidak memulangkan format JSON yang sah. Cuba lagi.');
  const parsed=JSON.parse(match[0]);
+ const bodyVal=parsed.body??parsed.points??'';
+ const chunks=cand?.groundingMetadata?.groundingChunks||[];
+ const seenUrls=new Set();
+ const sources=[];
+ chunks.forEach(ch=>{
+  const url=ch?.web?.uri;
+  const title=ch?.web?.title;
+  if(url&&/^https?:\/\//i.test(url)&&!seenUrls.has(url)){
+   seenUrls.add(url);
+   sources.push({title:String(title||url),url});
+  }
+ });
  return {
   hook:String(parsed.hook||'').trim(),
-  points:Array.isArray(parsed.points)?parsed.points.map(x=>String(x).trim()).filter(Boolean).join('\n'):String(parsed.points||'').trim(),
+  points:Array.isArray(bodyVal)?bodyVal.map(x=>String(x).trim()).filter(Boolean).join('\n\n'):String(bodyVal||'').trim(),
   cta:String(parsed.cta||'').trim(),
   caption:String(parsed.caption||'').trim(),
-  shots:Array.isArray(parsed.shots)?parsed.shots.map(x=>String(x).trim()).filter(Boolean):[]
+  shots:Array.isArray(parsed.shots)?parsed.shots.map(x=>String(x).trim()).filter(Boolean):[],
+  sources:sources.slice(0,6)
  };
 }
 function reorderCreatorShots(fromIdx,toIdx){
@@ -3430,6 +3508,11 @@ async function doAction(a,b){
   if(v&&CC_STYLES[b.dataset.style]){v.style=b.dataset.style;draft();render();}
   return;
  }
+ if(a==='cc-set-depth'){
+  const v=getActiveCreatorVideo();
+  if(v){v.depth=b.dataset.depth==='bullets'?'bullets':'detailed';draft();render();}
+  return;
+ }
  if(a==='cc-copy-caption'){
   const v=getActiveCreatorVideo();
   if(!v?.caption){notify('Caption masih kosong.');return;}
@@ -3478,8 +3561,9 @@ async function doAction(a,b){
    if(result.shots.length){
     v.shots=result.shots.map(t=>({id:uid(),text:t,done:false}));
    }
+   v.aiSources=Array.isArray(result.sources)?result.sources:[];
    draft();
-   notify('✨ AI siap jana skrip & cadangan klip ikut personaliti anda!');
+   notify(v.aiSources.length?`✨ AI siap kaji (${v.aiSources.length} sumber web) & tulis skrip ikut gaya anda!`:'✨ AI siap kaji sejarah projek & tulis skrip ikut personaliti anda!');
   }catch(err){
    notify(`AI gagal: ${err.message}`);
   }finally{
