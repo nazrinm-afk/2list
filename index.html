@@ -1130,6 +1130,89 @@ html.is-standalone-pwa .sidebar{padding-top:calc(max(env(safe-area-inset-top,0px
 html.is-standalone-pwa dialog{margin-top:max(env(safe-area-inset-top,0px),52px)!important;max-height:calc(var(--visual-height,100dvh) - max(env(safe-area-inset-top,0px),52px) - 30px)!important}
 html.is-standalone-pwa .welcome-signout-btn{top:calc(max(env(safe-area-inset-top,0px),52px) + 16px)!important;right:18px!important}
 html.is-standalone-pwa .welcome{padding-top:calc(max(env(safe-area-inset-top,0px),52px) + 30px)!important}
+
+/* === Content Creation Mode (2List Theme, Strictly Scoped .cc-*) === */
+.cc-stack{display:flex;flex-direction:column;gap:14px;max-width:760px;margin:0 auto;padding-bottom:36px}
+.cc-card{background:var(--paper,#1e1e24);border:1px solid var(--line,#30303a);border-radius:14px;padding:16px}
+.cc-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.cc-card-title{font-size:13px;font-weight:750;color:var(--ink,#f4f4f6);letter-spacing:0.2px}
+.cc-card-label{font-size:11px;font-weight:750;text-transform:uppercase;letter-spacing:0.8px;color:var(--green,#f4cc57)}
+.cc-sub{font-size:12px;color:var(--muted,#9a9aa6);line-height:1.5;margin:0}
+.cc-row{display:flex;align-items:center;gap:8px}
+.cc-row-between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cc-quick-form{display:flex;gap:8px;align-items:center}
+.cc-quick-form input{flex:1;min-width:0;min-height:42px;border-radius:10px;padding:9px 12px;font-size:14px}
+.cc-quick-form button{min-height:42px;padding:0 16px;border-radius:10px;font-size:13px;font-weight:700;flex-shrink:0}
+.cc-persona-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:12px;background:rgba(244,204,87,0.08);border:1px solid rgba(244,204,87,0.25)}
+.cc-persona-info{min-width:0;flex:1}
+.cc-persona-info strong{display:block;font-size:13px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cc-persona-info small{display:block;font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cc-persona-edit-btn{min-height:34px!important;padding:6px 12px!important;font-size:11.5px!important;border-radius:8px!important;flex-shrink:0}
+.cc-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cc-stat-box{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
+.cc-stat-box strong{display:block;font-size:22px;font-weight:800;color:var(--ink);line-height:1.1}
+.cc-stat-box span{display:block;font-size:11px;color:var(--muted);margin-top:4px}
+.cc-pill-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.cc-pill{min-height:34px!important;padding:6px 12px!important;border-radius:999px!important;font-size:11.5px!important;font-weight:650!important;white-space:nowrap;border:1px solid var(--line)!important;background:var(--paper)!important;color:var(--muted)!important;cursor:pointer}
+.cc-pill.is-active{background:var(--green,#f4cc57)!important;color:#141416!important;border-color:transparent!important}
+.cc-status-btn{min-height:26px!important;padding:4px 10px!important;border-radius:999px!important;font-size:10px!important;font-weight:800!important;letter-spacing:0.5px;border:1px solid var(--line)!important;background:var(--bg)!important;color:var(--muted)!important;white-space:nowrap;flex-shrink:0}
+.cc-status-btn.st-ready{background:rgba(244,204,87,0.16)!important;color:var(--green,#f4cc57)!important;border-color:rgba(244,204,87,0.4)!important}
+.cc-status-btn.st-edit{background:rgba(251,146,60,0.15)!important;color:#fb923c!important;border-color:rgba(251,146,60,0.4)!important}
+.cc-status-btn.st-posted{background:rgba(74,222,128,0.15)!important;color:#4ade80!important;border-color:rgba(74,222,128,0.4)!important}
+.cc-video-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;transition:border-color .15s,transform .12s}
+.cc-video-card:hover{border-color:var(--green,#f4cc57)}
+.cc-video-card.is-selected{border-color:var(--green,#f4cc57);box-shadow:0 0 0 1px rgba(244,204,87,0.25)}
+.cc-video-title{font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.35;margin:0}
+.cc-video-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;font-size:11.5px;color:var(--muted)}
+.cc-style-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.cc-style-btn{min-height:42px!important;padding:8px 6px!important;border-radius:10px!important;font-size:11.5px!important;font-weight:700!important;text-align:center;border:1px solid var(--line)!important;background:var(--paper)!important;color:var(--muted)!important;line-height:1.25}
+.cc-style-btn.is-active{background:var(--green,#f4cc57)!important;color:#141416!important;border-color:transparent!important}
+.cc-script-toolbar{display:flex;gap:8px;align-items:center}
+.cc-script-toolbar select{flex:1;min-width:0;min-height:42px;border-radius:10px;font-size:13.5px;font-weight:650}
+.cc-ai-btn{min-height:42px!important;padding:0 14px!important;border-radius:10px!important;font-size:12.5px!important;font-weight:750!important;background:var(--green,#f4cc57)!important;color:#141416!important;border:0!important;white-space:nowrap;flex-shrink:0}
+.cc-ai-btn:disabled{opacity:.65;cursor:wait}
+.cc-textarea{width:100%;min-height:76px;border-radius:10px;padding:10px 12px;font-size:14.5px;line-height:1.55;resize:vertical}
+.cc-textarea.is-tall{min-height:126px}
+.cc-seg-switch{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:4px;border-radius:12px;background:var(--paper);border:1px solid var(--line)}
+.cc-seg-btn{min-height:38px!important;padding:6px 10px!important;border-radius:9px!important;border:0!important;background:transparent!important;color:var(--muted)!important;font-size:12.5px!important;font-weight:700!important;display:flex;align-items:center;justify-content:center;gap:6px}
+.cc-seg-btn.is-active{background:var(--green,#f4cc57)!important;color:#141416!important}
+.cc-pro-badge{display:inline-flex;align-items:center;padding:2px 6px;border-radius:5px;font-size:9px;font-weight:850;letter-spacing:0.6px;background:rgba(244,204,87,0.2);color:var(--green,#f4cc57);border:1px solid rgba(244,204,87,0.4)}
+.cc-seg-btn.is-active .cc-pro-badge{background:rgba(20,20,22,0.18);color:#141416;border-color:rgba(20,20,22,0.3)}
+.cc-progress-bar{width:100%;height:7px;border-radius:999px;background:var(--bg);overflow:hidden;margin-top:8px}
+.cc-progress-fill{height:100%;background:var(--green,#f4cc57);border-radius:999px;transition:width .2s ease}
+.cc-shot-list{display:flex;flex-direction:column;gap:8px}
+.cc-shot-item{display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;background:var(--paper);border:1px solid var(--line);transition:border-color .15s,opacity .15s,transform .15s;touch-action:pan-y}
+.cc-shot-item.is-dragging{opacity:0.45;border-color:var(--green,#f4cc57)}
+.cc-shot-item.is-drag-over{border-color:var(--green,#f4cc57);box-shadow:0 -2px 0 0 var(--green,#f4cc57)}
+.cc-drag-handle{display:inline-flex;align-items:center;justify-content:center;width:24px;height:32px;color:var(--muted);cursor:grab;font-size:15px;letter-spacing:-2px;user-select:none;flex-shrink:0;touch-action:none}
+.cc-drag-handle:active{cursor:grabbing;color:var(--green,#f4cc57)}
+.cc-shot-check{width:20px!important;height:20px!important;min-width:20px;margin:0;accent-color:var(--green,#f4cc57);cursor:pointer;flex-shrink:0}
+.cc-shot-text{flex:1;min-width:0;font-size:13.5px;line-height:1.45;color:var(--ink);word-break:break-word}
+.cc-shot-item.is-done .cc-shot-text{text-decoration:line-through;color:var(--muted)}
+.cc-shot-num{font-size:10px;font-weight:800;color:var(--muted);min-width:16px;text-align:center;flex-shrink:0}
+.cc-shot-actions{display:flex;align-items:center;gap:2px;flex-shrink:0}
+.cc-mini-btn{width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important;padding:0!important;border-radius:6px!important;border:0!important;background:transparent!important;color:var(--muted)!important;font-size:12px!important;display:inline-flex;align-items:center;justify-content:center}
+.cc-mini-btn:hover{background:rgba(255,255,255,0.08)!important;color:var(--ink)!important}
+.cc-pro-lock-card{background:var(--paper);border:1px dashed rgba(244,204,87,0.45);border-radius:16px;padding:28px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+.cc-pro-lock-icon{width:46px;height:46px;border-radius:14px;background:rgba(244,204,87,0.14);border:1px solid rgba(244,204,87,0.35);color:var(--green,#f4cc57);display:flex;align-items:center;justify-content:center;font-size:20px}
+.cc-onboard-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.cc-chip-choice{display:inline-flex;align-items:center;cursor:pointer;margin:0!important;flex-direction:row!important}
+.cc-chip-choice input{position:absolute;opacity:0;width:1px;height:1px}
+.cc-chip-choice span{display:inline-flex;align-items:center;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:12.5px;font-weight:600;transition:all .15s}
+.cc-chip-choice input:checked + span{background:var(--green,#f4cc57);color:#141416;border-color:transparent;font-weight:750}
+.cc-read-overlay{position:fixed;inset:0;z-index:10050;background:var(--bg,#141416);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.cc-read-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--paper)}
+.cc-read-body{flex:1;overflow-y:auto;padding:20px 18px 32px;max-width:680px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:16px;-webkit-overflow-scrolling:touch}
+.cc-read-block{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px}
+.cc-read-text{color:var(--ink);line-height:1.65;white-space:pre-wrap;margin:8px 0 0}
+.cc-read-body.sz-normal .cc-read-text{font-size:17px}
+.cc-read-body.sz-large .cc-read-text{font-size:22px}
+.cc-read-body.sz-xl .cc-read-text{font-size:28px;line-height:1.5}
+.cc-read-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;border-top:1px solid var(--line);background:var(--paper)}
+@media(max-width:760px){
+ .cc-stack{padding-bottom:96px}
+ .cc-style-btn{font-size:11px!important;padding:8px 4px!important}
+}
 </style></head><body><svg width="0" height="0" style="position:fixed;left:-9999px;top:-9999px;pointer-events:none" aria-hidden="true"><defs><filter id="whole-pill-type-a" filterUnits="userSpaceOnUse" x="0" y="0" width="358" height="64" color-interpolation-filters="sRGB"><feImage id="wp-img-r" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapR"/><feImage id="wp-img-g" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapG"/><feImage id="wp-img-b" x="0" y="0" width="358" height="64" preserveAspectRatio="none" result="dispMapB"/><feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="blurred"/><feDisplacementMap id="wp-disp-r" in="blurred" in2="dispMapR" scale="56" xChannelSelector="R" yChannelSelector="G" result="rDisp"/><feColorMatrix in="rDisp" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="redOnly"/><feDisplacementMap id="wp-disp-g" in="blurred" in2="dispMapG" scale="56" xChannelSelector="R" yChannelSelector="G" result="gDisp"/><feColorMatrix in="gDisp" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="greenOnly"/><feDisplacementMap id="wp-disp-b" in="blurred" in2="dispMapB" scale="56" xChannelSelector="R" yChannelSelector="G" result="bDisp"/><feColorMatrix in="bDisp" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blueOnly"/><feBlend in="redOnly" in2="greenOnly" mode="screen" result="rg"/><feBlend in="rg" in2="blueOnly" mode="screen" result="rgb"/></filter><filter id="active-pill-glass-rgb" filterUnits="userSpaceOnUse" x="0" y="0" width="70" height="56" color-interpolation-filters="sRGB"><feImage id="ap-img-r" x="0" y="0" width="70" height="56" preserveAspectRatio="none" result="apMapR"/><feImage id="ap-img-g" x="0" y="0" width="70" height="56" preserveAspectRatio="none" result="apMapG"/><feImage id="ap-img-b" x="0" y="0" width="70" height="56" preserveAspectRatio="none" result="apMapB"/><feGaussianBlur id="ap-blur-rgb" in="SourceGraphic" stdDeviation="1.4" result="apBlur"/><feDisplacementMap id="ap-disp-r" in="apBlur" in2="apMapR" scale="21" xChannelSelector="R" yChannelSelector="G" result="apRDisp"/><feColorMatrix in="apRDisp" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="apRedOnly"/><feDisplacementMap id="ap-disp-g" in="apBlur" in2="apMapG" scale="21" xChannelSelector="R" yChannelSelector="G" result="apGDisp"/><feColorMatrix in="apGDisp" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="apGreenOnly"/><feDisplacementMap id="ap-disp-b" in="apBlur" in2="apMapB" scale="21" xChannelSelector="R" yChannelSelector="G" result="apBDisp"/><feColorMatrix in="apBDisp" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="apBlueOnly"/><feBlend in="apRedOnly" in2="apGreenOnly" mode="screen" result="apRG"/><feBlend in="apRG" in2="apBlueOnly" mode="screen" result="apRGB"/></filter></defs></svg><div id="app"><p class="loading">Opening your writing workspace…</p></div><div id="toast" role="status" aria-live="polite"></div><dialog id="dialog"></dialog><dialog id="slot-warning-dialog" class="slot-warning-dialog"></dialog><script type="module">
 if(window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches){document.documentElement.classList.add('is-standalone-pwa');}
 const statuses = ['PREPRO','FILMED','EDITED','TX','CANCELLED','POST'];
@@ -1150,6 +1233,55 @@ function preset(slot=30) { const s=Number(slot)||30; return {slot:s,target:s===6
 function newProject(name,slot=30) { return {schema:1,id:uid(),name,settings:preset(slot),records:[],throws:[],scripts:{}}; }
 function newRecord(ep=null,cap='') { return {id:uid(),episode:(ep===null||ep===undefined||ep===''||Number.isNaN(Number(ep))||Number(ep)<=0)?null:Math.floor(Number(ep)),capsule:String(cap),type:'Interview',topic:'',description:'',guest:'',title:'',location:'',date:'',status:'PREPRO',duration:'',questions:'',vo:'',remarks:'',profile:''}; }
 function newThrow(ep=1){ return {id:uid(),episode:Number(ep)||1,topic:'',description:'',location:'',date:'',sponsored:false,status:'PREPRO',remarks:''}; }
+const CC_STATUSES=['IDEA','SEDIA RAKAM','TENGAH EDIT','DAH POST'];
+const CC_WEEKS=['Minggu Ini','Minggu Depan','Minggu Lepas'];
+const CC_ROLES=['Affiliate','Ejen Takaful','Ejen Emas / Public Gold','Peniaga Kecil / Servis','Kongsi Ilmu / Tips','Lifestyle / Harian'];
+const CC_TONES=[
+ {id:'santai',label:'Santai & Mesra (Saya / Anda)'},
+ {id:'kasual',label:'Kasual Harian (Aku / Korang)'},
+ {id:'profesional',label:'Profesional & Meyakinkan'},
+ {id:'story',label:'Tenang & Bercerita (Storytelling)'}
+];
+const CC_STYLES={
+ visual:{label:'Visual + Teks Skrin',short:'Visual + Teks',hookLabel:'Teks Pembuka (3 Saat Pertama)',bodyLabel:'3–4 Baris Teks Skrin (Ikut Babak)',bodyHint:'Tulis sebaris pendek untuk setiap klip visual.'},
+ faceless:{label:'Faceless + Suara Latar',short:'Faceless + VO',hookLabel:'Ayat Pancing Suara (3 Saat)',bodyLabel:'3–4 Poin Suara Latar (Spontan)',bodyHint:'Poin ringkas untuk dibaca santai masa rakam suara latar.'},
+ camera:{label:'Cakap Depan Kamera',short:'Depan Kamera',hookLabel:'Ayat Mula Depan Kamera (3 Saat)',bodyLabel:'3–4 Poin Bercakap (Tak Perlu Hafal)',bodyHint:'Cakap ikut gaya sendiri berpandukan 3–4 poin ini.'}
+};
+function isCreatorMode(proj=p){ return proj?.settings?.projectType==='script' && proj?.settings?.scriptFormat==='content-creation'; }
+function defaultCreatorSettings(){ return {onboarded:false,role:'',niche:'',tone:'santai',defaultStyle:'visual',weeklyGoal:1,isPro:false}; }
+function newCreatorVideo(title='',style='visual',week='Minggu Ini'){
+ return {
+  id:uid(),
+  title:String(title||'').trim()||'Idea Video Baru',
+  style:CC_STYLES[style]?style:'visual',
+  status:'IDEA',
+  week:CC_WEEKS.includes(week)?week:'Minggu Ini',
+  hook:'',
+  points:'',
+  cta:'',
+  caption:'',
+  shots:[
+   {id:uid(),text:'Klip pembuka 3 saat (Close-up aksi / produk terus)',done:false},
+   {id:uid(),text:'Klip proses kerja / sudut POV tangan',done:false},
+   {id:uid(),text:'Klip hasil akhir dengan cahaya terang',done:false}
+  ],
+  createdAt:new Date().toISOString()
+ };
+}
+function ensureCreatorData(proj){
+ if(!proj)return;
+ if(!proj.settings.creator)proj.settings.creator=defaultCreatorSettings();
+ if(!Array.isArray(proj.contents))proj.contents=[];
+ proj.contents.forEach(v=>{
+  if(!v.id)v.id=uid();
+  if(!CC_STYLES[v.style])v.style='visual';
+  if(!CC_STATUSES.includes(v.status))v.status='IDEA';
+  if(!CC_WEEKS.includes(v.week))v.week='Minggu Ini';
+  if(Array.isArray(v.points))v.points=v.points.join('\n');
+  if(!Array.isArray(v.shots))v.shots=[];
+  v.shots.forEach(s=>{if(!s.id)s.id=uid();s.done=Boolean(s.done);s.text=String(s.text||'');});
+ });
+}
 function keys(p) {return Array.from({length:Number(p?.settings?.capsules)||3},(_,i)=>String(i+1));}
 // Missing optional episode values from older drafts / the Sheets bridge mean
 // unassigned. Do not coerce strings, zero, or out-of-range assignments.
@@ -1579,6 +1711,16 @@ let writerName=safeStorage.getItem('rs:writer_name')||'';
 let contiEpFilter='all';
 let overviewEpPickerOpen=false;
 let scriptActiveEp=null;
+let ccActiveId=null,ccIdeaFilter='ALL',ccShootTab='checklist',ccReadMode=false,ccReadSize='large',ccAiBusy=false;
+const ccTabLabels={conti:'Shoot',script:'Script',home:'Home',log:'Ideas',overview:'Plan'};
+function getNavLabel(v){return isCreatorMode()?(ccTabLabels[v]||tabLabels[v]||v):(tabLabels[v]||v);}
+function getActiveCreatorVideo(){
+ ensureCreatorData(p);
+ if(!p.contents.length)return null;
+ let found=p.contents.find(v=>v.id===ccActiveId);
+ if(!found){found=p.contents[0];ccActiveId=found.id;}
+ return found;
+}
 const draftKey=id=>`rs:draft:${adapter.mode}:${id}`;
 function cleanSpecialTheme(v){return String(v||'').replace(/^special\s*edition\s*:\s*/i,'').replace(/^special\s*edition\s*/i,'').trim();}
 function notify(t){$('#toast').textContent=t;$('#toast').classList.add('show');clearTimeout(notify.timer);notify.timer=setTimeout(()=>$('#toast').classList.remove('show'),5000);}
@@ -1590,10 +1732,10 @@ function field(label,name,value='',type='text',extra=''){return `<label>${label}
 function area(label,name,value='',extra=''){return `<label>${label}<textarea name="${name}" ${extra}>${esc(value)}</textarea></label>`;}
 function options(values,selected){return values.map(v=>`<option value="${esc(v)}" ${String(v)===String(selected)?'selected':''}>${esc(v)}</option>`).join('');}
 function stat(n,label,sub=''){return `<div class="stat"><strong>${n}</strong><span>${label}</span><small>${sub}</small></div>`;}
-function header(){const activeTab=view==='preview'?'script':view==='conti-record'?'conti':view;const isContiOnly=p?.settings?.projectType==='conti';const logCount=(p?.records?.length||0)+((p?.throws||[]).length||0);return `<aside class="sidebar"><a class="brand" href="#" data-action="all-projects"><span class="brand-mark" aria-label="2list">${brandEmblemSvg}</span><span>2list<small>WRITING STUDIO</small></span></a><div class="project-picker"><label>ACTIVE PROJECT</label><div class="project-picker-row"><details class="project-menu"><summary aria-label="Active project"><span>${esc(p?.name||'Select project')}</span><span aria-hidden="true">▾</span></summary><div class="project-menu-list">${projects.map(x=>`<button type="button" class="project-menu-item ${x.id===p?.id?'active':''}" data-action="open-project" data-id="${esc(x.id)}"><span>${esc(x.name)}</span>${x.id===p?.id?'<span>✓</span>':''}</button>`).join('')}<div class="project-menu-divider"></div><button type="button" class="project-menu-item" data-action="new-project"><span>＋ Create new project</span></button><button type="button" class="project-menu-item" data-action="all-projects"><span>← All projects</span></button></div></details><details class="dots-menu ${view==='settings'||view==='account'?'active':''}"><summary aria-label="Menu" title="Menu">⋮</summary><div class="dots-menu-list"><button type="button" class="project-menu-item ${view==='account'?'active':''}" data-action="nav" data-view="account"><span>Account</span></button><button type="button" class="project-menu-item ${view==='settings'?'active':''}" data-action="nav" data-view="settings"><span>Settings</span></button></div></details></div></div>${isContiOnly?'':`<nav aria-label="Main navigation">${navs.map(([v,l])=>{const isActive=activeTab===v;const hasBadge=v==='log'&&logCount>0;return `<button data-action="nav" data-view="${v}" class="nav-link ${isActive?'active':''}" aria-label="${l}" ${isActive?'aria-current="page"':''}><div class="nav-icon-wrap"><span class="nav-icon" aria-hidden="true">${icons[v]}</span></div><span class="nav-label desktop-label">${l}</span>${hasBadge?`<span class="nav-badge desktop-badge">${logCount}</span>`:''}</button>`;}).join('')}</nav>`}<div class="sidebar-note"><span class="dot"></span> ${esc(userEmail||(adapter.mode==='local'?'Local preview':'Google Sheets'))}<p>${adapter.mode==='local'?'Connected to Google Sheets (R&D preview).':'Synced to your Google Sheets.'}</p><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="text-button" data-action="help">Quick guide ↗</button><button class="text-button" data-action="sign-out">Sign out</button></div>${adapter.mode==='local'?'<a class="phone-preview-link" href="/?phone-preview=1" target="_blank" rel="noopener">Phone preview ↗</a>':''}</div></aside>`;}
+function header(){const activeTab=view==='preview'?'script':view==='conti-record'?'conti':view;const isContiOnly=p?.settings?.projectType==='conti';const creatorMode=isCreatorMode();const logCount=creatorMode?(p?.contents?.length||0):((p?.records?.length||0)+((p?.throws||[]).length||0));return `<aside class="sidebar" data-mode="${creatorMode?'creator':'tv'}"><a class="brand" href="#" data-action="all-projects"><span class="brand-mark" aria-label="2list">${brandEmblemSvg}</span><span>2list<small>${creatorMode?'CREATOR STUDIO':'WRITING STUDIO'}</small></span></a><div class="project-picker"><label>ACTIVE PROJECT</label><div class="project-picker-row"><details class="project-menu"><summary aria-label="Active project"><span>${esc(p?.name||'Select project')}</span><span aria-hidden="true">▾</span></summary><div class="project-menu-list">${projects.map(x=>`<button type="button" class="project-menu-item ${x.id===p?.id?'active':''}" data-action="open-project" data-id="${esc(x.id)}"><span>${esc(x.name)}</span>${x.id===p?.id?'<span>✓</span>':''}</button>`).join('')}<div class="project-menu-divider"></div><button type="button" class="project-menu-item" data-action="new-project"><span>＋ Create new project</span></button><button type="button" class="project-menu-item" data-action="all-projects"><span>← All projects</span></button></div></details><details class="dots-menu ${view==='settings'||view==='account'?'active':''}"><summary aria-label="Menu" title="Menu">⋮</summary><div class="dots-menu-list"><button type="button" class="project-menu-item ${view==='account'?'active':''}" data-action="nav" data-view="account"><span>Account</span></button><button type="button" class="project-menu-item ${view==='settings'?'active':''}" data-action="nav" data-view="settings"><span>Settings</span></button></div></details></div></div>${isContiOnly?'':`<nav aria-label="Main navigation">${navs.map(([v])=>{const lbl=getNavLabel(v);const isActive=activeTab===v;const hasBadge=v==='log'&&logCount>0;return `<button data-action="nav" data-view="${v}" class="nav-link ${isActive?'active':''}" aria-label="${lbl}" ${isActive?'aria-current="page"':''}><div class="nav-icon-wrap"><span class="nav-icon" aria-hidden="true">${icons[v]}</span></div><span class="nav-label desktop-label">${lbl}</span>${hasBadge?`<span class="nav-badge desktop-badge">${logCount}</span>`:''}</button>`;}).join('')}</nav>`}<div class="sidebar-note"><span class="dot"></span> ${esc(userEmail||(adapter.mode==='local'?'Local preview':'Google Sheets'))}<p>${adapter.mode==='local'?'Connected to Google Sheets (R&D preview).':'Synced to your Google Sheets.'}</p><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="text-button" data-action="help">Quick guide ↗</button><button class="text-button" data-action="sign-out">Sign out</button></div>${adapter.mode==='local'?'<a class="phone-preview-link" href="/?phone-preview=1" target="_blank" rel="noopener">Phone preview ↗</a>':''}</div></aside>`;}
 function mobileGlassNavHtml(activeTab){
  const activeIdx=Math.max(0,navs.findIndex(([v])=>v===activeTab));
- return `<nav id="mobile-glass-nav" aria-label="Mobile navigation"><div class="glass-backdrop-layer" id="glass-backdrop-layer" aria-hidden="true"></div><div class="glass-rim-layer" id="glass-rim-layer" aria-hidden="true"></div>${navs.map(([v,l])=>{const isActive=activeTab===v;return `<button data-action="nav" data-view="${v}" class="nav-link ${isActive?'active':''}" aria-label="${l}" ${isActive?'aria-current="page"':''}><div class="nav-icon-wrap"><span class="nav-icon" aria-hidden="true">${mobileIcons[v]}</span></div><span class="nav-label mobile-label" aria-hidden="true">${tabLabels[v]}</span></button>`;}).join('')}<div class="nav-active-pill" id="nav-active-pill" style="transform:translate3d(${activeIdx * 100}%,0,0);"><div class="active-pill-rim" id="active-pill-rim" aria-hidden="true"></div></div><div class="crisp-overlay-layer" id="crisp-overlay-layer" aria-hidden="true">${navs.map(([v],idx)=>`<div class="crisp-tab-slot ${idx===activeIdx?'is-visible':''}" data-cidx="${idx}"><div class="nav-icon-wrap"><span class="nav-icon">${mobileIcons[v]}</span></div><span class="nav-label mobile-label">${tabLabels[v]}</span></div>`).join('')}</div></nav>`;
+ return `<nav id="mobile-glass-nav" aria-label="Mobile navigation"><div class="glass-backdrop-layer" id="glass-backdrop-layer" aria-hidden="true"></div><div class="glass-rim-layer" id="glass-rim-layer" aria-hidden="true"></div>${navs.map(([v])=>{const lbl=getNavLabel(v);const isActive=activeTab===v;return `<button data-action="nav" data-view="${v}" class="nav-link ${isActive?'active':''}" aria-label="${lbl}" ${isActive?'aria-current="page"':''}><div class="nav-icon-wrap"><span class="nav-icon" aria-hidden="true">${mobileIcons[v]}</span></div><span class="nav-label mobile-label" aria-hidden="true">${lbl}</span></button>`;}).join('')}<div class="nav-active-pill" id="nav-active-pill" style="transform:translate3d(${activeIdx * 100}%,0,0);"><div class="active-pill-rim" id="active-pill-rim" aria-hidden="true"></div></div><div class="crisp-overlay-layer" id="crisp-overlay-layer" aria-hidden="true">${navs.map(([v],idx)=>`<div class="crisp-tab-slot ${idx===activeIdx?'is-visible':''}" data-cidx="${idx}"><div class="nav-icon-wrap"><span class="nav-icon">${mobileIcons[v]}</span></div><span class="nav-label mobile-label">${getNavLabel(v)}</span></div>`).join('')}</div></nav>`;
 }
 function updateSidebarNav(activeTab, logCount){
  const activeIdx = navs.findIndex(([v]) => v === activeTab);
@@ -1669,6 +1811,41 @@ function render(){
   $('#app').innerHTML=`<button type="button" class="welcome-signout-btn" data-action="sign-out">Sign out</button><main class="welcome"><div class="brand-logo-wrap"><img src="${BRAND_LOGO_URI}" alt="2list" class="brand-logo-img"></div><p class="eyebrow welcome-eyebrow">Welcome back, toolist!</p><h1 class="welcome-heading">Ready to tell stories, ${esc(accountName)}?</h1><div class="actions"><button class="primary" data-action="new-project">${hasProjects?'＋ Create new project':'＋ Create your first project'}</button></div>${hasProjects?`<div class="welcome-projects" role="list" aria-label="Your projects">${projects.map(x=>{const nameStr=String(x.name||'Untitled project').trim()||'Untitled project';const isShort=nameStr.length<15;return `<div class="welcome-project-row" role="listitem"><button class="welcome-project-card welcome-project-open" data-action="open-project" data-id="${esc(x.id)}"><span class="welcome-project-title ${isShort?'is-single':'is-double'}">${esc(nameStr)}</span></button><button type="button" class="welcome-project-delete" data-action="delete-project" data-id="${esc(x.id)}" data-name="${esc(nameStr)}" aria-label="Delete ${esc(nameStr)}" title="Delete project">&times;</button></div>`;}).join('')}</div>`:''}</main>`;
   return;
  }
+ const creatorMode=isCreatorMode();
+ if(creatorMode){
+  ensureCreatorData(p);
+  const ccTitles={home:'Home',log:'Ideas',script:'Script',conti:'Shoot',overview:'Plan',settings:'Settings',account:'Account'};
+  const ccSubs={
+   home:'Rentak santai & ruang idea pantas untuk pencipta kandungan.',
+   log:'Simpan idea dalam 5 saat & tukar status satu sentuhan.',
+   script:'3 kotak panduan mudah + bantuan AI mengikut personaliti anda.',
+   conti:'Susun urutan klip (drag & drop) supaya mudah ikut lokasi atau jalan cerita.',
+   overview:'Jadual mingguan santai tanpa tekanan.',
+   settings:'Urus profil kreator, kunci AI dan salinan sandaran projek.',
+   account:'Your 2list writer profile. It stays the same across all your projects.'
+  };
+  const activeTab=view==='preview'?'script':view==='conti-record'?'conti':view;
+  const logCount=p.contents.length;
+  const showSaveBar=view==='script'||view==='conti'||dirty;
+  const rightHeadHtml=(view==='script'||view==='conti')&&getActiveCreatorVideo()?`<button type="button" class="primary" style="min-height:38px;padding:8px 14px;font-size:12px" data-action="cc-toggle-read">👁️ Mod Bacaan</button>`:'';
+  const ccViewMap={home:ccHomeView,log:ccIdeasView,script:ccScriptView,conti:ccShootView,overview:ccPlanView,settings:ccSettingsView,account:accountPage};
+  const viewFn=ccViewMap[view]||ccHomeView;
+  const workspaceHtml=`<div class="workspace">${showSaveBar?`<header class="topbar"><div><span class="eyebrow">CONTENT CREATION</span><span class="top-project">${esc(p.name)}</span></div><div class="save-tools"><span id="save-state" role="status">${dirty?'Local draft · unsaved':'Saved '+(adapter.mode==='local'?'on this device':'in Sheets')}</span><button data-action="save" class="primary" ${busy?'disabled':''}>${busy?activity:'Save'}</button></div></header>`:''}<main id="main"><div class="page-heading"><div><p class="eyebrow">${esc(p.name)} / CREATOR</p><h1>${esc(ccTitles[view]||'Workspace')}</h1><p>${esc(ccSubs[view]||'')}</p></div>${rightHeadHtml}</div>${conflict?conflictView():''}${viewFn()}</main>${ccReadMode?ccReadOverlayHtml():''}<footer>2list <span>Content Creation · Personal workspace</span></footer></div>`;
+  const existingSidebar=document.querySelector('#app > .sidebar');
+  const existingWs=document.querySelector('#app > .workspace');
+  if(existingSidebar && existingSidebar.dataset.mode==='creator' && existingWs && Boolean(document.getElementById('mobile-glass-nav'))){
+   updateSidebarNav(activeTab, logCount);
+   existingWs.outerHTML=workspaceHtml;
+   window.__rebuildSafariMirror?.();
+  }else{
+   $('#app').innerHTML=`${header()}${workspaceHtml}${mobileGlassNavHtml(activeTab)}`;
+   window.__syncLiquidTabBar?.(true);
+   window.__rebuildSafariMirror?.();
+  }
+  if(view==='conti'&&ccShootTab==='checklist')initCreatorShotDrag();
+  if(busy)document.querySelectorAll('#app input,#app textarea,#app select,#app button').forEach(el=>el.disabled=true);
+  return;
+ }
  const isScriptEditor=view==='script'&&scriptActiveEp!==null;
  const showSaveBar=isScriptEditor||view==='preview';
  const isContiView=view==='conti'||view==='conti-record';
@@ -1683,7 +1860,7 @@ function render(){
  const existingSidebar=document.querySelector('#app > .sidebar');
  const existingWs=document.querySelector('#app > .workspace');
  const needsNav=p?.settings?.projectType!=='conti';
- if(existingSidebar && existingWs && Boolean(document.getElementById('mobile-glass-nav'))===needsNav){
+ if(existingSidebar && existingSidebar.dataset.mode!=='creator' && existingWs && Boolean(document.getElementById('mobile-glass-nav'))===needsNav){
   updateSidebarNav(activeTab, logCount);
   existingWs.outerHTML=workspaceHtml;
   window.__rebuildSafariMirror?.();
@@ -1693,6 +1870,452 @@ function render(){
   window.__rebuildSafariMirror?.();
  }
  if(busy)document.querySelectorAll('#app input,#app textarea,#app select,#app button').forEach(el=>el.disabled=true);
+}
+
+/* === Content Creation Mode Views, Onboarding, Drag-Drop & Real Gemini AI === */
+function ccStatusClass(st){
+ if(st==='SEDIA RAKAM')return 'st-ready';
+ if(st==='TENGAH EDIT')return 'st-edit';
+ if(st==='DAH POST')return 'st-posted';
+ return '';
+}
+function ccOnboardingDialog(){
+ ensureCreatorData(p);
+ const c=p.settings.creator;
+ const curRole=c.role||'';
+ const curTone=c.tone||'santai';
+ const curStyle=c.defaultStyle||'visual';
+ dialog(`<form id="cc-onboarding-form">
+  <div class="dialog-heading">
+   <div>
+    <p class="eyebrow">${esc(p.name)} / PERSONALIZE</p>
+    <h2>Kenali gaya anda dulu</h2>
+   </div>
+   <button type="button" data-action="close" aria-label="Close">✕</button>
+  </div>
+  <p>Supaya cadangan skrip &amp; AI kedengaran betul-betul macam diri anda sendiri (bukan bunyi robot).</p>
+  <div style="margin-top:16px">
+   <span class="cc-card-label">1. Siapa anda / Peranan utama?</span>
+   <div class="cc-onboard-chips">
+    ${CC_ROLES.map(r=>`<label class="cc-chip-choice"><input type="radio" name="role" value="${esc(r)}" ${curRole===r?'checked':''}><span>${esc(r)}</span></label>`).join('')}
+   </div>
+   <div style="margin-top:12px">${field('Bidang / Produk / Servis spesifik anda (pilihan)','niche',c.niche||'','text','placeholder="Contoh: Ejen Takaful keluarga, jual kek batik, affiliate barang dapur" maxlength="140"')}</div>
+  </div>
+  <div style="margin-top:18px">
+   <span class="cc-card-label">2. Gaya bahasa &amp; cara bercakap</span>
+   <div class="cc-onboard-chips">
+    ${CC_TONES.map(t=>`<label class="cc-chip-choice"><input type="radio" name="tone" value="${esc(t.id)}" ${curTone===t.id?'checked':''}><span>${esc(t.label)}</span></label>`).join('')}
+   </div>
+  </div>
+  <div style="margin-top:18px">
+   <span class="cc-card-label">3. Gaya video kegemaran anda</span>
+   <div class="cc-onboard-chips">
+    ${Object.entries(CC_STYLES).map(([k,info])=>`<label class="cc-chip-choice"><input type="radio" name="defaultStyle" value="${esc(k)}" ${curStyle===k?'checked':''}><span>${esc(info.label)}</span></label>`).join('')}
+   </div>
+  </div>
+  <div class="dialog-actions">
+   <button type="button" data-action="close">Nanti dulu</button>
+   <button type="submit" class="primary">Simpan &amp; Mula →</button>
+  </div>
+ </form>`);
+}
+function ccHomeView(){
+ const c=p.settings.creator||defaultCreatorSettings();
+ const active=getActiveCreatorVideo();
+ const postedCount=p.contents.filter(v=>v.status==='DAH POST').length;
+ const readyCount=p.contents.filter(v=>v.status==='SEDIA RAKAM').length;
+ const ideaCount=p.contents.filter(v=>v.status==='IDEA').length;
+ const toneObj=CC_TONES.find(t=>t.id===c.tone)||CC_TONES[0];
+ const personaTitle=c.role||c.niche||'Belum tetapkan personaliti kreator';
+ const personaSub=[c.niche&&c.role?c.niche:'',toneObj.label,CC_STYLES[c.defaultStyle]?.short||''].filter(Boolean).join(' · ');
+ return `<div class="cc-stack">
+  <div class="cc-persona-bar">
+   <div class="cc-persona-info">
+    <strong>👤 ${esc(personaTitle)}</strong>
+    <small>${esc(personaSub||'Klik Edit supaya AI tulis ikut gaya bahasa anda.')}</small>
+   </div>
+   <button type="button" class="cc-persona-edit-btn" data-action="cc-open-onboarding">${c.onboarded?'Edit':'Personalize'}</button>
+  </div>
+
+  <div class="cc-card">
+   <div class="cc-card-head"><span class="cc-card-title">⚡ Simpan Idea Pantas (5 Saat)</span></div>
+   <form class="cc-quick-form" id="cc-quick-idea-home">
+    <input type="text" name="title" placeholder="Taip 1 ayat idea kasar terus di sini..." maxlength="160" autocomplete="off">
+    <button type="submit" class="primary">Simpan</button>
+   </form>
+  </div>
+
+  ${active?`<div class="cc-card">
+   <div class="cc-card-head">
+    <span class="cc-card-label">Fokus Video Sekarang</span>
+    <button type="button" class="cc-status-btn ${ccStatusClass(active.status)}" data-action="cc-cycle-status" data-id="${esc(active.id)}">${esc(active.status)}</button>
+   </div>
+   <h3 class="cc-video-title" style="font-size:16px;margin-bottom:6px">${esc(active.title)}</h3>
+   <p class="cc-sub">${esc(CC_STYLES[active.style].label)} · ${active.shots.filter(s=>s.done).length}/${active.shots.length} klip siap</p>
+   <div class="cc-row" style="margin-top:14px">
+    <button type="button" class="primary" style="flex:1" data-action="cc-open-script" data-id="${esc(active.id)}">Buka Skrip</button>
+    <button type="button" style="flex:1" data-action="cc-open-shoot" data-id="${esc(active.id)}">Senarai Klip</button>
+   </div>
+  </div>`:`<div class="cc-card" style="text-align:center;padding:26px 18px">
+   <h3 style="margin:0 0 6px">Belum ada video lagi</h3>
+   <p class="cc-sub">Taip satu idea kasar di kotak atas, kemudian susun skrip dengan bantuan AI.</p>
+  </div>`}
+
+  <div class="cc-stats-grid">
+   <div class="cc-stat-box"><strong>${ideaCount}</strong><span>Idea</span></div>
+   <div class="cc-stat-box"><strong>${readyCount}</strong><span>Sedia Rakam</span></div>
+   <div class="cc-stat-box"><strong>${postedCount}</strong><span>Dah Post</span></div>
+  </div>
+ </div>`;
+}
+function ccIdeasView(){
+ const list=ccIdeaFilter==='ALL'?p.contents:p.contents.filter(v=>v.status===ccIdeaFilter);
+ return `<div class="cc-stack">
+  <form class="cc-quick-form" id="cc-quick-idea-log">
+   <input type="text" name="title" placeholder="Tambah idea baru dalam 5 saat..." maxlength="160" autocomplete="off">
+   <button type="submit" class="primary">+ Tambah</button>
+  </form>
+  <div class="cc-pill-row">
+   ${['ALL',...CC_STATUSES].map(st=>`<button type="button" class="cc-pill ${ccIdeaFilter===st?'is-active':''}" data-action="cc-filter-ideas" data-status="${esc(st)}">${st==='ALL'?'Semua':esc(st)}</button>`).join('')}
+  </div>
+  ${list.length?list.map(v=>`<div class="cc-video-card ${v.id===ccActiveId?'is-selected':''}" data-action="cc-open-script" data-id="${esc(v.id)}">
+   <div class="cc-row-between" style="align-items:flex-start">
+    <h3 class="cc-video-title">${esc(v.title)}</h3>
+    <button type="button" class="cc-status-btn ${ccStatusClass(v.status)}" data-action="cc-cycle-status" data-id="${esc(v.id)}">${esc(v.status)}</button>
+   </div>
+   <div class="cc-video-meta">
+    <span>${esc(CC_STYLES[v.style].short)} · ${esc(v.week)}</span>
+    <span style="color:var(--green,#f4cc57);font-weight:700">Susun Skrip →</span>
+   </div>
+  </div>`).join(''):`<div class="cc-card" style="text-align:center;padding:28px 16px"><p class="cc-sub">Tiada video dalam status ini.</p></div>`}
+ </div>`;
+}
+function ccScriptView(){
+ const v=getActiveCreatorVideo();
+ if(!v){
+  return `<div class="cc-stack"><div class="cc-card" style="text-align:center;padding:28px 16px">
+   <h3 style="margin:0 0 8px">Tambah idea pertama anda</h3>
+   <p class="cc-sub" style="margin-bottom:14px">Masukkan tajuk atau topik kasar video supaya kita boleh mula rangka skrip &amp; guna Bantu AI.</p>
+   <form class="cc-quick-form" id="cc-quick-idea-script">
+    <input type="text" name="title" placeholder="Contoh: Cara pilih takaful untuk keluarga muda" maxlength="160" autocomplete="off">
+    <button type="submit" class="primary">Mula</button>
+   </form>
+  </div></div>`;
+ }
+ const meta=CC_STYLES[v.style]||CC_STYLES.visual;
+ return `<div class="cc-stack">
+  <div class="cc-script-toolbar">
+   <select id="cc-video-select" aria-label="Pilih video">
+    ${p.contents.map(x=>`<option value="${esc(x.id)}" ${x.id===v.id?'selected':''}>${esc(x.title)}</option>`).join('')}
+   </select>
+   <button type="button" class="cc-ai-btn" data-action="cc-ai-generate" ${ccAiBusy?'disabled':''}>${ccAiBusy?'Menjana AI…':'✨ Bantu AI'}</button>
+  </div>
+
+  <div class="cc-style-grid">
+   ${Object.entries(CC_STYLES).map(([k,info])=>`<button type="button" class="cc-style-btn ${v.style===k?'is-active':''}" data-action="cc-set-style" data-style="${esc(k)}">${esc(info.short)}</button>`).join('')}
+  </div>
+
+  <div class="cc-card">
+   <div class="cc-card-head">
+    <span class="cc-card-label">1. ${esc(meta.hookLabel)}</span>
+    <button type="button" class="cc-status-btn ${ccStatusClass(v.status)}" data-action="cc-cycle-status" data-id="${esc(v.id)}">${esc(v.status)}</button>
+   </div>
+   <textarea class="cc-textarea" data-cc-field="hook" placeholder="Ayat atau teks 3 saat pertama supaya orang berhenti scroll...">${esc(v.hook)}</textarea>
+  </div>
+
+  <div class="cc-card">
+   <div class="cc-card-head"><span class="cc-card-title">2. ${esc(meta.bodyLabel)}</span></div>
+   <p class="cc-sub" style="margin-bottom:8px">${esc(meta.bodyHint)}</p>
+   <textarea class="cc-textarea is-tall" data-cc-field="points" placeholder="1. Poin pertama&#10;2. Poin kedua&#10;3. Poin ketiga">${esc(v.points)}</textarea>
+  </div>
+
+  <div class="cc-card">
+   <div class="cc-card-head"><span class="cc-card-title">3. Penutup / Ajakan (CTA)</span></div>
+   <input type="text" data-cc-field="cta" value="${esc(v.cta)}" placeholder="Contoh: Komen NAK, simpan video ni, atau klik link di bio">
+   <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line)">
+    <div class="cc-card-head">
+     <span class="cc-card-title">Caption &amp; Hashtag Siap-Siap</span>
+     <button type="button" class="cc-persona-edit-btn" data-action="cc-copy-caption">📋 Copy</button>
+    </div>
+    <textarea class="cc-textarea" data-cc-field="caption" placeholder="Caption sedia untuk ditampal ke TikTok / Reels / YouTube...">${esc(v.caption)}</textarea>
+   </div>
+  </div>
+
+  <div class="cc-row-between" style="padding:0 4px">
+   <button type="button" class="text-button" data-action="cc-open-onboarding">👤 Ubah personaliti AI</button>
+   <button type="button" class="text-button" style="color:#ff7b7b" data-action="cc-delete-video" data-id="${esc(v.id)}">Padam video ini</button>
+  </div>
+ </div>`;
+}
+function ccShootView(){
+ const v=getActiveCreatorVideo();
+ const done=v?v.shots.filter(s=>s.done).length:0;
+ const total=v?v.shots.length:0;
+ const pct=total?Math.round((done/total)*100):0;
+ return `<div class="cc-stack">
+  <div class="cc-seg-switch">
+   <button type="button" class="cc-seg-btn ${ccShootTab==='checklist'?'is-active':''}" data-action="cc-shoot-tab" data-tab="checklist">Shot Checklist</button>
+   <button type="button" class="cc-seg-btn ${ccShootTab==='conti'?'is-active':''}" data-action="cc-shoot-tab" data-tab="conti"><span>Conti Sheet</span><span class="cc-pro-badge">PRO</span></button>
+  </div>
+
+  ${ccShootTab==='conti'?`
+   <div class="cc-pro-lock-card">
+    <div class="cc-pro-lock-icon" aria-hidden="true">🔒</div>
+    <span class="cc-pro-badge">2LIST PRO FEATURE</span>
+    <h3 style="margin:4px 0 0">Conti Sheet Multi-Cam</h3>
+    <p class="cc-sub" style="max-width:360px">Fungsi Conti Sheet penuh (Scene, Shot, Take, multi-kamera &amp; audio berasingan) khusus untuk pelanggan <strong>2List PRO</strong>. Untuk rakaman solo atau kru kecil, gunakan <strong>Shot Checklist</strong> secara percuma.</p>
+    <button type="button" class="primary" style="margin-top:6px" data-action="cc-shoot-tab" data-tab="checklist">← Kembali ke Shot Checklist</button>
+   </div>
+  `:(!v?`
+   <div class="cc-card" style="text-align:center;padding:28px 16px">
+    <p class="cc-sub">Belum ada video dipilih. Tambah idea di tab Home atau Ideas dahulu.</p>
+   </div>
+  `:`
+   <div class="cc-card">
+    <div class="cc-script-toolbar" style="margin-bottom:10px">
+     <select id="cc-video-select" aria-label="Pilih video untuk dirakam">
+      ${p.contents.map(x=>`<option value="${esc(x.id)}" ${x.id===v.id?'selected':''}>${esc(x.title)}</option>`).join('')}
+     </select>
+    </div>
+    <div class="cc-row-between">
+     <span class="cc-sub">Seret ikon <strong>⋮⋮</strong> untuk susun semula urutan klip ikut lokasi / jalan cerita.</span>
+     <strong style="font-size:13px;color:var(--green,#f4cc57);flex-shrink:0">${done}/${total}</strong>
+    </div>
+    <div class="cc-progress-bar"><div class="cc-progress-fill" style="width:${pct}%"></div></div>
+   </div>
+
+   <div class="cc-shot-list" id="cc-shot-list">
+    ${v.shots.map((s,idx)=>`<div class="cc-shot-item ${s.done?'is-done':''}" draggable="true" data-shot-id="${esc(s.id)}" data-shot-idx="${idx}">
+     <span class="cc-drag-handle" title="Seret untuk susun semula" aria-label="Seret untuk susun semula">⋮⋮</span>
+     <span class="cc-shot-num">${idx+1}</span>
+     <input type="checkbox" class="cc-shot-check" data-action="cc-toggle-shot" data-shot-id="${esc(s.id)}" ${s.done?'checked':''}>
+     <span class="cc-shot-text">${esc(s.text)}</span>
+     <div class="cc-shot-actions">
+      <button type="button" class="cc-mini-btn" data-action="cc-move-shot" data-shot-id="${esc(s.id)}" data-dir="-1" title="Naik atas" ${idx===0?'disabled':''}>▲</button>
+      <button type="button" class="cc-mini-btn" data-action="cc-move-shot" data-shot-id="${esc(s.id)}" data-dir="1" title="Turun bawah" ${idx===v.shots.length-1?'disabled':''}>▼</button>
+      <button type="button" class="cc-mini-btn" data-action="cc-del-shot" data-shot-id="${esc(s.id)}" title="Padam klip">✕</button>
+     </div>
+    </div>`).join('')||`<div class="cc-card" style="text-align:center"><p class="cc-sub">Belum ada klip. Tambah klip di bawah atau tekan ✨ Bantu AI di tab Script.</p></div>`}
+   </div>
+
+   <form class="cc-quick-form" id="cc-add-shot-form">
+    <input type="text" name="shotText" placeholder="Tambah klip / angle baru (cth: Wide shot pantai Phuket)..." maxlength="200" autocomplete="off">
+    <button type="submit" class="primary">+ Klip</button>
+   </form>
+  `)}
+ </div>`;
+}
+function ccPlanView(){
+ return `<div class="cc-stack">
+  <div class="cc-card">
+   <p class="cc-sub">Susun video ikut minggu secara santai (<strong style="color:var(--ink)">${p.settings.creator?.weeklyGoal||1} video / minggu</strong>). Klik kad untuk terus buka skrip.</p>
+  </div>
+  ${CC_WEEKS.map(wk=>{
+   const items=p.contents.filter(v=>v.week===wk);
+   return `<div style="display:flex;flex-direction:column;gap:8px">
+    <span class="cc-card-label" style="padding:0 4px">${esc(wk)} (${items.length})</span>
+    ${items.length?items.map(v=>`<div class="cc-video-card" data-action="cc-open-script" data-id="${esc(v.id)}">
+     <div class="cc-row-between">
+      <div style="min-width:0;flex:1">
+       <h3 class="cc-video-title">${esc(v.title)}</h3>
+       <p class="cc-sub" style="margin-top:3px">${esc(CC_STYLES[v.style].short)}</p>
+      </div>
+      <div class="cc-row">
+       <button type="button" class="cc-persona-edit-btn" data-action="cc-cycle-week" data-id="${esc(v.id)}" title="Tukar minggu">⇄</button>
+       <button type="button" class="cc-status-btn ${ccStatusClass(v.status)}" data-action="cc-cycle-status" data-id="${esc(v.id)}">${esc(v.status)}</button>
+      </div>
+     </div>
+    </div>`).join(''):`<div class="cc-card" style="padding:14px"><p class="cc-sub">Tiada video dijadualkan untuk ${esc(wk.toLowerCase())}.</p></div>`}
+   </div>`;
+  }).join('')}
+ </div>`;
+}
+function ccSettingsView(){
+ const c=p.settings.creator||defaultCreatorSettings();
+ return `<div class="cc-stack">
+  <form id="cc-settings-form" class="cc-card" style="display:flex;flex-direction:column;gap:14px">
+   <h2 style="margin:0">Tetapan Projek Content Creation</h2>
+   ${field('Nama Projek / Saluran','name',p.name,'text','required maxlength="100"')}
+   ${field('Sasaran video seminggu','weeklyGoal',c.weeklyGoal||1,'number','min="1" max="14"')}
+   ${field('Gemini API Key (pilihan — guna kunci lalai jika kosong)','geminiApiKey',p.settings.geminiApiKey||'','password','placeholder="Biarkan kosong untuk guna kunci sedia ada"')}
+   <div class="cc-row" style="margin-top:4px">
+    <button type="button" data-action="cc-open-onboarding">👤 Edit Personaliti Kreator</button>
+    <button type="submit" class="primary">Simpan Tetapan</button>
+   </div>
+  </form>
+  <div class="cc-card">
+   <h3 style="margin:0 0 8px">Sandaran Data</h3>
+   <p class="cc-sub" style="margin-bottom:12px">Semua idea dan skrip anda disimpan pada peranti / Google Sheets sendiri tanpa iklan.</p>
+   <button type="button" data-action="backup">Muat turun salinan JSON</button>
+  </div>
+ </div>`;
+}
+function ccReadOverlayHtml(){
+ const v=getActiveCreatorVideo();
+ if(!v)return '';
+ const meta=CC_STYLES[v.style]||CC_STYLES.visual;
+ const szClass=ccReadSize==='xl'?'sz-xl':ccReadSize==='normal'?'sz-normal':'sz-large';
+ return `<div class="cc-read-overlay" id="cc-read-overlay">
+  <div class="cc-read-header">
+   <div style="min-width:0;flex:1">
+    <span class="cc-card-label">MOD BACAAN SOLO</span>
+    <div style="font-size:14px;font-weight:750;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(v.title)}</div>
+   </div>
+   <button type="button" data-action="cc-toggle-read">Tutup ✕</button>
+  </div>
+  <div class="cc-read-body ${szClass}">
+   <div class="cc-read-block">
+    <span class="cc-card-label">1. ${esc(meta.hookLabel)}</span>
+    <div class="cc-read-text" style="font-weight:700">${esc(v.hook||'Belum diisi')}</div>
+   </div>
+   <div class="cc-read-block">
+    <span class="cc-card-label">2. ${esc(meta.bodyLabel)}</span>
+    <div class="cc-read-text">${esc(v.points||'Belum diisi')}</div>
+   </div>
+   <div class="cc-read-block">
+    <span class="cc-card-label">3. Penutup / Ajakan (CTA)</span>
+    <div class="cc-read-text">${esc(v.cta||'Belum diisi')}</div>
+   </div>
+  </div>
+  <div class="cc-read-footer">
+   <span class="cc-sub">Saiz tulisan:</span>
+   <div class="cc-row">
+    <button type="button" class="cc-pill ${ccReadSize==='normal'?'is-active':''}" data-action="cc-read-size" data-size="normal">Normal</button>
+    <button type="button" class="cc-pill ${ccReadSize==='large'?'is-active':''}" data-action="cc-read-size" data-size="large">Besar</button>
+    <button type="button" class="cc-pill ${ccReadSize==='xl'?'is-active':''}" data-action="cc-read-size" data-size="xl">Ekstra</button>
+   </div>
+  </div>
+ </div>`;
+}
+async function requestCreatorAI(proj, video){
+ const apiKey=String(proj.settings?.geminiApiKey||safeStorage.getItem('rs:gemini_api_key')||DEFAULT_GEMINI_KEY).trim();
+ if(!apiKey)throw new Error('Gemini API Key diperlukan. Semak Settings.');
+ const c=proj.settings?.creator||defaultCreatorSettings();
+ const toneObj=CC_TONES.find(t=>t.id===c.tone)||CC_TONES[0];
+ const styleObj=CC_STYLES[video.style]||CC_STYLES.visual;
+ const prompt=`Anda ialah jurulatih kandungan digital Malaysia yang sangat memahami rakyat marhaen dan pencipta kandungan solo.
+PROFIL KREATOR:
+- Peranan: ${c.role||'Pencipta kandungan solo'}
+- Bidang / Produk / Servis: ${c.niche||proj.name}
+- Gaya bahasa & cara bercakap: ${toneObj.label}
+- Format video dipilih: ${styleObj.label}
+
+TOPIK VIDEO: "${video.title}"
+
+TUGAS:
+Hasilkan draf skrip & senarai klip yang SANGAT NATURAL, ringkas, tidak berbunyi skema/robot, dan sesuai dengan gaya bahasa kreator di atas (Bahasa Melayu santai Malaysia).
+Balas DALAM FORMAT JSON SAHAJA (tiada teks luar JSON) mengikut struktur tepat ini:
+{
+  "hook": "1 ayat atau teks pembuka 3 saat pertama yang kuat dan buat orang berhenti scroll",
+  "points": ["1. Poin ringkas pertama", "2. Poin ringkas kedua", "3. Poin ringkas ketiga", "4. Poin ringkas keempat (jika perlu)"],
+  "cta": "1 ayat penutup / ajakan yang santai",
+  "caption": "Caption ringkas sedia post + 4-5 hashtag relevan",
+  "shots": ["Klip 1: cadangan sudut/aksi visual spesifik", "Klip 2: ...", "Klip 3: ...", "Klip 4: ..."]
+}`;
+ const endpoint=`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${encodeURIComponent(apiKey)}`;
+ const res=await fetch(endpoint,{
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({
+   contents:[{parts:[{text:prompt}]}],
+   generationConfig:{temperature:0.75,maxOutputTokens:1500,responseMimeType:'application/json'}
+  })
+ });
+ const data=await res.json().catch(()=>null);
+ if(!res.ok){
+  const msg=data?.error?.message||`Gemini API status ${res.status}`;
+  throw new Error(msg);
+ }
+ let raw=String(data?.candidates?.[0]?.content?.parts?.[0]?.text||'').trim();
+ raw=raw.replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/```\s*$/i,'').trim();
+ const match=raw.match(/\{[\s\S]*\}/);
+ if(!match)throw new Error('AI tidak memulangkan format JSON yang sah. Cuba lagi.');
+ const parsed=JSON.parse(match[0]);
+ return {
+  hook:String(parsed.hook||'').trim(),
+  points:Array.isArray(parsed.points)?parsed.points.map(x=>String(x).trim()).filter(Boolean).join('\n'):String(parsed.points||'').trim(),
+  cta:String(parsed.cta||'').trim(),
+  caption:String(parsed.caption||'').trim(),
+  shots:Array.isArray(parsed.shots)?parsed.shots.map(x=>String(x).trim()).filter(Boolean):[]
+ };
+}
+function reorderCreatorShots(fromIdx,toIdx){
+ const v=getActiveCreatorVideo();
+ if(!v||fromIdx===toIdx||fromIdx<0||toIdx<0||fromIdx>=v.shots.length||toIdx>=v.shots.length)return;
+ const [moved]=v.shots.splice(fromIdx,1);
+ v.shots.splice(toIdx,0,moved);
+ draft();
+ render();
+}
+function initCreatorShotDrag(){
+ const list=document.getElementById('cc-shot-list');
+ if(!list)return;
+ let dragFromIdx=null;
+ // Desktop HTML5 drag & drop
+ list.querySelectorAll('.cc-shot-item').forEach(item=>{
+  item.addEventListener('dragstart',e=>{
+   dragFromIdx=Number(item.dataset.shotIdx);
+   item.classList.add('is-dragging');
+   e.dataTransfer.effectAllowed='move';
+   try{e.dataTransfer.setData('text/plain',String(dragFromIdx));}catch{}
+  });
+  item.addEventListener('dragover',e=>{
+   e.preventDefault();
+   e.dataTransfer.dropEffect='move';
+   item.classList.add('is-drag-over');
+  });
+  item.addEventListener('dragleave',()=>item.classList.remove('is-drag-over'));
+  item.addEventListener('drop',e=>{
+   e.preventDefault();
+   item.classList.remove('is-drag-over');
+   const toIdx=Number(item.dataset.shotIdx);
+   if(dragFromIdx!==null&&!Number.isNaN(toIdx)&&dragFromIdx!==toIdx){
+    reorderCreatorShots(dragFromIdx,toIdx);
+   }
+   dragFromIdx=null;
+  });
+  item.addEventListener('dragend',()=>{
+   item.classList.remove('is-dragging');
+   list.querySelectorAll('.is-drag-over').forEach(el=>el.classList.remove('is-drag-over'));
+   dragFromIdx=null;
+  });
+ });
+ // Touch drag on handle for mobile devices
+ list.querySelectorAll('.cc-drag-handle').forEach(handle=>{
+  handle.addEventListener('touchstart',e=>{
+   const row=handle.closest('.cc-shot-item');
+   if(!row)return;
+   const startIdx=Number(row.dataset.shotIdx);
+   let targetIdx=startIdx;
+   row.classList.add('is-dragging');
+   const onMove=ev=>{
+    if(!ev.touches?.[0])return;
+    ev.preventDefault();
+    const y=ev.touches[0].clientY;
+    const rows=[...list.querySelectorAll('.cc-shot-item')];
+    rows.forEach(r=>r.classList.remove('is-drag-over'));
+    for(let i=0;i<rows.length;i++){
+     const rect=rows[i].getBoundingClientRect();
+     if(y>=rect.top&&y<=rect.bottom){
+      targetIdx=i;
+      if(i!==startIdx)rows[i].classList.add('is-drag-over');
+      break;
+     }
+    }
+   };
+   const onEnd=()=>{
+    document.removeEventListener('touchmove',onMove);
+    document.removeEventListener('touchend',onEnd);
+    document.removeEventListener('touchcancel',onEnd);
+    row.classList.remove('is-dragging');
+    list.querySelectorAll('.is-drag-over').forEach(el=>el.classList.remove('is-drag-over'));
+    if(targetIdx!==startIdx)reorderCreatorShots(startIdx,targetIdx);
+   };
+   document.addEventListener('touchmove',onMove,{passive:false});
+   document.addEventListener('touchend',onEnd,{passive:true});
+   document.addEventListener('touchcancel',onEnd,{passive:true});
+  },{passive:true});
+ });
 }
 function formatProgramTitle(name){
  const clean=String(name||'Program').trim().replace(/\s+/g,' ');
@@ -2239,7 +2862,7 @@ function accountPage(){
  return `<form id="account-form" class="settings-form"><section class="panel"><h2>Writer</h2><p>Your name appears as the writer on every script you prepare. It follows your account across all projects.</p>${field('Writer name','writerName',writerName,'text','required maxlength="100" placeholder="Your full name" autocomplete="name"')}<p class="form-error" role="alert"></p></section><button class="primary" type="submit">Save account</button></form>`;
 }
 function conflictView(){return `<section class="conflict"><h2>Sheets changes need review</h2><p>A saved copy was edited after the app read it. Both versions are preserved for review. Download both, then choose a version to continue with.</p>${conflict.source?`<p>Source: ${esc(conflict.source)}${conflict.pendingCount>1?` · ${conflict.pendingCount} changes need separate review`:""}</p>`:""}<div class="actions"><button data-action="conflict-download" data-choice="manual">Back up manual version</button><button data-action="conflict-download" data-choice="app">Back up app version</button><button data-action="resolve" data-choice="manual">Use manual version…</button><button data-action="resolve" data-choice="app">Use app version…</button></div></section>`;}
-async function openProject(id){const loaded=await adapter.load(id);p=loaded.project;token=loaded.token;conflict=loaded.conflict||null;dirty=false;try{const d=JSON.parse(safeStorage.getItem(draftKey(id))||'null');if(d){if(id==='anggun-s4'&&d.project?.settings?.episodeLocations?.['1']!=='Shang Ri La, KL'){safeStorage.removeItem(draftKey(id));}else{validate(d.project);p=d.project;token=d.token;dirty=true;notify('Unsaved draft restored.');}}}catch{notify('Could not read the draft; opened the last saved version.');}if(!Array.isArray(p.throws))p.throws=[];if(p?.settings?.episodeThemes){for(const k in p.settings.episodeThemes){p.settings.episodeThemes[k]=cleanSpecialTheme(p.settings.episodeThemes[k]);}}ep=Math.min(ep,p.settings.episodes);view=p.settings.projectType==='conti'?'conti':'home';filter='all';search='';contiSearch='';contiMonthFilter='all';itemActiveTab='split';throwSearch='';throwFilter='all';render();window.scrollTo(0,0);}
+async function openProject(id){const loaded=await adapter.load(id);p=loaded.project;token=loaded.token;conflict=loaded.conflict||null;dirty=false;try{const d=JSON.parse(safeStorage.getItem(draftKey(id))||'null');if(d){if(id==='anggun-s4'&&d.project?.settings?.episodeLocations?.['1']!=='Shang Ri La, KL'){safeStorage.removeItem(draftKey(id));}else{validate(d.project);p=d.project;token=d.token;dirty=true;notify('Unsaved draft restored.');}}}catch{notify('Could not read the draft; opened the last saved version.');}if(!Array.isArray(p.throws))p.throws=[];if(p?.settings?.episodeThemes){for(const k in p.settings.episodeThemes){p.settings.episodeThemes[k]=cleanSpecialTheme(p.settings.episodeThemes[k]);}}if(isCreatorMode(p)){ensureCreatorData(p);ccActiveId=p.contents[0]?.id||null;ccIdeaFilter='ALL';ccShootTab='checklist';ccReadMode=false;}ep=Math.min(ep,p.settings.episodes);view=p.settings.projectType==='conti'?'conti':'home';filter='all';search='';contiSearch='';contiMonthFilter='all';itemActiveTab='split';throwSearch='';throwFilter='all';render();window.scrollTo(0,0);if(isCreatorMode(p)&&!p.settings.creator?.onboarded){ccOnboardingDialog();}}
 async function save(){if(busy||!p)return;const invalid=document.querySelector('[data-section-field]:invalid');if(invalid){invalid.reportValidity();throw new Error('Correct the duration before saving.');}if(conflict)throw new Error('Resolve the Sheets conflict first. Back up your draft before choosing a version.');activity='Saving…';busy=true;render();try{const result=await adapter.save(p,token);p=result.project;token=result.token;conflict=result.conflict||null;if(conflict)throw new Error('Manual changes detected during save. Both versions are preserved.');dirty=false;try{safeStorage.removeItem(draftKey(p.id));}catch{}projects=await adapter.list();notify('Project and scripts saved.');const webAppUrl=safeStorage.getItem('rs:google_webapp_url');if(webAppUrl&&p){try{fetch(webAppUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'save',project:p})}).then(()=>notify('Synced to Google Sheets.')).catch(()=>{});}catch(e){}}}finally{busy=false;render();}}
 
 function getRecordGuestList(r){
@@ -2610,7 +3233,7 @@ function projectTypeDialog(name){
  dialog(`<div><div class="dialog-heading"><div><p class="eyebrow">${esc(name)}</p><h2>Choose project type</h2></div><button type="button" data-action="close" aria-label="Close">✕</button></div><p>Select how you want to use 2List for this project.</p><div class="project-type-grid"><button type="button" class="project-type-btn" data-action="select-project-type" data-type="conti"><strong><span>Conti Sheet</span><span aria-hidden="true">→</span></strong><small>Dedicated continuity sheet workspace for clappers and script supervisors on set.</small></button><button type="button" class="project-type-btn is-featured" data-action="select-project-type" data-type="script"><strong><span>Script</span><span aria-hidden="true">→</span></strong><small>Full scriptwriting workspace with Episodes, Capsules, Continuity Sheet and Script Editor.</small></button></div></div>`);
 }
 function scriptFormatDialog(name){
- dialog(`<div><div class="dialog-heading"><div><p class="eyebrow">${esc(name)} / SCRIPT</p><h2>Choose script format</h2></div><button type="button" data-action="back-to-project-type" aria-label="Back">✕</button></div><p>Select your program format.</p><div class="project-type-grid script-format-grid"><button type="button" class="project-type-btn is-featured" data-action="select-script-format" data-format="tv-magazine"><strong><span>TV Magazine</span><span aria-hidden="true">→</span></strong></button><button type="button" class="project-type-btn is-disabled" disabled aria-disabled="true"><strong><span>Talk Show</span><span class="format-lock-badge">PRO</span></strong></button><button type="button" class="project-type-btn is-disabled" disabled aria-disabled="true"><strong><span>Documentary</span><span class="format-lock-badge">PRO</span></strong></button><button type="button" class="project-type-btn is-disabled" disabled aria-disabled="true"><strong><span>Social Media Content</span><span class="format-lock-badge">PRO</span></strong></button></div></div>`);
+ dialog(`<div><div class="dialog-heading"><div><p class="eyebrow">${esc(name)} / SCRIPT</p><h2>Choose script format</h2></div><button type="button" data-action="back-to-project-type" aria-label="Back">✕</button></div><p>Select your program format.</p><div class="project-type-grid script-format-grid"><button type="button" class="project-type-btn is-featured" data-action="select-script-format" data-format="tv-magazine"><strong><span>TV Magazine</span><span aria-hidden="true">→</span></strong></button><button type="button" class="project-type-btn is-featured" data-action="select-script-format" data-format="content-creation"><strong><span>Content Creation</span><span aria-hidden="true">→</span></strong><small>TikTok, Reels, YouTube &amp; solo creator workspace.</small></button><button type="button" class="project-type-btn is-disabled" disabled aria-disabled="true"><strong><span>Talk Show</span><span class="format-lock-badge">PRO</span></strong></button><button type="button" class="project-type-btn is-disabled" disabled aria-disabled="true"><strong><span>Documentary</span><span class="format-lock-badge">PRO</span></strong></button></div></div>`);
 }
 function contiSetupDialog(){
  const s=p?.settings||{};
@@ -2721,6 +3344,10 @@ async function doAction(a,b){
   const created=newProject(pendingProjectName||'Untitled Project');
   created.settings.projectType='script';
   created.settings.scriptFormat=format;
+  if(format==='content-creation'){
+   created.settings.creator=defaultCreatorSettings();
+   created.contents=[];
+  }
   await adapter.save(created);
   projects=await adapter.list();
   closeDialog();
@@ -2728,6 +3355,93 @@ async function doAction(a,b){
  }
  if(a==='back-to-project-type'){
   projectTypeDialog(pendingProjectName||'Untitled Project');
+  return;
+ }
+ if(a==='cc-open-onboarding'){ccOnboardingDialog();return;}
+ if(a==='cc-filter-ideas'){ccIdeaFilter=b.dataset.status||'ALL';render();return;}
+ if(a==='cc-open-script'){ccActiveId=b.dataset.id||ccActiveId;view='script';render();window.scrollTo(0,0);return;}
+ if(a==='cc-open-shoot'){ccActiveId=b.dataset.id||ccActiveId;ccShootTab='checklist';view='conti';render();window.scrollTo(0,0);return;}
+ if(a==='cc-shoot-tab'){ccShootTab=b.dataset.tab==='conti'?'conti':'checklist';render();return;}
+ if(a==='cc-toggle-read'){ccReadMode=!ccReadMode;render();return;}
+ if(a==='cc-read-size'){ccReadSize=b.dataset.size||'large';render();return;}
+ if(a==='cc-cycle-status'){
+  const v=(p?.contents||[]).find(x=>x.id===b.dataset.id);
+  if(v){
+   const idx=CC_STATUSES.indexOf(v.status);
+   v.status=CC_STATUSES[(idx+1)%CC_STATUSES.length];
+   draft();render();notify(`Status: ${v.status}`);
+  }
+  return;
+ }
+ if(a==='cc-cycle-week'){
+  const v=(p?.contents||[]).find(x=>x.id===b.dataset.id);
+  if(v){
+   const idx=CC_WEEKS.indexOf(v.week);
+   v.week=CC_WEEKS[(idx+1)%CC_WEEKS.length];
+   draft();render();notify(`Dijadualkan: ${v.week}`);
+  }
+  return;
+ }
+ if(a==='cc-set-style'){
+  const v=getActiveCreatorVideo();
+  if(v&&CC_STYLES[b.dataset.style]){v.style=b.dataset.style;draft();render();}
+  return;
+ }
+ if(a==='cc-copy-caption'){
+  const v=getActiveCreatorVideo();
+  if(!v?.caption){notify('Caption masih kosong.');return;}
+  try{await navigator.clipboard.writeText(v.caption);notify('Caption disalin! Sedia untuk tampal.');}catch{notify('Sila salin caption secara manual.');}
+  return;
+ }
+ if(a==='cc-delete-video'){
+  const id=b.dataset.id;
+  if(!confirm('Padam video ini daripada projek?'))return;
+  p.contents=(p.contents||[]).filter(x=>x.id!==id);
+  ccActiveId=p.contents[0]?.id||null;
+  draft();await save();render();notify('Video dipadam.');
+  return;
+ }
+ if(a==='cc-toggle-shot'){
+  const v=getActiveCreatorVideo();
+  const s=v?.shots?.find(x=>x.id===b.dataset.shotId);
+  if(s){s.done=!s.done;draft();render();}
+  return;
+ }
+ if(a==='cc-move-shot'){
+  const v=getActiveCreatorVideo();
+  if(!v)return;
+  const idx=v.shots.findIndex(x=>x.id===b.dataset.shotId);
+  const dir=Number(b.dataset.dir||0);
+  if(idx!==-1)reorderCreatorShots(idx,idx+dir);
+  return;
+ }
+ if(a==='cc-del-shot'){
+  const v=getActiveCreatorVideo();
+  if(!v)return;
+  v.shots=v.shots.filter(x=>x.id!==b.dataset.shotId);
+  draft();render();
+  return;
+ }
+ if(a==='cc-ai-generate'){
+  const v=getActiveCreatorVideo();
+  if(!v||ccAiBusy)return;
+  ccAiBusy=true;render();
+  try{
+   const result=await requestCreatorAI(p,v);
+   if(result.hook)v.hook=result.hook;
+   if(result.points)v.points=result.points;
+   if(result.cta)v.cta=result.cta;
+   if(result.caption)v.caption=result.caption;
+   if(result.shots.length){
+    v.shots=result.shots.map(t=>({id:uid(),text:t,done:false}));
+   }
+   draft();
+   notify('✨ AI siap jana skrip & cadangan klip ikut personaliti anda!');
+  }catch(err){
+   notify(`AI gagal: ${err.message}`);
+  }finally{
+   ccAiBusy=false;render();
+  }
   return;
  }
  if(a==='conti-setup')contiSetupDialog();
@@ -3122,10 +3836,10 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const b=e.target.closest?.('[role="button"][data-action]');if(b&&e.target===b){e.preventDefault();b.click();}}});
 document.addEventListener('focusin',e=>{if(e.target.name==='contiStartScene'){const r=e.target.closest('.conti-option-row')?.querySelector('[name="contiSceneMode"]');if(r)r.checked=false;e.target.classList.add('is-active');}if(e.target.closest('#record-form')&&(e.target.name==='capsule'||e.target.name==='episode')){if(!e.target.dataset.prevVal)e.target.dataset.prevVal=e.target.value;}});
-document.addEventListener('change',async e=>{try{if(busy){render();return;}if(e.target.name==='type'&&e.target.closest('#record-form')){const qBox=$('#capsule-questions-box');if(qBox)qBox.hidden=(e.target.value==='Other');}if(e.target.name==='contiType'){const ht=e.target.value==='Host Throw';const sg=$('#conti-scene-group');if(sg)sg.hidden=ht;const eg=$('#conti-episode-group');if(eg)eg.hidden=!ht;const acts=$('#conti-setup-step1-actions');if(acts)acts.hidden=false;const nb=$('#conti-setup-next-btn');if(nb)nb.hidden=false;return;}if(e.target.name==='contiEpisode'){const chosenEp=Number(e.target.value)||1;const locInput=document.querySelector('#conti-setup-form [name="contiLocation"]');if(locInput&&(!locInput.value||locInput.dataset.autoFilled==='true')){const epLoc=p.settings?.episodeLocations?.[chosenEp]||'';if(epLoc){locInput.value=epLoc;locInput.dataset.autoFilled='true';}}return;}if(e.target.name==='contiSceneMode'){const inp=e.target.closest('.conti-option-row')?.querySelector('[name="contiStartScene"]');if(inp){inp.value='';inp.classList.remove('is-active');}return;}if(e.target.name==='contiCameras'){const c=Number(e.target.value)||2;document.querySelectorAll('[data-cam-start]').forEach(el=>{el.hidden=Number(el.dataset.camStart)>c;});return;}if(e.target.name==='contiAudio'){const aud=$('#conti-audio-start');if(aud)aud.hidden=e.target.value==='direct';return;}if(e.target.id==='project-select'){const v=e.target.value;if(v==='__new__'){e.target.value=p?.id||'';projectDialog();}else if(v==='__all__'){p=null;token=null;conflict=null;projects=await adapter.list();render();window.scrollTo(0,0);}else await openProject(v);}if(e.target.id==='episode-select'){ep=+e.target.value;if(view==='script')scriptActiveEp=ep;render();}if(e.target.id==='conti-episode-select'){contiEpFilter=e.target.value==='all'?'all':Number(e.target.value);if(contiEpFilter!=='all')ep=contiEpFilter;render();}if(e.target.dataset.txEp){const n=e.target.dataset.txEp;if(!p.settings.txDates||typeof p.settings.txDates!=='object')p.settings.txDates={};if(e.target.value)p.settings.txDates[n]=e.target.value;else delete p.settings.txDates[n];const st=txStatusForEpisode(Number(n));const dot=document.querySelector(`[data-tx-dot="${n}"]`);if(dot){dot.className=`tx-status-dot ${st.cls}`;dot.title=st.label;dot.setAttribute('aria-label',st.label);}const nx=$('#next-tx-display');if(nx)nx.textContent=nextTxDisplay();draft();return;}if(e.target.id==='log-filter'){filter=e.target.value;render();}
+document.addEventListener('change',async e=>{try{if(busy){render();return;}if(e.target.id==='cc-video-select'){ccActiveId=e.target.value;render();return;}if(e.target.name==='type'&&e.target.closest('#record-form')){const qBox=$('#capsule-questions-box');if(qBox)qBox.hidden=(e.target.value==='Other');}if(e.target.name==='contiType'){const ht=e.target.value==='Host Throw';const sg=$('#conti-scene-group');if(sg)sg.hidden=ht;const eg=$('#conti-episode-group');if(eg)eg.hidden=!ht;const acts=$('#conti-setup-step1-actions');if(acts)acts.hidden=false;const nb=$('#conti-setup-next-btn');if(nb)nb.hidden=false;return;}if(e.target.name==='contiEpisode'){const chosenEp=Number(e.target.value)||1;const locInput=document.querySelector('#conti-setup-form [name="contiLocation"]');if(locInput&&(!locInput.value||locInput.dataset.autoFilled==='true')){const epLoc=p.settings?.episodeLocations?.[chosenEp]||'';if(epLoc){locInput.value=epLoc;locInput.dataset.autoFilled='true';}}return;}if(e.target.name==='contiSceneMode'){const inp=e.target.closest('.conti-option-row')?.querySelector('[name="contiStartScene"]');if(inp){inp.value='';inp.classList.remove('is-active');}return;}if(e.target.name==='contiCameras'){const c=Number(e.target.value)||2;document.querySelectorAll('[data-cam-start]').forEach(el=>{el.hidden=Number(el.dataset.camStart)>c;});return;}if(e.target.name==='contiAudio'){const aud=$('#conti-audio-start');if(aud)aud.hidden=e.target.value==='direct';return;}if(e.target.id==='project-select'){const v=e.target.value;if(v==='__new__'){e.target.value=p?.id||'';projectDialog();}else if(v==='__all__'){p=null;token=null;conflict=null;projects=await adapter.list();render();window.scrollTo(0,0);}else await openProject(v);}if(e.target.id==='episode-select'){ep=+e.target.value;if(view==='script')scriptActiveEp=ep;render();}if(e.target.id==='conti-episode-select'){contiEpFilter=e.target.value==='all'?'all':Number(e.target.value);if(contiEpFilter!=='all')ep=contiEpFilter;render();}if(e.target.dataset.txEp){const n=e.target.dataset.txEp;if(!p.settings.txDates||typeof p.settings.txDates!=='object')p.settings.txDates={};if(e.target.value)p.settings.txDates[n]=e.target.value;else delete p.settings.txDates[n];const st=txStatusForEpisode(Number(n));const dot=document.querySelector(`[data-tx-dot="${n}"]`);if(dot){dot.className=`tx-status-dot ${st.cls}`;dot.title=st.label;dot.setAttribute('aria-label',st.label);}const nx=$('#next-tx-display');if(nx)nx.textContent=nextTxDisplay();draft();return;}if(e.target.id==='log-filter'){filter=e.target.value;render();}
 if(e.target.id==='throw-filter'){throwFilter=e.target.value;render();}
 if(e.target.id==='throw-episode-select'){ep=+e.target.value;render();}if(e.target.id==='conti-month-filter'){contiMonthFilter=e.target.value;render();}if(e.target.id==='conti-sort'){contiSort=e.target.value;render();}if(e.target.dataset.contiField==='remarks'){const rowId=e.target.closest('[data-conti-id]')?.dataset.contiId;const row=p?.settings?.contiRows?.find(r=>r.id===rowId);if(row){row.remarks=e.target.value;e.target.className=`conti-rem-select is-${(e.target.value||'empty').toLowerCase()}`;syncActiveContiSheet();draft();}}if(e.target.id==='script-style-upload'&&e.target.files?.length){const names=[...(p.settings.styleFiles||[])];const texts=[p.settings.styleReference||''];for(const file of e.target.files){const t=await extractScriptText(file);names.push(file.name);if(t)texts.push(`[${file.name}]\n${t.slice(0,3000)}`);}p.settings.styleFiles=names.slice(-5);p.settings.styleReference=texts.filter(Boolean).join('\n\n').slice(-8000);draft();render();notify('Past script reference added for AI style.');}if(e.target.closest('#record-form')&&(e.target.name==='capsule'||e.target.name==='episode')){const rf=e.target.closest('#record-form');checkCapsuleSlotConflict(rf,e.target);}if(e.target.matches('#record-form [name="capsule"]')){const f=$('#record-form [name="duration"]');if(f){f.readOnly=e.target.value==='Pr';if(f.readOnly)f.value=p.settings.promo;}}if(e.target.dataset.sectionField==='seconds'){const s=p.scripts[ep].sections.find(x=>x.id===e.target.closest('[data-section]').dataset.section);const n=duration(e.target.value);if(!s.edited)s.generated=clone(s);s.edited=true;s.seconds=n;draft();render();}}catch(err){e.target.setCustomValidity?.(err.message);e.target.reportValidity?.();notify(err.message);}});
-document.addEventListener('input',e=>{e.target.setCustomValidity?.('');if(e.target.name==='contiLocation'){e.target.dataset.autoFilled='false';}if(e.target.name==='contiStartScene'){const r=e.target.closest('.conti-option-row')?.querySelector('[name="contiSceneMode"]');if(r)r.checked=false;e.target.classList.add('is-active');}if(e.target.name==='type'&&e.target.closest('#record-form')){const qBox=$('#capsule-questions-box');if(qBox)qBox.hidden=(e.target.value==='Other');}if(e.target.id==='search'){search=e.target.value;const pos=e.target.selectionStart;render();$('#search').focus();$('#search').setSelectionRange(pos,pos);}
+document.addEventListener('input',e=>{e.target.setCustomValidity?.('');if(e.target.dataset.ccField&&isCreatorMode()){const v=getActiveCreatorVideo();if(v){v[e.target.dataset.ccField]=e.target.value;draft();}return;}if(e.target.name==='contiLocation'){e.target.dataset.autoFilled='false';}if(e.target.name==='contiStartScene'){const r=e.target.closest('.conti-option-row')?.querySelector('[name="contiSceneMode"]');if(r)r.checked=false;e.target.classList.add('is-active');}if(e.target.name==='type'&&e.target.closest('#record-form')){const qBox=$('#capsule-questions-box');if(qBox)qBox.hidden=(e.target.value==='Other');}if(e.target.id==='search'){search=e.target.value;const pos=e.target.selectionStart;render();$('#search').focus();$('#search').setSelectionRange(pos,pos);}
 if(e.target.id==='throw-search'){throwSearch=e.target.value;const pos=e.target.selectionStart;render();$('#throw-search')?.focus();$('#throw-search')?.setSelectionRange(pos,pos);}if(e.target.id==='conti-search'){contiSearch=e.target.value;const pos=e.target.selectionStart;render();$('#conti-search').focus();$('#conti-search').setSelectionRange(pos,pos);}const sd=e.target.dataset.contiShotDesc;if(sd){const [sc,sh]=sd.split(':');const val=e.target.value;const epRows=getEpisodeContiRows();const matching=epRows.filter(r=>String(r.scene||'1')===sc&&String(r.shot||'1')===sh);const wasEmpty=!matching.some(r=>!r.draft&&String(r.description||'').trim());const nowFilled=Boolean(val.trim());for(const r of matching){r.description=val;if(nowFilled&&r.draft){r.draft=false;r.createdAt=Date.now();}}if(nowFilled){recalculateContiFileNumbers(epRows);}syncActiveContiSheet();draft();if(wasEmpty&&nowFilled){const pos=e.target.selectionStart;render();const el=document.querySelector(`[data-conti-shot-desc="${esc(sc)}:${esc(sh)}"]`);if(el){el.focus();el.setSelectionRange(pos,pos);}}}const cf=e.target.dataset.contiField;if(cf&&cf!=='remarks'){const rowId=e.target.closest('[data-conti-id]')?.dataset.contiId;const row=p?.settings?.contiRows?.find(r=>r.id===rowId);if(row){row[cf]=e.target.value;if(['cam1','cam2','cam3','audio'].includes(cf)){row[`${cf}_manual`]=true;row[`${cf}_off`]=false;recalculateContiFileNumbers(getEpisodeContiRows());}syncActiveContiSheet();draft();}}const f=e.target.dataset.sectionField;if(f&&f!=='seconds'){const s=p.scripts[ep].sections.find(x=>x.id===e.target.closest('[data-section]').dataset.section);if(!s.edited)s.generated=clone(s);s.edited=true;s[f]=e.target.value;if(f==='audio')syncSectionToThrow(ep,s);draft();}});
 document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target;if(f.dataset.submitting==='true')return;f.dataset.submitting='true';const data=Object.fromEntries(new FormData(f));try{
  if(f.id==='auth-form'){userEmail=data.email.trim();safeStorage.setItem('rs:user_email',userEmail);projects=await adapter.list();render();notify(`Signed in as ${userEmail}`);return;}
@@ -3350,6 +4064,68 @@ document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target
   await save();
   render();
   notify(isEdit?'Throw updated.':'Throw added.');
+  return;
+ }
+ if(f.id==='cc-onboarding-form'){
+  ensureCreatorData(p);
+  const c=p.settings.creator;
+  c.role=String(data.role||c.role||'').trim();
+  c.niche=String(data.niche||'').trim();
+  c.tone=String(data.tone||'santai');
+  c.defaultStyle=CC_STYLES[data.defaultStyle]?data.defaultStyle:'visual';
+  c.onboarded=true;
+  if(!p.contents.length){
+   const topicHint=c.niche||c.role||p.name;
+   const starter=newCreatorVideo(`3 perkara ramai tak tahu tentang ${topicHint}`,c.defaultStyle,'Minggu Ini');
+   p.contents.push(starter);
+   ccActiveId=starter.id;
+  }
+  closeDialog();
+  draft();
+  await save();
+  render();
+  notify('Personaliti kreator disimpan! Cuba tekan ✨ Bantu AI di tab Script.');
+  return;
+ }
+ if(f.id==='cc-quick-idea-home'||f.id==='cc-quick-idea-log'||f.id==='cc-quick-idea-script'){
+  const title=String(data.title||'').trim();
+  if(!title){notify('Taip sikit tajuk idea dulu ya!');return;}
+  ensureCreatorData(p);
+  const defStyle=p.settings.creator?.defaultStyle||'visual';
+  const item=newCreatorVideo(title,defStyle,'Minggu Ini');
+  p.contents.unshift(item);
+  ccActiveId=item.id;
+  f.reset();
+  draft();
+  await save();
+  if(f.id==='cc-quick-idea-script')view='script';
+  render();
+  notify('Idea disimpan! Klik untuk mula susun skrip.');
+  return;
+ }
+ if(f.id==='cc-add-shot-form'){
+  const text=String(data.shotText||'').trim();
+  if(!text)return;
+  const v=getActiveCreatorVideo();
+  if(v){
+   v.shots.push({id:uid(),text,done:false});
+   f.reset();
+   draft();
+   await save();
+   render();
+  }
+  return;
+ }
+ if(f.id==='cc-settings-form'){
+  ensureCreatorData(p);
+  p.name=String(data.name||p.name).trim()||p.name;
+  p.settings.creator.weeklyGoal=Math.max(1,Math.min(14,Number(data.weeklyGoal)||1));
+  const keyVal=String(data.geminiApiKey||'').trim();
+  if(keyVal)safeStorage.setItem('rs:gemini_api_key',keyVal);
+  p.settings.geminiApiKey=keyVal;
+  draft();
+  view='home';
+  await save();
   return;
  }
  if(f.id==='settings-form'){const next=clone(p);next.name=data.name.trim();if(data.geminiApiKey)safeStorage.setItem('rs:gemini_api_key',String(data.geminiApiKey).trim());next.settings={...next.settings,...data,geminiApiKey:String(data.geminiApiKey||'').trim(),station:String(data.station||'').trim(),slot:+data.slot,target:+data.target,capsules:+data.capsules,episodes:+data.episodes,breaks:Array.from({length:breaksForSlot(+data.slot)},(_,i)=>i+1).join(',')};delete next.settings.name;validate(next);p=next;ep=Math.min(ep,p.settings.episodes);draft();view=p.settings.projectType==='conti'?'conti':'home';await save();}
