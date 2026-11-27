@@ -341,16 +341,16 @@ html:has(dialog[open]){overflow:hidden}
  }
  #mobile-glass-nav .nav-link.active{
   flex:1 1 0!important;
-  color:#f4cc57!important;
+  color:#ffffff!important;
   background:transparent!important;
   box-shadow:none!important;
   transform:none!important;
  }
  #mobile-glass-nav .nav-link.active .nav-svg-icon{stroke-width:2.2!important}
- #mobile-glass-nav .nav-link.active .mobile-label{font-weight:700!important;color:#f4cc57!important}
+ #mobile-glass-nav .nav-link.active .mobile-label{font-weight:700!important;color:#ffffff!important}
  #mobile-glass-nav.is-light-backdrop .nav-link{color:rgba(12,12,16,0.56)!important}
- #mobile-glass-nav.is-light-backdrop .nav-link.active{color:#b8860b!important}
- #mobile-glass-nav.is-light-backdrop .nav-link.active .mobile-label{color:#b8860b!important}
+ #mobile-glass-nav.is-light-backdrop .nav-link.active{color:#0a0a0c!important}
+ #mobile-glass-nav.is-light-backdrop .nav-link.active .mobile-label{color:#0a0a0c!important}
  .topbar{height:52px;padding:0 18px;background:var(--bg);border-bottom:0}
  .topbar>div:first-child{display:none}
  .save-tools{width:100%;justify-content:space-between}
@@ -5020,8 +5020,8 @@ document.addEventListener('focusin',e=>{
   },140);
  };
 
- // Dedicated WebGL1 GLSL Active Droplet Magnifying Lens for iOS Safari (matches iOS 26 video!)
- function paintNavIconsCanvas(nav,activeIdx){
+ // Dedicated WebGL1 GLSL Active Droplet Minifying Lens (kanta pengecil) for iOS Safari
+ function paintNavIconsCanvas(nav){
   const W=Math.max(100,Math.round(nav.offsetWidth||358));
   const H=Math.max(40,Math.round(nav.offsetHeight||64));
   const dpr=2;
@@ -5034,13 +5034,13 @@ document.addEventListener('focusin',e=>{
   const slotW=innerW/navs.length;
   ctx.lineCap='round';ctx.lineJoin='round';
   ctx.textAlign='center';ctx.textBaseline='middle';
+  // Keep ALL icons clean white while gliding (yellow accent ONLY pops when settled & selected!)
+  const col=isLight?'rgba(12,12,16,0.88)':'rgba(255,255,255,0.92)';
   navs.forEach(([v],i)=>{
    const cx=5+(i+0.5)*slotW;
    const cy=H*0.5-6;
-   const isAct=i===activeIdx;
-   const col=isAct?(isLight?'#b8860b':'#f4cc57'):(isLight?'rgba(12,12,16,0.72)':'rgba(255,255,255,0.85)');
    ctx.strokeStyle=col;ctx.fillStyle=col;
-   ctx.lineWidth=isAct?2.1:1.75;
+   ctx.lineWidth=1.9;
    ctx.save();
    ctx.translate(cx-10,cy-10);
    const s=20/24;
@@ -5063,7 +5063,7 @@ document.addEventListener('focusin',e=>{
    }
    ctx.stroke();
    ctx.restore();
-   ctx.font=`${isAct?'700':'600'} 10px -apple-system,BlinkMacSystemFont,sans-serif`;
+   ctx.font='600 10px -apple-system,BlinkMacSystemFont,sans-serif';
    ctx.fillText(tabLabels[v]||v,cx,H*0.5+14);
   });
   return {c,W,H};
@@ -5097,11 +5097,19 @@ document.addEventListener('focusin',e=>{
    vec3 sampleScene(vec2 navP){
     vec2 bgUv=clamp((u_navOffset+navP)/u_bgSize,vec2(0.0005),vec2(0.9995));
     vec3 bg=texture2D(u_bgTex,bgUv).rgb;
-    bg=mix(bg,u_tint.rgb,u_tint.a);
+    // Check if navP falls inside the Whole Pill capsule so its top/bottom edges visibly pinch inward under the lens!
+    float wpR=u_navSize.y*0.5;
+    float wpCx=clamp(navP.x,wpR,max(wpR,u_navSize.x-wpR));
+    float wpDist=length(navP-vec2(wpCx,wpR));
+    float inWhole=1.0-smoothstep(wpR-1.2,wpR+0.8,wpDist);
+    bg=mix(bg,mix(bg,u_tint.rgb,u_tint.a),inWhole);
+    // Subtle Whole Pill capsule rim edge so the pinched/shrunk Whole Pill boundary is clearly visible inside the lens!
+    float wpEdge=smoothstep(wpR-2.2,wpR-0.6,wpDist)*inWhole;
+    bg+=vec3(wpEdge*0.16);
     vec2 icUv=navP/u_navSize;
     if(icUv.x>=0.0&&icUv.x<=1.0&&icUv.y>=0.0&&icUv.y<=1.0){
      vec4 ic=texture2D(u_iconTex,icUv);
-     bg=mix(bg,ic.rgb,ic.a);
+     bg=mix(bg,ic.rgb,ic.a*inWhole);
     }
     return bg;
    }
@@ -5113,8 +5121,9 @@ document.addEventListener('focusin',e=>{
     float dist=length(delta);
     float t=clamp(dist/R,0.0,1.0);
     vec2 n=dist>0.0001?(delta/dist):vec2(0.0);
-    // Keep consistent refined glass character (AP_K=1.00, AP_RGB=1.5px, AP_Bevel=26%) + gentle convex lens magnification!
-    vec2 localFromCenter=(p-u_apSize*0.5)*0.90;
+    // Minifying concave optical lens (kanta pengecil: 1.22x radial pull)
+    // => ONLY the part of Whole Pill & icons overlapping under the Active Pill visibly shrinks/pinches inward!
+    vec2 localFromCenter=(p-u_apSize*0.5)*(1.0+0.22*(0.35+0.65*t*t));
     float start=0.74;
     float baseDisp=0.0;
     float prismDisp=0.0;
@@ -5188,10 +5197,8 @@ document.addEventListener('focusin',e=>{
   if(!st)return;
   st.canvas.style.opacity=lensMix>0.02?Math.min(1,lensMix*1.25).toFixed(3):'0';
   if(lensMix<=0.02||!st.hasBg)return;
-  const nearIdx=Math.max(0,Math.min(navs.length-1,Math.round(xPos)));
-  if(!st.hasIcon||nearIdx!==lastIconActiveIdx){
-   lastIconActiveIdx=nearIdx;
-   const ic=paintNavIconsCanvas(nav,nearIdx);
+  if(!st.hasIcon){
+   const ic=paintNavIconsCanvas(nav);
    st.gl.bindTexture(st.gl.TEXTURE_2D,st.iconTex);
    st.gl.texImage2D(st.gl.TEXTURE_2D,0,st.gl.RGBA,st.gl.RGBA,st.gl.UNSIGNED_BYTE,ic.c);
    st.navW=ic.W;st.navH=ic.H;st.hasIcon=true;
@@ -5259,36 +5266,22 @@ document.addEventListener('focusin',e=>{
   if(!apEl)return;
   const bdEl=nav?.querySelector('.glass-backdrop-layer');
   const rimEl=nav?.querySelector('.glass-rim-layer');
+  if(bdEl)bdEl.style.transform='';
+  if(rimEl)rimEl.style.transform='';
   if(!window.matchMedia('(max-width: 760px)').matches){
    apEl.style.transform='';
-   if(bdEl)bdEl.style.transform='';
-   if(rimEl)rimEl.style.transform='';
    return;
   }
   const speed=Math.abs(vx);
   const stretchFactor=ACTIVE_PILL_FINAL.stretch/100;
   const velStretch=Math.min(0.32,speed*0.018*(stretchFactor/0.20));
-  // Active Pill inflates above & below Whole Pill while keeping its consistent glass character
+  // Whole Pill stays 100% unaffected in size; Active Pill inflates & acts as a minifying lens (kanta pengecil)
+  // pinching ONLY the overlapping portion of Whole Pill & icons passing underneath it!
   const sx=1+0.28*lensMix+velStretch;
   const sy=1+0.26*lensMix-velStretch*0.20;
   apEl.classList.toggle('is-lens-active',lensMix>0.04);
   apEl.style.setProperty('--lens-mix',lensMix.toFixed(3));
   apEl.style.transform=`translate3d(${(xPos*100).toFixed(3)}%,0,0) scale(${sx.toFixed(4)},${sy.toFixed(4)})`;
-
-  // Whole Pill physical liquid reaction: compresses slightly & yields directionally as Active Pill expands!
-  const wpSx=1-0.018*lensMix;
-  const wpSy=1-0.075*lensMix;
-  const wpTx=((xPos-2)/2)*3.5*lensMix;
-  const wpOriginX=Math.max(12,Math.min(88,((xPos+0.5)/navs.length)*100));
-  const wpTf=lensMix>0.002?`translate3d(${wpTx.toFixed(2)}px,0,0) scale(${wpSx.toFixed(4)},${wpSy.toFixed(4)})`:'';
-  if(bdEl){
-   bdEl.style.transformOrigin=`${wpOriginX.toFixed(1)}% 50%`;
-   bdEl.style.transform=wpTf;
-  }
-  if(rimEl){
-   rimEl.style.transformOrigin=`${wpOriginX.toFixed(1)}% 50%`;
-   rimEl.style.transform=wpTf;
-  }
 
   renderActivePillWebGL(sx,sy);
   updateCrispOverlay();
