@@ -101,6 +101,8 @@ html:has(dialog[open]){overflow:hidden}
   pointer-events:none;
   z-index:0;
   overflow:hidden;
+  transform-origin:center center;
+  will-change:transform;
   -webkit-backdrop-filter:blur(1.2px) saturate(165%) contrast(1.05) brightness(1.03);
   backdrop-filter:blur(1.2px) saturate(165%) contrast(1.05) brightness(1.03);
  }
@@ -127,9 +129,23 @@ html:has(dialog[open]){overflow:hidden}
   border-radius:9999px;
   pointer-events:none;
   z-index:1;
+  transform-origin:center center;
+  will-change:transform;
   box-shadow:inset 0 1.2px 1.5px rgba(255,255,255,0.035),inset 0 -1px 1.5px rgba(255,255,255,0.013);
  }
  #mobile-glass-nav.is-light-backdrop{
+  background:transparent!important;
+  box-shadow:none!important;
+ }
+ #mobile-glass-nav{
+  background:transparent!important;
+  box-shadow:none!important;
+ }
+ #mobile-glass-nav .glass-backdrop-layer{
+  background:rgba(22,24,30,0.35)!important;
+  box-shadow:0 14px 34px rgba(0,0,0,0.45),0 2px 8px rgba(0,0,0,0.22)!important;
+ }
+ #mobile-glass-nav.is-light-backdrop .glass-backdrop-layer{
   background:rgba(255,255,255,0.35)!important;
   box-shadow:0 12px 30px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06)!important;
  }
@@ -145,10 +161,10 @@ html:has(dialog[open]){overflow:hidden}
   width:calc((100% - 10px) / 5)!important;
   left:5px!important;
   border-radius:9999px!important;
-  background:rgba(255,255,255,0.11)!important;
-  -webkit-backdrop-filter:none!important;
-  backdrop-filter:none!important;
-  box-shadow:none!important;
+  background:rgba(255,255,255,0.06)!important;
+  -webkit-backdrop-filter:blur(1.4px) saturate(140%) contrast(1.04)!important;
+  backdrop-filter:blur(1.4px) saturate(140%) contrast(1.04)!important;
+  box-shadow:0 4px 14px rgba(0,0,0,0.06)!important;
   border:none!important;
   pointer-events:none!important;
   z-index:2!important;
@@ -158,12 +174,12 @@ html:has(dialog[open]){overflow:hidden}
  }
  #mobile-glass-nav .nav-active-pill.is-lens-active{
   z-index:5!important;
-  background:rgba(255,255,255,0.03)!important;
-  box-shadow:0 10px 26px rgba(0,0,0,0.42),0 2px 8px rgba(0,0,0,0.22)!important;
+  background:rgba(255,255,255,0.04)!important;
+  box-shadow:0 8px 22px rgba(0,0,0,0.28),0 2px 6px rgba(0,0,0,0.14)!important;
  }
  #mobile-glass-nav.has-svg-lg .nav-active-pill.is-lens-active{
-  -webkit-backdrop-filter:url(#active-pill-glass-rgb) saturate(145%) contrast(1.06)!important;
-  backdrop-filter:url(#active-pill-glass-rgb) saturate(145%) contrast(1.06)!important;
+  -webkit-backdrop-filter:url(#active-pill-glass-rgb) saturate(140%) contrast(1.04)!important;
+  backdrop-filter:url(#active-pill-glass-rgb) saturate(140%) contrast(1.04)!important;
  }
  #mobile-glass-nav .nav-active-pill .ap-webgl-canvas{
   position:absolute;
@@ -183,23 +199,26 @@ html:has(dialog[open]){overflow:hidden}
   inset:0;
   border-radius:9999px;
   pointer-events:none;
-  opacity:0;
-  box-shadow:inset 0 1.4px 2px rgba(255,255,255,0.78),inset 0 -1.2px 2px rgba(255,255,255,0.26),inset 2px 1px 3px rgba(255,105,135,0.34),inset -2px -1px 3px rgba(70,210,255,0.40);
-  transition:opacity 0.14s ease;
+  opacity:1;
+  box-shadow:inset 0 1.2px 1.6px rgba(255,255,255,0.11),inset 0 -1px 1.4px rgba(255,255,255,0.03);
+  transition:box-shadow 0.16s ease;
  }
  #mobile-glass-nav .nav-active-pill.is-lens-active .active-pill-rim{
-  opacity:1;
+  box-shadow:inset 0 1.3px 1.8px rgba(255,255,255,0.24),inset 0 -1.1px 1.6px rgba(255,255,255,0.07);
  }
  #mobile-glass-nav.is-light-backdrop .nav-active-pill{
-  background:rgba(15,23,42,0.08)!important;
-  box-shadow:none!important;
+  background:rgba(15,23,42,0.06)!important;
+  box-shadow:0 3px 10px rgba(0,0,0,0.04)!important;
  }
  #mobile-glass-nav.is-light-backdrop .nav-active-pill.is-lens-active{
-  background:rgba(255,255,255,0.05)!important;
-  box-shadow:0 8px 22px rgba(0,0,0,0.16),0 2px 6px rgba(0,0,0,0.08)!important;
+  background:rgba(255,255,255,0.04)!important;
+  box-shadow:0 8px 20px rgba(0,0,0,0.12),0 2px 6px rgba(0,0,0,0.06)!important;
  }
  #mobile-glass-nav.is-light-backdrop .nav-active-pill .active-pill-rim{
-  box-shadow:inset 0 1.4px 2px rgba(255,255,255,0.92),inset 0 -1.2px 2px rgba(0,0,0,0.14),inset 2px 1px 2.5px rgba(255,90,120,0.28),inset -2px -1px 2.5px rgba(45,190,255,0.32);
+  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.22),inset 0 -1.2px 1.6px rgba(0,0,0,0.04);
+ }
+ #mobile-glass-nav.is-light-backdrop .nav-active-pill.is-lens-active .active-pill-rim{
+  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.42),inset 0 -1.2px 1.6px rgba(0,0,0,0.08);
  }
  #mobile-glass-nav .crisp-overlay-layer{
   position:absolute!important;
@@ -5094,17 +5113,17 @@ document.addEventListener('focusin',e=>{
     float dist=length(delta);
     float t=clamp(dist/R,0.0,1.0);
     vec2 n=dist>0.0001?(delta/dist):vec2(0.0);
-    // Gentle center magnification (0.86x) + steep curved bevel refraction + chromatic RGB prism!
-    vec2 localFromCenter=(p-u_apSize*0.5)*0.86;
-    float start=0.52;
+    // Keep consistent refined glass character (AP_K=1.00, AP_RGB=1.5px, AP_Bevel=26%) + gentle convex lens magnification!
+    vec2 localFromCenter=(p-u_apSize*0.5)*0.90;
+    float start=0.74;
     float baseDisp=0.0;
     float prismDisp=0.0;
     if(t>start){
      float u=(t-start)/(1.0-start);
-     baseDisp=1.65*(0.48*R)*(u*u);
-     if(u>0.28){
-      float v=(u-0.28)/0.72;
-      prismDisp=3.2*(v*v);
+     baseDisp=1.00*(0.26*R)*(u*u);
+     if(u>0.50){
+      float v=(u-0.50)/0.50;
+      prismDisp=1.5*(v*v);
      }
     }
     vec2 baseNavP=u_apCenter+localFromCenter;
@@ -5114,8 +5133,7 @@ document.addEventListener('focusin',e=>{
     vec3 col=vec3(r,g,b);
     float lum=dot(col,vec3(0.299,0.587,0.114));
     col=mix(vec3(lum),col,1.35);
-    // Subtle top specular glass glint
-    float glint=smoothstep(0.55,1.0,t)*smoothstep(0.2,-0.8,n.y)*0.22;
+    float glint=smoothstep(0.68,1.0,t)*smoothstep(0.15,-0.85,n.y)*0.12;
     col+=vec3(glint);
     gl_FragColor=vec4(clamp(col,0.0,1.0),1.0);
    }`;
@@ -5236,21 +5254,42 @@ document.addEventListener('focusin',e=>{
  }
 
  function applyPillTransform(){
+  const nav=document.getElementById('mobile-glass-nav');
   const apEl=document.getElementById('nav-active-pill');
   if(!apEl)return;
+  const bdEl=nav?.querySelector('.glass-backdrop-layer');
+  const rimEl=nav?.querySelector('.glass-rim-layer');
   if(!window.matchMedia('(max-width: 760px)').matches){
    apEl.style.transform='';
+   if(bdEl)bdEl.style.transform='';
+   if(rimEl)rimEl.style.transform='';
    return;
   }
   const speed=Math.abs(vx);
   const stretchFactor=ACTIVE_PILL_FINAL.stretch/100;
   const velStretch=Math.min(0.32,speed*0.018*(stretchFactor/0.20));
-  // Inflate dramatically above & below the Whole Pill when pressed/dragging/sliding (exact iOS 26 behavior!)
-  const sx=1+0.30*lensMix+velStretch;
-  const sy=1+0.28*lensMix-velStretch*0.20;
+  // Active Pill inflates above & below Whole Pill while keeping its consistent glass character
+  const sx=1+0.28*lensMix+velStretch;
+  const sy=1+0.26*lensMix-velStretch*0.20;
   apEl.classList.toggle('is-lens-active',lensMix>0.04);
   apEl.style.setProperty('--lens-mix',lensMix.toFixed(3));
   apEl.style.transform=`translate3d(${(xPos*100).toFixed(3)}%,0,0) scale(${sx.toFixed(4)},${sy.toFixed(4)})`;
+
+  // Whole Pill physical liquid reaction: compresses slightly & yields directionally as Active Pill expands!
+  const wpSx=1-0.018*lensMix;
+  const wpSy=1-0.075*lensMix;
+  const wpTx=((xPos-2)/2)*3.5*lensMix;
+  const wpOriginX=Math.max(12,Math.min(88,((xPos+0.5)/navs.length)*100));
+  const wpTf=lensMix>0.002?`translate3d(${wpTx.toFixed(2)}px,0,0) scale(${wpSx.toFixed(4)},${wpSy.toFixed(4)})`:'';
+  if(bdEl){
+   bdEl.style.transformOrigin=`${wpOriginX.toFixed(1)}% 50%`;
+   bdEl.style.transform=wpTf;
+  }
+  if(rimEl){
+   rimEl.style.transformOrigin=`${wpOriginX.toFixed(1)}% 50%`;
+   rimEl.style.transform=wpTf;
+  }
+
   renderActivePillWebGL(sx,sy);
   updateCrispOverlay();
  }
