@@ -5274,11 +5274,11 @@ document.addEventListener('focusin',e=>{
   }
   const speed=Math.abs(vx);
   const stretchFactor=ACTIVE_PILL_FINAL.stretch/100;
-  const velStretch=Math.min(0.32,speed*0.018*(stretchFactor/0.20));
-  // Whole Pill stays 100% unaffected in size; Active Pill inflates & acts as a minifying lens (kanta pengecil)
-  // pinching ONLY the overlapping portion of Whole Pill & icons passing underneath it!
-  const sx=1+0.28*lensMix+velStretch;
-  const sy=1+0.26*lensMix-velStretch*0.20;
+  const velStretch=Math.min(0.46,speed*0.028*(stretchFactor/0.20));
+  // Whole Pill stays 100% unaffected in size; Active Pill inflates with juicy liquid squash-and-stretch
+  // and acts as a minifying lens (kanta pengecil) pinching ONLY the overlapping portion underneath!
+  const sx=1+0.24*lensMix+velStretch;
+  const sy=1+0.26*lensMix-velStretch*0.42;
   apEl.classList.toggle('is-lens-active',lensMix>0.04);
   apEl.style.setProperty('--lens-mix',lensMix.toFixed(3));
   apEl.style.transform=`translate3d(${(xPos*100).toFixed(3)}%,0,0) scale(${sx.toFixed(4)},${sy.toFixed(4)})`;
@@ -5290,8 +5290,8 @@ document.addEventListener('focusin',e=>{
  function tick(now){
   const dt=lastT?Math.min(0.024,Math.max(0.001,(now-lastT)/1000)):0.016;
   lastT=now;
-  const stiffness=dragging?320:225;
-  const damping=dragging?22:16.5;
+  const stiffness=dragging?290:215;
+  const damping=dragging?18:13.5;
   const force=(target-xPos)*stiffness;
   vx+=(force-vx*damping)*dt;
   xPos+=vx*dt;
