@@ -88,7 +88,7 @@ html:has(dialog[open]){overflow:hidden}
   box-shadow:0 14px 34px rgba(0,0,0,0.45),0 2px 8px rgba(0,0,0,0.22)!important;
   isolation:isolate!important;
   transition:transform 0.44s cubic-bezier(0.16,1,0.3,1),opacity 0.36s cubic-bezier(0.16,1,0.3,1),background 0.2s ease,box-shadow 0.2s ease!important;
-  overflow:hidden!important;
+  overflow:visible!important;
   touch-action:none;
   user-select:none;
   -webkit-user-select:none;
@@ -137,41 +137,69 @@ html:has(dialog[open]){overflow:hidden}
   box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.067),inset 0 -1.2px 1.6px rgba(0,0,0,0.011);
  }
  #mobile-glass-nav .nav-active-pill{
+  --lens-mix:0;
   display:block!important;
   position:absolute!important;
-  top:4px!important;
-  bottom:4px!important;
+  top:5px!important;
+  bottom:5px!important;
   width:calc((100% - 10px) / 5)!important;
   left:5px!important;
   border-radius:9999px!important;
-  background:transparent!important;
-  -webkit-backdrop-filter:blur(1.4px) saturate(140%) contrast(1.04)!important;
-  backdrop-filter:blur(1.4px) saturate(140%) contrast(1.04)!important;
-  box-shadow:0 4px 14px rgba(0,0,0,0.046)!important;
+  background:rgba(255,255,255,0.11)!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  box-shadow:none!important;
   border:none!important;
   pointer-events:none!important;
-  z-index:5!important;
+  z-index:2!important;
   transform-origin:center center!important;
   overflow:hidden!important;
   will-change:transform!important;
  }
- #mobile-glass-nav.has-svg-lg .nav-active-pill{
-  -webkit-backdrop-filter:url(#active-pill-glass-rgb) saturate(140%) contrast(1.04)!important;
-  backdrop-filter:url(#active-pill-glass-rgb) saturate(140%) contrast(1.04)!important;
+ #mobile-glass-nav .nav-active-pill.is-lens-active{
+  z-index:5!important;
+  background:rgba(255,255,255,0.03)!important;
+  box-shadow:0 10px 26px rgba(0,0,0,0.42),0 2px 8px rgba(0,0,0,0.22)!important;
+ }
+ #mobile-glass-nav.has-svg-lg .nav-active-pill.is-lens-active{
+  -webkit-backdrop-filter:url(#active-pill-glass-rgb) saturate(145%) contrast(1.06)!important;
+  backdrop-filter:url(#active-pill-glass-rgb) saturate(145%) contrast(1.06)!important;
+ }
+ #mobile-glass-nav .nav-active-pill .ap-webgl-canvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border-radius:9999px;
+  pointer-events:none;
+  display:block;
+  opacity:0;
+ }
+ #mobile-glass-nav.has-svg-lg .nav-active-pill .ap-webgl-canvas{
+  display:none!important;
  }
  #mobile-glass-nav .nav-active-pill .active-pill-rim{
   position:absolute;
   inset:0;
   border-radius:9999px;
   pointer-events:none;
-  box-shadow:inset 0 1.2px 1.6px rgba(255,255,255,0.083),inset 0 -1px 1.4px rgba(255,255,255,0.024);
+  opacity:0;
+  box-shadow:inset 0 1.4px 2px rgba(255,255,255,0.78),inset 0 -1.2px 2px rgba(255,255,255,0.26),inset 2px 1px 3px rgba(255,105,135,0.34),inset -2px -1px 3px rgba(70,210,255,0.40);
+  transition:opacity 0.14s ease;
+ }
+ #mobile-glass-nav .nav-active-pill.is-lens-active .active-pill-rim{
+  opacity:1;
  }
  #mobile-glass-nav.is-light-backdrop .nav-active-pill{
-  background:transparent!important;
-  box-shadow:0 4px 12px rgba(0,0,0,0.017)!important;
+  background:rgba(15,23,42,0.08)!important;
+  box-shadow:none!important;
+ }
+ #mobile-glass-nav.is-light-backdrop .nav-active-pill.is-lens-active{
+  background:rgba(255,255,255,0.05)!important;
+  box-shadow:0 8px 22px rgba(0,0,0,0.16),0 2px 6px rgba(0,0,0,0.08)!important;
  }
  #mobile-glass-nav.is-light-backdrop .nav-active-pill .active-pill-rim{
-  box-shadow:inset 0 1.4px 1.8px rgba(255,255,255,0.105),inset 0 -1.2px 1.6px rgba(0,0,0,0.020);
+  box-shadow:inset 0 1.4px 2px rgba(255,255,255,0.92),inset 0 -1.2px 2px rgba(0,0,0,0.14),inset 2px 1px 2.5px rgba(255,90,120,0.28),inset -2px -1px 2.5px rgba(45,190,255,0.32);
  }
  #mobile-glass-nav .crisp-overlay-layer{
   position:absolute!important;
@@ -251,7 +279,7 @@ html:has(dialog[open]){overflow:hidden}
   gap:2px!important;
   box-shadow:none!important;
   position:relative!important;
-  z-index:2!important;
+  z-index:3!important;
   transition:none!important;
   -webkit-tap-highlight-color:transparent!important;
   cursor:pointer!important;
@@ -4593,8 +4621,8 @@ document.addEventListener('focusin',e=>{
  const canUseSvgBackdrop=!isWebKitOnly;
  const WHOLE_PILL_TYPE_A={K:2.00,rgb:2.5,bevel:42,blur:0.8,tint:35,rim:7};
  const ACTIVE_PILL_FINAL={K:1.00,rgb:1.5,bevel:26,blur:1.4,tint:0,rim:11,stretch:40,crispOnLand:true};
- let lastSizeKey='',ro=null,glState=null;
- let xPos=2,vx=0,target=2,dragging=false,scaleBoost=0,rafId=0,lastT=0;
+ let lastSizeKey='',ro=null,glState=null,apGlState=null,lastMainCanvas=null,lastIconActiveIdx=-1;
+ let xPos=2,vx=0,target=2,dragging=false,scaleBoost=0,lensMix=0,rafId=0,lastT=0;
  let ptrId=null,startX=0,startY=0,didScrub=false,suppressClickUntil=0;
 
  function ensureSvgDefs(){
@@ -4963,9 +4991,220 @@ document.addEventListener('focusin',e=>{
    st.texW=texW;
    st.texH=texH;
    st.hasTex=true;
+   lastMainCanvas=c;
+   if(apGlState&&apGlState.gl&&!apGlState.gl.isContextLost()){
+    apGlState.gl.bindTexture(apGlState.gl.TEXTURE_2D,apGlState.bgTex);
+    apGlState.gl.texImage2D(apGlState.gl.TEXTURE_2D,0,apGlState.gl.RGBA,apGlState.gl.RGBA,apGlState.gl.UNSIGNED_BYTE,c);
+    apGlState.bgW=texW;apGlState.bgH=texH;apGlState.hasBg=true;
+   }
    renderWebGLFrame();
   },140);
  };
+
+ // Dedicated WebGL1 GLSL Active Droplet Magnifying Lens for iOS Safari (matches iOS 26 video!)
+ function paintNavIconsCanvas(nav,activeIdx){
+  const W=Math.max(100,Math.round(nav.offsetWidth||358));
+  const H=Math.max(40,Math.round(nav.offsetHeight||64));
+  const dpr=2;
+  const c=document.createElement('canvas');
+  c.width=W*dpr;c.height=H*dpr;
+  const ctx=c.getContext('2d');
+  ctx.scale(dpr,dpr);
+  const isLight=nav.classList.contains('is-light-backdrop');
+  const innerW=W-10;
+  const slotW=innerW/navs.length;
+  ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  navs.forEach(([v],i)=>{
+   const cx=5+(i+0.5)*slotW;
+   const cy=H*0.5-6;
+   const isAct=i===activeIdx;
+   const col=isAct?(isLight?'#b8860b':'#f4cc57'):(isLight?'rgba(12,12,16,0.72)':'rgba(255,255,255,0.85)');
+   ctx.strokeStyle=col;ctx.fillStyle=col;
+   ctx.lineWidth=isAct?2.1:1.75;
+   ctx.save();
+   ctx.translate(cx-10,cy-10);
+   const s=20/24;
+   ctx.scale(s,s);
+   ctx.beginPath();
+   if(v==='conti'){
+    drawRoundRect(ctx,3,4,18,16,2);
+    ctx.moveTo(3,10);ctx.lineTo(21,10);ctx.moveTo(9,4);ctx.lineTo(9,20);
+   }else if(v==='script'){
+    ctx.moveTo(14,2);ctx.lineTo(6,2);ctx.quadraticCurveTo(4,2,4,4);ctx.lineTo(4,20);ctx.quadraticCurveTo(4,22,6,22);ctx.lineTo(18,22);ctx.quadraticCurveTo(20,22,20,20);ctx.lineTo(20,8);ctx.closePath();
+    ctx.moveTo(14,2);ctx.lineTo(14,8);ctx.lineTo(20,8);ctx.moveTo(8,13);ctx.lineTo(16,13);ctx.moveTo(8,17);ctx.lineTo(14,17);
+   }else if(v==='home'){
+    ctx.moveTo(3,10.5);ctx.lineTo(12,3);ctx.lineTo(21,10.5);ctx.lineTo(21,20);ctx.quadraticCurveTo(21,21,20,21);ctx.lineTo(15,21);ctx.lineTo(15,15);ctx.lineTo(9,15);ctx.lineTo(9,21);ctx.lineTo(4,21);ctx.quadraticCurveTo(3,21,3,20);ctx.closePath();
+   }else if(v==='log'){
+    ctx.moveTo(8,6);ctx.lineTo(21,6);ctx.moveTo(8,12);ctx.lineTo(21,12);ctx.moveTo(8,18);ctx.lineTo(21,18);
+    ctx.moveTo(3,6);ctx.lineTo(3.5,6);ctx.moveTo(3,12);ctx.lineTo(3.5,12);ctx.moveTo(3,18);ctx.lineTo(3.5,18);
+   }else{
+    drawRoundRect(ctx,2,4,20,16,2);
+    ctx.moveTo(7,4);ctx.lineTo(7,20);ctx.moveTo(17,4);ctx.lineTo(17,20);ctx.moveTo(2,12);ctx.lineTo(22,12);
+   }
+   ctx.stroke();
+   ctx.restore();
+   ctx.font=`${isAct?'700':'600'} 10px -apple-system,BlinkMacSystemFont,sans-serif`;
+   ctx.fillText(tabLabels[v]||v,cx,H*0.5+14);
+  });
+  return {c,W,H};
+ }
+
+ function initActivePillWebGL(nav){
+  if(canUseSvgBackdrop||!nav)return null;
+  const apEl=nav.querySelector('#nav-active-pill');
+  if(!apEl)return null;
+  let canvas=apEl.querySelector('.ap-webgl-canvas');
+  if(apGlState&&apGlState.canvas===canvas&&apGlState.gl&&!apGlState.gl.isContextLost())return apGlState;
+  if(!canvas){
+   canvas=document.createElement('canvas');
+   canvas.className='ap-webgl-canvas';
+   canvas.setAttribute('aria-hidden','true');
+   apEl.insertBefore(canvas,apEl.firstChild);
+  }
+  const gl=canvas.getContext('webgl',{alpha:true,antialias:false,premultipliedAlpha:true,preserveDrawingBuffer:false});
+  if(!gl)return null;
+  const vsSrc=`attribute vec2 a_pos;varying vec2 v_uv;void main(){v_uv=vec2(a_pos.x*0.5+0.5,0.5-a_pos.y*0.5);gl_Position=vec4(a_pos,0.0,1.0);}`;
+  const fsSrc=`precision highp float;
+   uniform sampler2D u_bgTex;
+   uniform sampler2D u_iconTex;
+   uniform vec2 u_bgSize;
+   uniform vec2 u_navSize;
+   uniform vec2 u_navOffset;
+   uniform vec2 u_apCenter;
+   uniform vec2 u_apSize;
+   uniform vec4 u_tint;
+   varying vec2 v_uv;
+   vec3 sampleScene(vec2 navP){
+    vec2 bgUv=clamp((u_navOffset+navP)/u_bgSize,vec2(0.0005),vec2(0.9995));
+    vec3 bg=texture2D(u_bgTex,bgUv).rgb;
+    bg=mix(bg,u_tint.rgb,u_tint.a);
+    vec2 icUv=navP/u_navSize;
+    if(icUv.x>=0.0&&icUv.x<=1.0&&icUv.y>=0.0&&icUv.y<=1.0){
+     vec4 ic=texture2D(u_iconTex,icUv);
+     bg=mix(bg,ic.rgb,ic.a);
+    }
+    return bg;
+   }
+   void main(){
+    vec2 p=v_uv*u_apSize;
+    float R=u_apSize.y*0.5;
+    float cx=clamp(p.x,R,max(R,u_apSize.x-R));
+    vec2 delta=p-vec2(cx,R);
+    float dist=length(delta);
+    float t=clamp(dist/R,0.0,1.0);
+    vec2 n=dist>0.0001?(delta/dist):vec2(0.0);
+    // Gentle center magnification (0.86x) + steep curved bevel refraction + chromatic RGB prism!
+    vec2 localFromCenter=(p-u_apSize*0.5)*0.86;
+    float start=0.52;
+    float baseDisp=0.0;
+    float prismDisp=0.0;
+    if(t>start){
+     float u=(t-start)/(1.0-start);
+     baseDisp=1.65*(0.48*R)*(u*u);
+     if(u>0.28){
+      float v=(u-0.28)/0.72;
+      prismDisp=3.2*(v*v);
+     }
+    }
+    vec2 baseNavP=u_apCenter+localFromCenter;
+    float r=sampleScene(baseNavP-n*(baseDisp+prismDisp)).r;
+    float g=sampleScene(baseNavP-n*baseDisp).g;
+    float b=sampleScene(baseNavP-n*max(0.0,baseDisp-prismDisp)).b;
+    vec3 col=vec3(r,g,b);
+    float lum=dot(col,vec3(0.299,0.587,0.114));
+    col=mix(vec3(lum),col,1.35);
+    // Subtle top specular glass glint
+    float glint=smoothstep(0.55,1.0,t)*smoothstep(0.2,-0.8,n.y)*0.22;
+    col+=vec3(glint);
+    gl_FragColor=vec4(clamp(col,0.0,1.0),1.0);
+   }`;
+  const compile=(type,src)=>{const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;};
+  const prog=gl.createProgram();
+  gl.attachShader(prog,compile(gl.VERTEX_SHADER,vsSrc));
+  gl.attachShader(prog,compile(gl.FRAGMENT_SHADER,fsSrc));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf=gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1, 1,-1, -1,1, 1,1]),gl.STATIC_DRAW);
+  const aPos=gl.getAttribLocation(prog,'a_pos');
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
+  const mkTex=()=>{
+   const t=gl.createTexture();
+   gl.bindTexture(gl.TEXTURE_2D,t);
+   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
+   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+   return t;
+  };
+  const bgTex=mkTex(),iconTex=mkTex();
+  apGlState={
+   canvas,gl,prog,bgTex,iconTex,hasBg:false,hasIcon:false,bgW:1,bgH:1,navW:358,navH:64,
+   uBgTex:gl.getUniformLocation(prog,'u_bgTex'),
+   uIconTex:gl.getUniformLocation(prog,'u_iconTex'),
+   uBgSize:gl.getUniformLocation(prog,'u_bgSize'),
+   uNavSize:gl.getUniformLocation(prog,'u_navSize'),
+   uNavOffset:gl.getUniformLocation(prog,'u_navOffset'),
+   uApCenter:gl.getUniformLocation(prog,'u_apCenter'),
+   uApSize:gl.getUniformLocation(prog,'u_apSize'),
+   uTint:gl.getUniformLocation(prog,'u_tint')
+  };
+  if(lastMainCanvas&&glState){
+   gl.bindTexture(gl.TEXTURE_2D,bgTex);
+   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,lastMainCanvas);
+   apGlState.bgW=glState.texW;apGlState.bgH=glState.texH;apGlState.hasBg=true;
+  }
+  return apGlState;
+ }
+
+ function renderActivePillWebGL(sx,sy){
+  if(canUseSvgBackdrop)return;
+  const nav=document.getElementById('mobile-glass-nav');
+  const mainEl=document.getElementById('main');
+  if(!nav||!mainEl)return;
+  const st=initActivePillWebGL(nav);
+  if(!st)return;
+  st.canvas.style.opacity=lensMix>0.02?Math.min(1,lensMix*1.25).toFixed(3):'0';
+  if(lensMix<=0.02||!st.hasBg)return;
+  const nearIdx=Math.max(0,Math.min(navs.length-1,Math.round(xPos)));
+  if(!st.hasIcon||nearIdx!==lastIconActiveIdx){
+   lastIconActiveIdx=nearIdx;
+   const ic=paintNavIconsCanvas(nav,nearIdx);
+   st.gl.bindTexture(st.gl.TEXTURE_2D,st.iconTex);
+   st.gl.texImage2D(st.gl.TEXTURE_2D,0,st.gl.RGBA,st.gl.RGBA,st.gl.UNSIGNED_BYTE,ic.c);
+   st.navW=ic.W;st.navH=ic.H;st.hasIcon=true;
+  }
+  const apEl=nav.querySelector('#nav-active-pill');
+  const dpr=Math.min(2,window.devicePixelRatio||1);
+  const apW=Math.max(40,apEl.offsetWidth*sx);
+  const apH=Math.max(36,apEl.offsetHeight*sy);
+  const cw=Math.round(apW*dpr),ch=Math.round(apH*dpr);
+  if(st.canvas.width!==cw||st.canvas.height!==ch){
+   st.canvas.width=cw;st.canvas.height=ch;st.gl.viewport(0,0,cw,ch);
+  }
+  const navRect=nav.getBoundingClientRect();
+  const mainRect=mainEl.getBoundingClientRect();
+  const slotW=(navRect.width-10)/navs.length;
+  const apCx=5+(xPos+0.5)*slotW;
+  const apCy=navRect.height*0.5;
+  const isLight=nav.classList.contains('is-light-backdrop');
+  const {gl}=st;
+  gl.useProgram(st.prog);
+  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,st.bgTex);gl.uniform1i(st.uBgTex,0);
+  gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,st.iconTex);gl.uniform1i(st.uIconTex,1);
+  gl.uniform2f(st.uBgSize,st.bgW,st.bgH);
+  gl.uniform2f(st.uNavSize,st.navW,st.navH);
+  gl.uniform2f(st.uNavOffset,navRect.left-mainRect.left,navRect.top-mainRect.top);
+  gl.uniform2f(st.uApCenter,apCx,apCy);
+  gl.uniform2f(st.uApSize,apW,apH);
+  if(isLight)gl.uniform4f(st.uTint,1.0,1.0,1.0,0.22);
+  else gl.uniform4f(st.uTint,22/255,24/255,30/255,0.26);
+  gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+ }
 
  if(!canUseSvgBackdrop){
   let scrollRaf=0;
@@ -4986,7 +5225,9 @@ document.addEventListener('focusin',e=>{
   const links=document.querySelectorAll('#mobile-glass-nav .nav-link');
   if(!slots.length)return;
   const snapIdx=Math.max(0,Math.min(navs.length-1,Math.round(target)));
-  const settled=ACTIVE_PILL_FINAL.crispOnLand&&!dragging&&Math.abs(xPos-snapIdx)<0.07&&Math.abs(vx)<0.45;
+  // Resting state: crisp yellow icon on top, tucked-in resting pill behind;
+  // Moving/Dragging state: giant glass droplet pops OVER the icons and magnifies/refracts them!
+  const settled=ACTIVE_PILL_FINAL.crispOnLand&&lensMix<0.12&&!dragging&&Math.abs(xPos-snapIdx)<0.07&&Math.abs(vx)<0.45;
   slots.forEach((slot,i)=>{
    const show=settled&&i===snapIdx;
    slot.classList.toggle('is-visible',show);
@@ -5003,11 +5244,14 @@ document.addEventListener('focusin',e=>{
   }
   const speed=Math.abs(vx);
   const stretchFactor=ACTIVE_PILL_FINAL.stretch/100;
-  const velStretch=Math.min(0.42,speed*0.022*(stretchFactor/0.20));
-  const inflate=scaleBoost*0.10;
-  const sx=1+velStretch+inflate;
-  const sy=1-velStretch*0.34+inflate*0.85;
+  const velStretch=Math.min(0.32,speed*0.018*(stretchFactor/0.20));
+  // Inflate dramatically above & below the Whole Pill when pressed/dragging/sliding (exact iOS 26 behavior!)
+  const sx=1+0.30*lensMix+velStretch;
+  const sy=1+0.28*lensMix-velStretch*0.20;
+  apEl.classList.toggle('is-lens-active',lensMix>0.04);
+  apEl.style.setProperty('--lens-mix',lensMix.toFixed(3));
   apEl.style.transform=`translate3d(${(xPos*100).toFixed(3)}%,0,0) scale(${sx.toFixed(4)},${sy.toFixed(4)})`;
+  renderActivePillWebGL(sx,sy);
   updateCrispOverlay();
  }
 
@@ -5021,11 +5265,14 @@ document.addEventListener('focusin',e=>{
   xPos+=vx*dt;
   const targetBoost=dragging?1:0;
   scaleBoost+=(targetBoost-scaleBoost)*Math.min(1,dt*18);
+  const isMoving=dragging||Math.abs(target-xPos)>0.06||Math.abs(vx)>0.35;
+  const targetLens=isMoving?1:0;
+  lensMix+=(targetLens-lensMix)*Math.min(1,dt*(isMoving?18:13));
   applyPillTransform();
-  if(Math.abs(target-xPos)>0.0006||Math.abs(vx)>0.002||Math.abs(targetBoost-scaleBoost)>0.004||dragging){
+  if(Math.abs(target-xPos)>0.0006||Math.abs(vx)>0.002||Math.abs(targetBoost-scaleBoost)>0.004||Math.abs(targetLens-lensMix)>0.004||dragging){
    rafId=requestAnimationFrame(tick);
   }else{
-   xPos=target;vx=0;scaleBoost=targetBoost;
+   xPos=target;vx=0;scaleBoost=targetBoost;lensMix=targetLens;
    applyPillTransform();
    rafId=0;lastT=0;
   }
